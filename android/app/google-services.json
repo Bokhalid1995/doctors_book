@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23996142872",
+    "project_id": "bookdoctors-79046",
+    "storage_bucket": "bookdoctors-79046.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23996142872:android:afa3def3d9849877a03a6d",
+        "android_client_info": {
+          "package_name": "com.example.doctors_book"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23996142872-9uvcqbro5agf16ne21vadpgvrecbh6ib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1RMk6TVpag2S-rPEJcUKhNc1LSabNaZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23996142872-9uvcqbro5agf16ne21vadpgvrecbh6ib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
