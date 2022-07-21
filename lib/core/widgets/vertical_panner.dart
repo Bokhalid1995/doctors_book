@@ -28,7 +28,7 @@ class GroceryFeaturedCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Container(
-          width: SizeConfig.screenWidth! /1.7,
+          width: SizeConfig.screenWidth! / 1.7,
           height: 150,
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 17),
           decoration: BoxDecoration(

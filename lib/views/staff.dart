@@ -46,7 +46,30 @@ class _StaffState extends State<Staff> {
     return Scaffold(
       body: Column(
         children: [
-          
+            Container(
+                      padding: const EdgeInsets.all(20),
+                      height: SizeConfig.screenheight! * 0.1,
+
+                      child:  Row(
+                        children:  [
+                          Text(
+                            'ابحث من هنا ',
+                            style: TextStyle(
+                              color: const Color(
+                                0xff0a0a0a).withOpacity(0.65),
+                              fontSize: 17,
+                            ),
+                          ),
+                          const Spacer(),
+
+                           SizedBox(height: 40,
+                            width: 40,child:  Icon(Icons.volunteer_activism , color:   const Color(
+                              0xff0a0a0a).withOpacity(0.65),),
+                          ),
+
+                        ],
+                      ),
+                    ),
           StreamBuilder(
               stream:_staff.snapshots(),
               builder: (context ,AsyncSnapshot<QuerySnapshot> snapshot) {
