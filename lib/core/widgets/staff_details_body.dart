@@ -5,13 +5,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class StaffDetailsBody extends StatefulWidget {
-   const StaffDetailsBody(this.name, this.category, this.details, this.phone, this.imagePath, {Key? key}  ) : super(key: key);
+   const StaffDetailsBody(this.DoctorName, this.QualifiedCert, this.Specialize, {Key? key}  ) : super(key: key);
 
-  final String name;
-  final String category;
-  final String details;
-  final String phone;
-  final String imagePath;
+  final String DoctorName;
+  final String QualifiedCert;
+  final String Specialize;
+ 
+  final String imagePath = "assets/images/767676.jpg";
 
   @override
   State<StaffDetailsBody> createState() => _StaffDetailsBodyState();
@@ -52,7 +52,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                   child: GestureDetector(
                     onTap: (){
                       // ignore: deprecated_member_use
-                      launch("tel://${widget.phone}");
+                      // launch("tel://${widget.phone}");
                     },
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
@@ -100,7 +100,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          widget.name,
+                          widget.DoctorName,
                           style:const TextStyle(
                             color: PColor,
                             fontSize: 13,
@@ -112,7 +112,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                         Align(
                           alignment: Alignment.topRight,
                           child: Text(
-                            widget.category,
+                            widget.QualifiedCert,
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -122,7 +122,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
 
                         const SizedBox(height: 15,),
                         Text(
-                          widget.details,
+                          widget.Specialize,
                           style: const TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w600,

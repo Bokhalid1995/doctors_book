@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:doctors_book/views/staff.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:doctors_book/core/constants.dart';
@@ -199,25 +200,31 @@ class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
                       const SizedBox(
                         height: 8,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: PColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        height: 70,
-                        child: Row(
-                          children: const [
-                             Text(
-                              'الكوادر الطبية',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                             Spacer(),
-                             Icon(
-                              Icons.people_alt_rounded,
-                              color: Colors.white,
-                            )
-                          ],
+                      GestureDetector(
+                        onTap: (){
+                           Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => const Staff()));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: PColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          height: 70,
+                          child: Row(
+                            children: const [
+                               Text(
+                                'الكوادر الطبية',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                               Spacer(),
+                               Icon(
+                                Icons.people_alt_rounded,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],
