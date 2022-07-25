@@ -10,10 +10,10 @@ class GroceryFeaturedItem {
 }
 
 var groceryFeaturedItems = [
-  GroceryFeaturedItem("المستشفيات", "assets/images/136934.jpg" , 45),
-  GroceryFeaturedItem("المعامل", "assets/images/136949.jpg" , 17),
-  GroceryFeaturedItem("الصيدليات", "assets/images/136934.jpg" , 34),
-  GroceryFeaturedItem("الخدمات ", "assets/images/136949.jpg", 13),
+  GroceryFeaturedItem("الحجوزات", "assets/images/136934.jpg" , 45),
+  GroceryFeaturedItem("الاطباء", "assets/images/136949.jpg" , 17),
+  GroceryFeaturedItem("المستشفيات", "assets/images/136934.jpg" , 34),
+  
 ];
 
 class GroceryFeaturedCard extends StatelessWidget {

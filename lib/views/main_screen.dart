@@ -1,6 +1,7 @@
 
 // ignore_for_file: unnecessary_const
 
+import 'package:doctors_book/views/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
@@ -98,7 +99,7 @@ class _MainScreenBodyState extends State<MainScreenBody> with TickerProviderStat
                     Expanded(
                       flex: 2,
                       child:  CircleAvatar(
-                        child: Image.asset("assets/images/insurance/pic (6).png"),
+                        child: Image.asset("assets/images/insurance/pic (5).png"),
                       ),
                     ),
                     const Expanded(
@@ -274,8 +275,8 @@ class _MainScreenBodyState extends State<MainScreenBody> with TickerProviderStat
               actions: [
                 IconButton(onPressed: (){
                   Navigator.of(context).pop();
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (BuildContext context) => AdminDashboard()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => const AdminDashboard()));
 
                 }, icon: const Icon(Icons.fullscreen_exit_rounded))
               ],

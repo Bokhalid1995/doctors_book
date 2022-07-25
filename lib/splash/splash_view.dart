@@ -13,7 +13,7 @@ class SplashView extends StatelessWidget {
            decoration: const BoxDecoration(
              color: PColor,
              image: DecorationImage(
-               image: AssetImage("assets/images/insurance/pic (1).png" ),
+               image: AssetImage("assets/images/doc_bg.jpg" ),
                fit: BoxFit.cover
              ),
 

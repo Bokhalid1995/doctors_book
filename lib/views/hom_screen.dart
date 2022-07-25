@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
               ),
               width: SizeConfig.screenWidth!,
-              child: Image.asset("assets/images/insurance/pic (2).png" ,width: SizeConfig.screenWidth! / 2, height: 150,),
+              child: Image.asset("assets/images/insurance/pic (7).png" ,width: SizeConfig.screenWidth! / 2, height: 150,),
             ),
             Container(
               height: SizeConfig.screenheight! / 1.51,
@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           GroceryFeaturedCard(
                             groceryFeaturedItems[0],
-                            SColor,
+                           const Color(0xff068e93)
                           ),
                           const SizedBox(
                             width: 20,
@@ -103,14 +103,7 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(
                             width: 20,
                           ),
-                          GroceryFeaturedCard(
-                            groceryFeaturedItems[3],
-                              const Color(0xff068e93)
-
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
+                         
                         ],
                       ),
 

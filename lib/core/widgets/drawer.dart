@@ -1,4 +1,6 @@
 
+import 'package:doctors_book/views/admin/Hospital_control.dart';
+import 'package:doctors_book/views/admin/staff_control.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
 
@@ -29,7 +31,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Expanded(
                     flex: 6,
                     child: Text(
-                      "مستشفي الدروشاب التخصصي",
+                      "تطبيق احجز طبيبك",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -41,7 +43,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           ),
           ListTile(
-            title: const Text("إدارة الخدمات"),
+            title: const Text("إدارة المستشفيات"),
             leading: IconButton(
               icon: const Icon(Icons.medical_services_outlined),
               onPressed: () {
@@ -51,8 +53,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: ()
             {
               Navigator.of(context).pop();
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (BuildContext context) => ServicesControl()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const HospitalControl()));
             },
           ),
           const Divider(
@@ -68,8 +70,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: ()
             {
               Navigator.of(context).pop();
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (BuildContext context) => StaffControl()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const StaffControl()));
             },
           ),
           const Divider(
