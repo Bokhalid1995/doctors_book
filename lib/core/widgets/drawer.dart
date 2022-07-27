@@ -1,5 +1,6 @@
 
 import 'package:doctors_book/views/admin/Hospital_control.dart';
+import 'package:doctors_book/views/admin/Register.dart';
 import 'package:doctors_book/views/admin/staff_control.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
@@ -78,7 +79,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             color: Colors.grey,
           ),
           ListTile(
-            title: const Text("إدارة الأقسام"),
+            title: const Text("إدارة المستخدمين"),
             leading: IconButton(
               icon: const Icon(Icons.dashboard),
               onPressed: () {
@@ -87,8 +88,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: ()
             {
               Navigator.of(context).pop();
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (BuildContext context) => DepartmentControl()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const RegisterControl()));
             },
           )
         ],
