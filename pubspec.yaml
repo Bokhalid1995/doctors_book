@@ -48,6 +48,7 @@ dependencies:
   firebase_messaging_platform_interface: 3.1.6
   http:
   intl: ^0.17.0
+  dropdown_button2: ^1.7.0
 
   
 
