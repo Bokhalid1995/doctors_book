@@ -5,6 +5,7 @@ import 'package:doctors_book/core/constants.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
  
@@ -144,6 +145,22 @@ class _RegisterControlState extends State<RegisterControl> {
                                value: _UserType == null || _UserType == "" ? "Admin" : _UserType ,
                           )
                         ),
+                         StreamBuilder<QuerySnapshot>(
+    stream: _hospital.snapshots(),
+    builder: (context, snapshot){
+      if (!snapshot.hasData) {
+        return const Center(
+        child:  CupertinoActivityIndicator(),
+      );
+      }
+      var length = snapshot.data!.docs.length;
+      DocumentSnapshot ds = snapshot.data!.docs[length - 1];
+      var hospitalname = snapshot.data!.docs;
+      return Container(
+      
+      );
+    }
+),
                                    const SizedBox(height: 10,),
                                   Row(
                                     children: [
