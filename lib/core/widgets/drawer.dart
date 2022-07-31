@@ -1,7 +1,7 @@
-
 import 'package:doctors_book/views/admin/Hospital_control.dart';
 import 'package:doctors_book/views/admin/Register.dart';
 import 'package:doctors_book/views/admin/staff_control.dart';
+import 'package:doctors_book/views/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
 
@@ -27,7 +27,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 children: const [
                   Expanded(
                     flex: 2,
-                    child: Icon(Icons.account_circle, color: Colors.white,size: 40,),
+                    child: Icon(
+                      Icons.account_circle,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
                   Expanded(
                     flex: 6,
@@ -51,8 +55,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 Navigator.of(context).pop();
               },
             ),
-            onTap: ()
-            {
+            onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const HospitalControl()));
@@ -65,11 +68,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             title: const Text("إدارة الإطباء"),
             leading: IconButton(
               icon: const Icon(Icons.people_alt_outlined),
-              onPressed: () {
-              },
+              onPressed: () {},
             ),
-            onTap: ()
-            {
+            onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const StaffControl()));
@@ -81,15 +82,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ListTile(
             title: const Text("إدارة المستخدمين"),
             leading: IconButton(
-              icon: const Icon(Icons.dashboard),
-              onPressed: () {
-              },
+              icon: const Icon(Icons.people_rounded),
+              onPressed: () {},
             ),
-            onTap: ()
-            {
+            onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const RegisterControl()));
+            },
+          ),
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
+            title: const Text("الصفحه الرئيسية"),
+            leading: IconButton(
+              icon: const Icon(Icons.home_filled),
+              onPressed: () {},
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const MainScreen()));
             },
           )
         ],
