@@ -3,7 +3,7 @@
    <application
         android:label="doctors_book"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/pic_1">
         <activity
             android:name=".MainActivity"
             android:exported="true"

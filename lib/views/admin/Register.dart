@@ -354,170 +354,183 @@ class _RegisterControlState extends State<RegisterControl> {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              height: 390,
-              child: Form(
-                key: formUpdateKey,
-                child: ListView(
-                  children: [
-                    const Center(
-                      child: Text(
-                        'تعديل البيانات',
-                        style: TextStyle(color: PColor),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      height: 390,
-                      child: ListView(
-                        children: [
-                          const Text(
-                            'اسم المستخدم',
-                            style: TextStyle(color: Colors.grey),
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  height: 390,
+                  child: Form(
+                    key: formUpdateKey,
+                    child: ListView(
+                      children: [
+                        const Center(
+                          child: Text(
+                            'تعديل البيانات',
+                            style: TextStyle(color: PColor),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextFormField(
-                              controller: _UserName,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "هذا الحقل ضروري";
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            'كلمة المرور',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextFormField(
-                              controller: _Password,
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "هذا الحقل ضروري";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const Text(
-                            'صلاحية المستخدم',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Container(
-                              padding: const EdgeInsets.all(5),
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButton<String>(
-                                value: _UserType == null || _UserType == ""
-                                    ? "Admin"
-                                    : _UserType,
-                                items: menuItems.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                      value: item, child: Text(item));
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _UserType = val!;
-                                  });
-                                },
-                              )),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          height: 390,
+                          child: ListView(
                             children: [
-                              GeneralButton(
-                                customText: 'الغاء',
-                                color: Colors.redAccent,
-                                raduis: 30,
-                                onTap: () {
-                                  _UserName.clear();
-                                  _Password.clear();
-                                  _UserType = "Admin";
-
-                                  Navigator.of(context).pop();
-                                },
+                              const Text(
+                                'اسم المستخدم',
+                                style: TextStyle(color: Colors.grey),
                               ),
-                              const Spacer(),
-                              Builder(builder: (context) {
-                                return GeneralButton(
-                                  customText: 'تعديل',
-                                  color: PColor,
-                                  raduis: 30,
-                                  onTap: () {
-                                    if (formUpdateKey.currentState!
-                                        .validate()) {
-                                      _register
-                                          .doc(documentSnapshot!.id)
-                                          .update({
-                                        "UserName": _UserName.text,
-                                        "Password": _Password.text,
-                                        "UserType": _UserType,
-                                      });
-
-                                      setState(() {
-                                        _UserName.clear();
-                                        _Password.clear();
-                                        _UserType = "Admin";
-                                      });
-
-                                      scaffoldKey.currentState!
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                          "تم التعديل بنجاح",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Cairo',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        backgroundColor: PColor,
-                                        behavior: SnackBarBehavior.floating,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                      ));
-                                      Navigator.of(context).pop();
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextFormField(
+                                  controller: _UserName,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "هذا الحقل ضروري";
                                     }
+                                    return null;
                                   },
-                                );
-                              }),
+                                  decoration: const InputDecoration(
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                'كلمة المرور',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: TextFormField(
+                                  controller: _Password,
+                                  decoration: const InputDecoration(
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "هذا الحقل ضروري";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const Text(
+                                'صلاحية المستخدم',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.all(5),
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: DropdownButton<String>(
+                                    value: _UserType == null || _UserType == ""
+                                        ? "Admin"
+                                        : _UserType,
+                                    items: menuItems.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                          value: item, child: Text(item));
+                                    }).toList(),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _UserType = val!;
+                                      });
+                                    },
+                                  )),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text(
+                                'المستشفي',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              BuildDropDown(setState, _hospital.snapshots()),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  GeneralButton(
+                                    customText: 'الغاء',
+                                    color: Colors.redAccent,
+                                    raduis: 30,
+                                    onTap: () {
+                                      _UserName.clear();
+                                      _Password.clear();
+                                      _UserType = "Admin";
+
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  const Spacer(),
+                                  Builder(builder: (context) {
+                                    return GeneralButton(
+                                      customText: 'تعديل',
+                                      color: PColor,
+                                      raduis: 30,
+                                      onTap: () {
+                                        if (formUpdateKey.currentState!
+                                            .validate()) {
+                                          _register
+                                              .doc(documentSnapshot!.id)
+                                              .update({
+                                            "UserName": _UserName.text,
+                                            "Password": _Password.text,
+                                            "UserType": _UserType,
+                                            "HospitalName": _SelectedHos,
+                                          });
+
+                                          setState(() {
+                                            _UserName.clear();
+                                            _Password.clear();
+                                            _UserType = "Admin";
+                                          });
+
+                                          scaffoldKey.currentState!
+                                              .showSnackBar(SnackBar(
+                                            content: const Text(
+                                              "تم التعديل بنجاح",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            backgroundColor: PColor,
+                                            behavior: SnackBarBehavior.floating,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                          ));
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                    );
+                                  }),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           );
         });
   }
