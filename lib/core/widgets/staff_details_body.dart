@@ -23,6 +23,8 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
   double raduis = 17;
   @override
   Widget build(BuildContext context) {
+    var fromFormat = int.parse(widget.From) > 12 ? 'ص' : 'م';
+    var fromTo = int.parse(widget.To) > 12 ? 'ص' : 'م';
     return Column(
       children: [
         const SizedBox(
@@ -128,7 +130,15 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                           height: 15,
                         ),
                         Text(
-                          'الزمن : من' + widget.From + ' الي' + widget.To,
+                          ' الزمن : من' +
+                              widget.From +
+                              '(' +
+                              fromFormat +
+                              ') الي ' +
+                              widget.To +
+                              '(' +
+                              fromTo +
+                              ')',
                           style: const TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
