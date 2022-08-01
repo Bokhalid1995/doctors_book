@@ -46,6 +46,7 @@ class ServicesBodyDetails extends StatefulWidget {
 class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
   final CollectionReference _hospital =
       FirebaseFirestore.instance.collection('Hospital');
+  String hospName = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +72,7 @@ class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
               print('fuuuuuuuck : ' + widget.moreDetails.toString());
               DocumentSnapshot data = snapshot.data!.docs[widget.moreDetails];
               print('fuuuuuuuck : ' + data.toString());
-
+              hospName = data['Name'];
               return Column(
                 children: [
                   Container(
@@ -214,7 +215,7 @@ class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        const Staff()));
+                                        Staff(hospName)));
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(10),

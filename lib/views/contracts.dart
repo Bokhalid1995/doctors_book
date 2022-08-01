@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doctors_book/views/staff.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:doctors_book/core/constants.dart';
@@ -165,7 +166,7 @@ class _PublicServicesState extends State<PublicServices> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              ServicesBodyDetails(index),
+                                              Staff(data['Name']),
                                         ),
                                       );
                                     },

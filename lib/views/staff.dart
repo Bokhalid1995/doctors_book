@@ -6,98 +6,129 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class StaffDetails {
-   String name;
-   String category;
-   String details;
-   String phone;
-   String imagePath;
+  String name;
+  String category;
+  String details;
+  String phone;
+  String imagePath;
 
-  
-   StaffDetails(this.name,this.category,this.details ,this.imagePath ,this.phone);
-  
-   static StaffDetails fromJson(Map<String , dynamic> json) => StaffDetails(
-    json['name'],
-    json['category'],
-    json['details'],
-    json['phone'],
-    json['imagePath'],
-  );
+  StaffDetails(
+      this.name, this.category, this.details, this.imagePath, this.phone);
+
+  static StaffDetails fromJson(Map<String, dynamic> json) => StaffDetails(
+        json['name'],
+        json['category'],
+        json['details'],
+        json['phone'],
+        json['imagePath'],
+      );
 }
-var moreStaffDetailsItems = [
-  StaffDetails("د. نزار السر ","اخصائي النساء والتوليد","نوفر خدمة موجات صوتيه اليه الدقة وعلي مدي 24 ساعه والنتيجه فوريه", "assets/images/pic_6.jpg","0922164150"),
-  StaffDetails("د. الطيب ابايزيد","اخصائي الأطفال","غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا", "assets/images/pic_7.jpg","0920888593"),
-  StaffDetails("د. محبوب الهاشمي","اخصائي العظام","غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا", "assets/images/pic_6.jpg" ,"0114195290"),
-  StaffDetails("د. احمد خالد","اخصائي الأطفال","غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا", "assets/images/pic_7.jpg" , "0920829900"),
-  StaffDetails("د. ألاء عثمان","اخصائي الباطنية","غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا", "assets/images/pic_7.jpg" ,"0962000077"),
 
+var moreStaffDetailsItems = [
+  StaffDetails(
+      "د. نزار السر ",
+      "اخصائي النساء والتوليد",
+      "نوفر خدمة موجات صوتيه اليه الدقة وعلي مدي 24 ساعه والنتيجه فوريه",
+      "assets/images/pic_6.jpg",
+      "0922164150"),
+  StaffDetails(
+      "د. الطيب ابايزيد",
+      "اخصائي الأطفال",
+      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
+      "assets/images/pic_7.jpg",
+      "0920888593"),
+  StaffDetails(
+      "د. محبوب الهاشمي",
+      "اخصائي العظام",
+      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
+      "assets/images/pic_6.jpg",
+      "0114195290"),
+  StaffDetails(
+      "د. احمد خالد",
+      "اخصائي الأطفال",
+      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
+      "assets/images/pic_7.jpg",
+      "0920829900"),
+  StaffDetails(
+      "د. ألاء عثمان",
+      "اخصائي الباطنية",
+      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
+      "assets/images/pic_7.jpg",
+      "0962000077"),
 ];
 
 class Staff extends StatefulWidget {
-  const Staff();
+  const Staff(this._hosName);
+  final String _hosName;
 
   @override
   State<Staff> createState() => _StaffState();
 }
 
 class _StaffState extends State<Staff> {
-  final CollectionReference _staff =  FirebaseFirestore.instance.collection('doctors');
+  final CollectionReference _distribution =
+      FirebaseFirestore.instance.collection('Distriputions');
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-            Container(
-                      padding: const EdgeInsets.all(20),
-                      height: SizeConfig.screenheight! * 0.1,
-
-                      child:  Row(
-                        children:  [
-                          Text(
-                            'ابحث من هنا ',
-                            style: TextStyle(
-                              color: const Color(
-                                0xff0a0a0a).withOpacity(0.65),
-                              fontSize: 17,
-                            ),
-                          ),
-                          const Spacer(),
-
-                           SizedBox(height: 40,
-                            width: 40,child:  Icon(Icons.volunteer_activism , color:   const Color(
-                              0xff0a0a0a).withOpacity(0.65),),
-                          ),
-
-                        ],
-                      ),
-                    ),
-          StreamBuilder(
-              stream:_staff.snapshots(),
-              builder: (context ,AsyncSnapshot<QuerySnapshot> snapshot) {
-                return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context , index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
-                    //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: StaffDetailsBody(data['DoctorName'],data['QualifiedCert'],data['Specialize']),
-                      ) ;
-                    }
-                );
-              }
-    
+    print(widget._hosName);
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: PColor,
+          title: Text(
+            'الاطباء المتوفرون | ' + widget._hosName,
+            style: TextStyle(
+              fontSize: 14,
+            ),
           ),
-        ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              height: SizeConfig.screenheight! / 1.14,
+              child: StreamBuilder(
+                  stream: _distribution.snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    return snapshot.connectionState == ConnectionState.waiting
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot data =
+                                  snapshot.data!.docs[index];
+                              // print("DoctorName" + data['DoctorName']);
+                              // print("Fuuuuuuuuuuuck" +
+                              //     data['HospitalName'] +
+                              //     widget._hosName);
+                              if (data['HospitalName']
+                                  .toString()
+                                  .contains(widget._hosName)) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: StaffDetailsBody(
+                                      data['DoctorName'],
+                                      data['Day'],
+                                      data['TimeFrom'],
+                                      data['TimeTo']),
+                                );
+                              }
+                              return const Text('');
+                            });
+                  }),
+            ),
+          ],
+        ),
       ),
     );
-
-
   }
 }
 
-Stream<List<StaffDetails>> getStaffDetails() =>
-   FirebaseFirestore.instance.collection('doctors').snapshots().
-   map((snapshot) =>
-     snapshot.docs.map((docs) => StaffDetails.fromJson(docs.data()) ).toList()
-   );
-
+Stream<List<StaffDetails>> getStaffDetails() => FirebaseFirestore.instance
+    .collection('doctors')
+    .snapshots()
+    .map((snapshot) => snapshot.docs
+        .map((docs) => StaffDetails.fromJson(docs.data()))
+        .toList());

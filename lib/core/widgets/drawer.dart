@@ -1,3 +1,4 @@
+import 'package:doctors_book/views/admin/Distribution.dart';
 import 'package:doctors_book/views/admin/Hospital_control.dart';
 import 'package:doctors_book/views/admin/Register.dart';
 import 'package:doctors_book/views/admin/staff_control.dart';
@@ -89,6 +90,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const RegisterControl()));
+            },
+          ),
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
+            title: const Text("توزيع الأطباء"),
+            leading: IconButton(
+              icon: const Icon(Icons.list_rounded),
+              onPressed: () {},
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const DistributionControl()));
             },
           ),
           const Divider(
