@@ -261,41 +261,45 @@ class _RegisterControlState extends State<RegisterControl> {
       body: StreamBuilder(
           stream: _register.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot data = snapshot.data!.docs[index];
-                  //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // child: RegisterDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
-                    child: Card(
-                      elevation: 5,
-                      child: ListTile(
-                        leading: IconButton(
-                          icon: const Icon(
-                            Icons.delete_forever,
-                            color: Colors.redAccent,
+            return snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        // child: RegisterDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
+                        child: Card(
+                          elevation: 5,
+                          child: ListTile(
+                            leading: IconButton(
+                              icon: const Icon(
+                                Icons.delete_forever,
+                                color: Colors.redAccent,
+                              ),
+                              onPressed: () {
+                                DeleteRegister(data.id);
+                              },
+                            ),
+                            title: Text(data['UserName']),
+                            subtitle: Text(data['Password']),
+                            trailing: IconButton(
+                              icon: const Icon(
+                                Icons.edit_outlined,
+                                color: PColor,
+                              ),
+                              onPressed: () {
+                                UpdateRegister(data);
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            DeleteRegister(data.id);
-                          },
                         ),
-                        title: Text(data['UserName']),
-                        subtitle: Text(data['Password']),
-                        trailing: IconButton(
-                          icon: const Icon(
-                            Icons.edit_outlined,
-                            color: PColor,
-                          ),
-                          onPressed: () {
-                            UpdateRegister(data);
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                });
+                      );
+                    });
           }),
     );
   }

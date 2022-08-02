@@ -7,7 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const DoctorsBook());
+  runApp(const Directionality(
+      textDirection: TextDirection.rtl, child: DoctorsBook()));
 }
 
 class DoctorsBook extends StatelessWidget {
@@ -15,7 +16,7 @@ class DoctorsBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GetMaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       textDirection: TextDirection.rtl,
       theme: ThemeData(

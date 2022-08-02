@@ -136,53 +136,58 @@ class _PublicServicesState extends State<PublicServices> {
             StreamBuilder(
                 stream: _hospital.snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Container(
-                      height: SizeConfig.screenheight! / 1.6,
-                      padding: EdgeInsets.all(10),
-                      child: snapshot.data!.docs.length == 0
-                          ? (Text(
-                              'لايوجد نتائج للبحث',
-                              style: (TextStyle(color: Colors.red)),
-                              textAlign: TextAlign.center,
-                            ))
-                          : ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) {
-                                DocumentSnapshot data =
-                                    snapshot.data!.docs[index];
-                                return Container(
-                                  height: 70,
-                                  margin: EdgeInsets.only(top: 10),
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: PColor.withOpacity(0.10),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              Staff(data['Name']),
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Container(
+                            height: SizeConfig.screenheight! / 1.6,
+                            padding: EdgeInsets.all(10),
+                            child: snapshot.data!.docs.length == 0
+                                ? (Text(
+                                    'لايوجد نتائج للبحث',
+                                    style: (TextStyle(color: Colors.red)),
+                                    textAlign: TextAlign.center,
+                                  ))
+                                : ListView.builder(
+                                    itemCount: snapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot data =
+                                          snapshot.data!.docs[index];
+                                      return Container(
+                                        height: 70,
+                                        margin: EdgeInsets.only(top: 10),
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: PColor.withOpacity(0.10),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: ListTile(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Staff(data['Name']),
+                                              ),
+                                            );
+                                          },
+                                          hoverColor: PColor,
+                                          leading: Icon(
+                                            Icons.home_work_outlined,
+                                            color: PColor,
+                                          ),
+                                          title: Text(data['Name']),
+                                          subtitle: Text(data['Location']),
                                         ),
                                       );
                                     },
-                                    hoverColor: PColor,
-                                    leading: Icon(
-                                      Icons.home_work_outlined,
-                                      color: PColor,
-                                    ),
-                                    title: Text(data['Name']),
-                                    subtitle: Text(data['Location']),
                                   ),
-                                );
-                              },
-                            ),
-                    ),
-                  );
+                          ),
+                        );
                 }),
           ],
         ),

@@ -1,12 +1,15 @@
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
+import 'package:doctors_book/views/Booking.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class StaffDetailsBody extends StatefulWidget {
-  const StaffDetailsBody(this.DoctorName, this.Day, this.From, this.To,
+  const StaffDetailsBody(
+      this.HospitalName, this.DoctorName, this.Day, this.From, this.To,
       {Key? key});
 
+  final String HospitalName;
   final String DoctorName;
   final String Day;
   final String From;
@@ -23,8 +26,8 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
   double raduis = 17;
   @override
   Widget build(BuildContext context) {
-    var fromFormat = int.parse(widget.From) > 12 ? 'ص' : 'م';
-    var fromTo = int.parse(widget.To) > 12 ? 'ص' : 'م';
+    var fromFormat = int.parse(widget.From) < 12 ? 'ص' : 'م';
+    var fromTo = int.parse(widget.To) < 12 ? 'ص' : 'م';
     return Column(
       children: [
         const SizedBox(
@@ -56,6 +59,14 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                     onTap: () {
                       // ignore: deprecated_member_use
                       // launch("tel://${widget.phone}");
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => Booking(
+                              widget.HospitalName,
+                              widget.DoctorName,
+                              widget.Day,
+                              widget.From,
+                              widget.To)));
                     },
                     child: CircleAvatar(
                       backgroundColor: Colors.white,

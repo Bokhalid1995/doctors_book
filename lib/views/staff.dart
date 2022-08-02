@@ -5,58 +5,6 @@ import 'package:doctors_book/core/widgets/staff_details_body.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
-class StaffDetails {
-  String name;
-  String category;
-  String details;
-  String phone;
-  String imagePath;
-
-  StaffDetails(
-      this.name, this.category, this.details, this.imagePath, this.phone);
-
-  static StaffDetails fromJson(Map<String, dynamic> json) => StaffDetails(
-        json['name'],
-        json['category'],
-        json['details'],
-        json['phone'],
-        json['imagePath'],
-      );
-}
-
-var moreStaffDetailsItems = [
-  StaffDetails(
-      "د. نزار السر ",
-      "اخصائي النساء والتوليد",
-      "نوفر خدمة موجات صوتيه اليه الدقة وعلي مدي 24 ساعه والنتيجه فوريه",
-      "assets/images/pic_6.jpg",
-      "0922164150"),
-  StaffDetails(
-      "د. الطيب ابايزيد",
-      "اخصائي الأطفال",
-      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
-      "assets/images/pic_7.jpg",
-      "0920888593"),
-  StaffDetails(
-      "د. محبوب الهاشمي",
-      "اخصائي العظام",
-      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
-      "assets/images/pic_6.jpg",
-      "0114195290"),
-  StaffDetails(
-      "د. احمد خالد",
-      "اخصائي الأطفال",
-      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
-      "assets/images/pic_7.jpg",
-      "0920829900"),
-  StaffDetails(
-      "د. ألاء عثمان",
-      "اخصائي الباطنية",
-      "غرف مجهزة بأفضل وسائل الراحة للمرضي وبمواصفات ممتازة جدا",
-      "assets/images/pic_7.jpg",
-      "0962000077"),
-];
-
 class Staff extends StatefulWidget {
   const Staff(this._hosName);
   final String _hosName;
@@ -77,7 +25,7 @@ class _StaffState extends State<Staff> {
         appBar: AppBar(
           backgroundColor: PColor,
           title: Text(
-            'الاطباء المتوفرون | ' + widget._hosName,
+            'الاطباء المتوفرون - ' + widget._hosName,
             style: TextStyle(
               fontSize: 14,
             ),
@@ -109,13 +57,14 @@ class _StaffState extends State<Staff> {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: StaffDetailsBody(
+                                      widget._hosName,
                                       data['DoctorName'],
                                       data['Day'],
                                       data['TimeFrom'],
                                       data['TimeTo']),
                                 );
                               }
-                              return const Text('');
+                              return Container();
                             });
                   }),
             ),
@@ -125,10 +74,3 @@ class _StaffState extends State<Staff> {
     );
   }
 }
-
-Stream<List<StaffDetails>> getStaffDetails() => FirebaseFirestore.instance
-    .collection('doctors')
-    .snapshots()
-    .map((snapshot) => snapshot.docs
-        .map((docs) => StaffDetails.fromJson(docs.data()))
-        .toList());
