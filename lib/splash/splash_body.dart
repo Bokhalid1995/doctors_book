@@ -84,13 +84,13 @@ class _SplashBodyState extends State<SplashBody>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                      BoxShadow(
-                        offset: Offset(0, 0),
-                        blurRadius: 5,
-                        color: PColor,
-                      )
-                    ],
+                    // boxShadow: const [
+                    //   BoxShadow(
+                    //     offset: Offset(0, 0),
+                    //     blurRadius: 5,
+                    //     color: PColor,
+                    //   )
+                    // ],
                   ),
                   child: const Text(
                     'ابدأ الان',
@@ -117,13 +117,13 @@ class _SplashBodyState extends State<SplashBody>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                      BoxShadow(
-                        offset: Offset(0, 0),
-                        blurRadius: 5,
-                        color: PColor,
-                      )
-                    ],
+                    // boxShadow: const [
+                    //   BoxShadow(
+                    //     offset: Offset(0, 0),
+                    //     blurRadius: 5,
+                    //     color: PColor,
+                    //   )
+                    // ],
                   ),
                   child: const Text(
                     'تسجيل الدخول',

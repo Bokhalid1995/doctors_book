@@ -206,6 +206,10 @@ class _BookingState extends State<Booking> {
                                   scaffoldKey.currentState!
                                       .showSnackBar(SnackBar(
                                     content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: const [
                                         Text(
                                           "تم  تاكيد الحجز بنجاح",

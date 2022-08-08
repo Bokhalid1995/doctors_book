@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/views/staff.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/more_details.dart';
-import 'package:doctors_book/core/widgets/services_details.dart';
 
 var moreServicesDetailsItems = [
   MoreServicesDetails("ابراهيم مالك", "مستشفي",
@@ -54,7 +52,7 @@ class _PublicServicesState extends State<PublicServices> {
         height: SizeConfig.screenheight! + 100,
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         ),
         child: Column(
           children: [
@@ -64,31 +62,31 @@ class _PublicServicesState extends State<PublicServices> {
                 height: SizeConfig.screenheight! / 5,
                 decoration: BoxDecoration(
                   color: PColor.withOpacity(0.20),
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(30), bottom: Radius.circular(30)),
                 ),
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       height: size.height * 0.1,
                       child: Row(
                         children: [
                           Text(
                             'ابحث من هنا ',
                             style: TextStyle(
-                              color: Color(0xff0a0a0a).withOpacity(0.65),
+                              color: const Color(0xff0a0a0a).withOpacity(0.65),
                               fontSize: 17,
                             ),
                           ),
-                          Spacer(),
-                          Container(
-                            child: Icon(
-                              Icons.volunteer_activism,
-                              color: Color(0xff0a0a0a).withOpacity(0.65),
-                            ),
+                          const Spacer(),
+                          SizedBox(
                             height: 40,
                             width: 40,
+                            child: Icon(
+                              Icons.volunteer_activism,
+                              color: const Color(0xff0a0a0a).withOpacity(0.65),
+                            ),
                           ),
                         ],
                       ),
@@ -123,30 +121,30 @@ class _PublicServicesState extends State<PublicServices> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     )
                   ],
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             StreamBuilder(
                 stream: _hospital.snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Container(
                             height: SizeConfig.screenheight! / 1.6,
-                            padding: EdgeInsets.all(10),
-                            child: snapshot.data!.docs.length == 0
-                                ? (Text(
+                            padding: const EdgeInsets.all(10),
+                            child: snapshot.data!.docs.isEmpty
+                                ? (const Text(
                                     'لايوجد نتائج للبحث',
                                     style: (TextStyle(color: Colors.red)),
                                     textAlign: TextAlign.center,
@@ -158,8 +156,8 @@ class _PublicServicesState extends State<PublicServices> {
                                           snapshot.data!.docs[index];
                                       return Container(
                                         height: 70,
-                                        margin: EdgeInsets.only(top: 10),
-                                        padding: EdgeInsets.all(5),
+                                        margin: const EdgeInsets.only(top: 10),
+                                        padding: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(
                                           color: PColor.withOpacity(0.10),
                                           borderRadius:
@@ -176,7 +174,7 @@ class _PublicServicesState extends State<PublicServices> {
                                             );
                                           },
                                           hoverColor: PColor,
-                                          leading: Icon(
+                                          leading: const Icon(
                                             Icons.home_work_outlined,
                                             color: PColor,
                                           ),
