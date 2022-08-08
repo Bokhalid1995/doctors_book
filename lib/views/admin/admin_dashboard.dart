@@ -145,7 +145,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ),
                     Builder(builder: (context) {
                       return GeneralButton(
-                        customText: 'تعديل',
+                        customText: 'تأكيد الحجز',
                         color: PColor,
                         raduis: 30,
                         onTap: () {
