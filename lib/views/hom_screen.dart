@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
@@ -5,9 +6,16 @@ import 'package:doctors_book/core/widgets/more_details.dart';
 import 'package:doctors_book/core/widgets/services_details.dart';
 import 'package:doctors_book/core/widgets/vertical_panner.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final CollectionReference _doctors =
+      FirebaseFirestore.instance.collection('doctors');
   @override
   Widget build(BuildContext context) {
     var moreServicesDetailsItems = [
@@ -80,12 +88,14 @@ class HomeScreen extends StatelessWidget {
                       height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           child: Text(
-                            'الأقسام :',
-                            textAlign: TextAlign.right,
+                            'مرحبا بكم في تطبيق احجز طبيبك',
+                            textAlign: TextAlign.center,
                             textDirection: TextDirection.rtl,
                             style: TextStyle(
                               fontSize: 15,
@@ -98,22 +108,22 @@ class HomeScreen extends StatelessWidget {
                       height: 10,
                     ),
                     SizedBox(
-                      height: 150,
+                      height: 130,
                       child: ListView(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.horizontal,
                         children: [
                           const SizedBox(
-                            width: 20,
+                            width: 15,
                           ),
                           GroceryFeaturedCard(
                               groceryFeaturedItems[0], const Color(0xff068e93)),
                           const SizedBox(
-                            width: 20,
+                            width: 15,
                           ),
                           GroceryFeaturedCard(groceryFeaturedItems[1], PColor),
                           const SizedBox(
-                            width: 20,
+                            width: 15,
                           ),
                           GroceryFeaturedCard(
                               groceryFeaturedItems[2], const Color(0xff7506af)),
@@ -127,12 +137,14 @@ class HomeScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: const [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           child: Text(
-                            '  الأكثر رواجا :',
-                            textAlign: TextAlign.right,
+                            '  قائمة من أميز الأطباء في السودان  ',
+                            textAlign: TextAlign.center,
                             textDirection: TextDirection.rtl,
                             style: TextStyle(
                               fontSize: 15,
@@ -141,96 +153,42 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                MoreDetails(
-                                  moreServicesDetailsItems[0],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[0]),
-                                    //   ),
-                                    // );
-                                  },
+                    StreamBuilder(
+                      stream: _doctors.snapshots(),
+                      builder: (context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  height: 300,
+                                  padding: EdgeInsets.all(10),
+                                  child: ListView.builder(
+                                    itemCount: snapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot data =
+                                          snapshot.data!.docs[index];
+                                      return Column(
+                                        children: [
+                                          MoreDetails(
+                                            name: data['DoctorName'],
+                                            degree: data['QualifiedCert'],
+                                            spec: data['Specialize'],
+                                            press: () {
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[0]),
+                                              //   ),
+                                              // );
+                                            },
+                                          ),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
-                                const SizedBox(width: 20),
-                                MoreDetails(
-                                  moreServicesDetailsItems[1],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[1]),
-                                    //   ),
-                                    // );
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                MoreDetails(
-                                  moreServicesDetailsItems[2],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[3]),
-                                    //   ),
-                                    // );
-                                  },
-                                ),
-                                const SizedBox(width: 20),
-                                MoreDetails(
-                                  moreServicesDetailsItems[1],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[1]),
-                                    //   ),
-                                    // );
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                MoreDetails(
-                                  moreServicesDetailsItems[4],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[4]),
-                                    //   ),
-                                    // );
-                                  },
-                                ),
-                                const SizedBox(width: 20),
-                                MoreDetails(
-                                  moreServicesDetailsItems[5],
-                                  press: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(builder: (context) => ServicesBodyDetails(moreServicesDetailsItems[5]),
-                                    //   ),
-                                    // );
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      ),
                     ),
                   ],
                 ),

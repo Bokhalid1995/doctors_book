@@ -61,17 +61,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               },
                             ),
                             // ignore: prefer_interpolation_to_compose_strings
-                            title: Text('اسم المريض : ' + data['PatientName']),
+                            title: Text(
+                              'اسم المريض : ' + data['PatientName'],
+                              style: TextStyle(fontSize: 13),
+                            ),
                             // ignore: prefer_interpolation_to_compose_strings
                             subtitle: Text('التاريخ : ' +
                                 data['BookingDate'] +
-                                ' / ' +
+                                ' | ' +
                                 data['TimeFrom'] +
                                 '- ' +
                                 data['TimeTo']),
                             trailing: IconButton(
                               icon: Icon(
-                                isConfirmed == false ? Icons.check : Icons.info,
+                                isConfirmed == true ? Icons.check : Icons.info,
                                 color: PColor,
                               ),
                               onPressed: () {
@@ -87,6 +90,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Future<void> Update([DocumentSnapshot? documentSnapshot]) async {
+    bool checkConfirm = documentSnapshot!['Status'] == "Accept" ? true : false;
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -95,21 +99,26 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Container(
                 padding: const EdgeInsets.all(8),
-                height: 420,
+                height: 350,
                 child: Column(
                   children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Center(
                       child: Container(
                         width: SizeConfig.screenWidth! / 2,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.20),
+                          color:
+                              Color.fromARGB(255, 6, 90, 8).withOpacity(0.20),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
                           "تأكيد  اجراء الحجز",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: PColor),
+                          style:
+                              TextStyle(color: Color.fromARGB(255, 6, 90, 8)),
                         ),
                       ),
                     ),
@@ -125,8 +134,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         const SizedBox(width: 5),
                         const Text('اسم المريض: '),
                         const SizedBox(width: 10),
-                        Text(documentSnapshot!['PatientName']),
+                        Text(documentSnapshot['PatientName']),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Row(
                       children: [
@@ -141,35 +153,69 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
                     const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.house_siding_sharp,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 5),
+                        const Text('المستشفي: '),
+                        const SizedBox(width: 10),
+                        Text(documentSnapshot['HospitalName']),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_month,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 5),
+                        const Text('تاريخ الحجز: '),
+                        const SizedBox(width: 10),
+                        Text(documentSnapshot['BookingDate']),
+                      ],
+                    ),
+                    const SizedBox(
                       height: 20,
                     ),
                     Builder(builder: (context) {
-                      return GeneralButton(
-                        customText: 'تأكيد الحجز',
-                        color: PColor,
-                        raduis: 30,
-                        onTap: () {
-                          _booking.doc(documentSnapshot.id).update({
-                            "Status": "Accept",
-                          });
+                      return IgnorePointer(
+                        ignoring: checkConfirm ? true : false,
+                        child: GeneralButton(
+                          customText:
+                              checkConfirm ? 'تم التأكيد ' : 'تأكيد الحجز',
+                          color: checkConfirm ? Colors.blueGrey[200] : PColor,
+                          raduis: 30,
+                          onTap: () {
+                            _booking.doc(documentSnapshot.id).update({
+                              "Status": "Accept",
+                            });
 
-                          scaffoldKey.currentState!.showSnackBar(SnackBar(
-                            content: const Text(
-                              "تم تأكيد الحجز بنجاح",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Cairo',
-                                color: Colors.white,
+                            scaffoldKey.currentState!.showSnackBar(SnackBar(
+                              content: const Text(
+                                "تم تأكيد الحجز بنجاح",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Cairo',
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            backgroundColor: PColor,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                          ));
-                          Navigator.of(context).pop();
-                        },
+                              backgroundColor: PColor,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                            ));
+                            Navigator.of(context).pop();
+                          },
+                        ),
                       );
                     }),
                     const SizedBox(

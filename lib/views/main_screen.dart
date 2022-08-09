@@ -60,8 +60,7 @@ class _MainScreenBodyState extends State<MainScreenBody>
         child: DefaultTabController(
           length: 2,
           child: Scaffold(
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: FloatingActionButton(
               onPressed: () {},
               backgroundColor: Colors.white,
