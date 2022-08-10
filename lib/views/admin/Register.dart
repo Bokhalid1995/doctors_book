@@ -251,7 +251,7 @@ class _RegisterControlState extends State<RegisterControl> {
               icon: const Icon(Icons.add_circle_outline_outlined))
         ],
         title: const Text(
-          "إدارة الأطباء",
+          "إدارة المستخدمين",
           style: TextStyle(
             fontSize: 15,
           ),

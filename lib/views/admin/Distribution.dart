@@ -230,7 +230,7 @@ class _DistributionControlState extends State<DistributionControl> {
               icon: const Icon(Icons.add_circle_outline_outlined))
         ],
         title: const Text(
-          "إدارة الأطباء",
+          "توزيع الأطباء علي المستشفيات",
           style: TextStyle(
             fontSize: 15,
           ),
