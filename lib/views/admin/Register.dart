@@ -327,15 +327,16 @@ class _RegisterControlState extends State<RegisterControl> {
                 child: DropdownButton2<String>(
                   items: hospitalname.map((DocumentSnapshot document) {
                     var name = document['Name'];
+                    var id = document.id;
                     return DropdownMenuItem<String>(
-                        value: name, child: Text(name));
+                        value: id, child: Text(name));
                   }).toList(),
                   onChanged: (val) {
                     setState(() {
                       _SelectedHos = val!;
                     });
                   },
-                  value: _SelectedHos ?? "المتكامل",
+                  value: _SelectedHos ?? snapshot.data!.docs[0].id,
 
                   // buttonDecoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(14),

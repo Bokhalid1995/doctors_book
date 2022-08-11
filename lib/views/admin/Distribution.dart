@@ -294,7 +294,7 @@ class _DistributionControlState extends State<DistributionControl> {
             );
           }
           var length = snapshot.data!.docs.length;
-          DocumentSnapshot ds = snapshot.data!.docs[length - 1];
+          //DocumentSnapshot ds = snapshot.data!.docs[length - 1];
           var hospitalname = snapshot.data!.docs;
           return Container(
               padding: const EdgeInsets.all(5),
