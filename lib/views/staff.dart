@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
@@ -19,8 +21,8 @@ class _StaffState extends State<Staff> {
     // TODO: implement initState
   }
 
-  String? DoctorName;
-  String? Specialist;
+  String DoctorName = "";
+  String Specialist = "";
   bool isLoaded = false;
   final CollectionReference _distribution =
       FirebaseFirestore.instance.collection('Distriputions');
@@ -54,37 +56,33 @@ class _StaffState extends State<Staff> {
                         : ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
+                              var x = "";
                               DocumentSnapshot data =
                                   snapshot.data!.docs[index];
+                              _getDoctors(data['DoctorName']).then((value) =>
+                                  {x = value, print("Fuck" + value)});
+                              Timer(
+                                  const Duration(milliseconds: 1000), () => {});
 
                               // print("DoctorName" + data['DoctorName']);
                               // print("Fuuuuuuuuuuuck" +
                               //     data['HospitalName'] +
                               //     widget._hosName);
-                              if (index == snapshot.data!.docs.length - 1 ||
-                                  isLoaded) {
-                                setState(() {
-                                  isLoaded = !isLoaded;
-                                });
-                              } else {
-                                if (data['HospitalName']
-                                        .toString()
-                                        .contains(widget._hosName) &&
-                                    !isLoaded) {
-                                  _getDoctors(data['DoctorName']);
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: StaffDetailsBody(
-                                        widget._hosName,
-                                        DoctorName!,
-                                        data['Day'],
-                                        data['TimeFrom'],
-                                        data['TimeTo']),
-                                  );
-                                }
 
-                                return Container();
+                              if (data['HospitalName']
+                                  .toString()
+                                  .contains(widget._hosName)) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: StaffDetailsBody(
+                                      widget._hosName,
+                                      x,
+                                      data['Day'],
+                                      data['TimeFrom'],
+                                      data['TimeTo']),
+                                );
                               }
+
                               return Container();
                             });
                   }),
@@ -95,28 +93,19 @@ class _StaffState extends State<Staff> {
     );
   }
 
-  Future<void> _getDoctors(doctorId) async {
+  Future<String> _getDoctors(doctorId) async {
+    var Doctor = "";
     await FirebaseFirestore.instance
         .collection('doctors')
         .get()
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {
                 if (doctorId == doc.id) {
-                  DoctorName = doc["DoctorName"];
-                  Specialist = doc["Specialize"];
-
-                  print(DoctorName);
+                  Doctor = doc["DoctorName"];
+                  print("Doctor" + Doctor);
                 }
               })
             });
+    return Doctor;
   }
-//   Stream<List<String>> list(FirebaseFirestore _firesore) {
-//   CollectionReference _col = _firesore.collection('Buisiness');
-
-//   final _snap = _col.snapshots();
-
-//   return _snap.map((event) => event.docs
-//       .map<Business>((e) => Business.fromMap(e.data() as Map<String, dynamic>))
-//       .toList());
-// }
 }
