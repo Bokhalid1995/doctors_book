@@ -14,8 +14,17 @@ class Staff extends StatefulWidget {
 }
 
 class _StaffState extends State<Staff> {
+  @override
+  void initState() {
+    // TODO: implement initState
+  }
+
+  String? DoctorName;
+  String? Specialist;
+  bool isLoaded = false;
   final CollectionReference _distribution =
       FirebaseFirestore.instance.collection('Distriputions');
+
   @override
   Widget build(BuildContext context) {
     // print(widget._hosName);
@@ -47,22 +56,34 @@ class _StaffState extends State<Staff> {
                             itemBuilder: (context, index) {
                               DocumentSnapshot data =
                                   snapshot.data!.docs[index];
+
                               // print("DoctorName" + data['DoctorName']);
                               // print("Fuuuuuuuuuuuck" +
                               //     data['HospitalName'] +
                               //     widget._hosName);
-                              if (data['HospitalName']
-                                  .toString()
-                                  .contains(widget._hosName)) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: StaffDetailsBody(
-                                      widget._hosName,
-                                      data['DoctorName'],
-                                      data['Day'],
-                                      data['TimeFrom'],
-                                      data['TimeTo']),
-                                );
+                              if (index == snapshot.data!.docs.length - 1 ||
+                                  isLoaded) {
+                                setState(() {
+                                  isLoaded = !isLoaded;
+                                });
+                              } else {
+                                if (data['HospitalName']
+                                        .toString()
+                                        .contains(widget._hosName) &&
+                                    !isLoaded) {
+                                  _getDoctors(data['DoctorName']);
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StaffDetailsBody(
+                                        widget._hosName,
+                                        DoctorName!,
+                                        data['Day'],
+                                        data['TimeFrom'],
+                                        data['TimeTo']),
+                                  );
+                                }
+
+                                return Container();
                               }
                               return Container();
                             });
@@ -73,4 +94,29 @@ class _StaffState extends State<Staff> {
       ),
     );
   }
+
+  Future<void> _getDoctors(doctorId) async {
+    await FirebaseFirestore.instance
+        .collection('doctors')
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                if (doctorId == doc.id) {
+                  DoctorName = doc["DoctorName"];
+                  Specialist = doc["Specialize"];
+
+                  print(DoctorName);
+                }
+              })
+            });
+  }
+//   Stream<List<String>> list(FirebaseFirestore _firesore) {
+//   CollectionReference _col = _firesore.collection('Buisiness');
+
+//   final _snap = _col.snapshots();
+
+//   return _snap.map((event) => event.docs
+//       .map<Business>((e) => Business.fromMap(e.data() as Map<String, dynamic>))
+//       .toList());
+// }
 }
