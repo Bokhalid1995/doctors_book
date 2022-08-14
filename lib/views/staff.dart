@@ -3,9 +3,9 @@ import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 
 class Staff extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const Staff(this._hosName);
   final String _hosName;
 
@@ -18,28 +18,28 @@ class _StaffState extends State<Staff> {
       FirebaseFirestore.instance.collection('Distriputions');
   @override
   Widget build(BuildContext context) {
-    print(widget._hosName);
+    // print(widget._hosName);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: PColor,
           title: Text(
-            'الاطباء المتوفرون - ' + widget._hosName,
-            style: TextStyle(
+            'الاطباء المتوفرون - ${widget._hosName}',
+            style: const TextStyle(
               fontSize: 14,
             ),
           ),
         ),
         body: Column(
           children: [
-            Container(
+            SizedBox(
               height: SizeConfig.screenheight! / 1.14,
               child: StreamBuilder(
                   stream: _distribution.snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
-                        ? Center(
+                        ? const Center(
                             child: CircularProgressIndicator(),
                           )
                         : ListView.builder(

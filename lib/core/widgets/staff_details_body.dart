@@ -1,5 +1,6 @@
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
+import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/views/Booking.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -59,14 +60,6 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                     onTap: () {
                       // ignore: deprecated_member_use
                       // launch("tel://${widget.phone}");
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => Booking(
-                              widget.HospitalName,
-                              widget.DoctorName,
-                              widget.Day,
-                              widget.From,
-                              widget.To)));
                     },
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
@@ -138,22 +131,45 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                           ),
                         ),
                         const SizedBox(
-                          height: 15,
+                          height: 10,
                         ),
-                        Text(
-                          ' الزمن : من' +
-                              widget.From +
-                              '(' +
-                              fromFormat +
-                              ') الي ' +
-                              widget.To +
-                              '(' +
-                              fromTo +
-                              ')',
-                          style: const TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              ' الزمن : ' +
+                                  (int.parse(widget.From) > 12
+                                          ? int.parse(widget.From) - 12
+                                          : int.parse(widget.From))
+                                      .toString() +
+                                  ' (' +
+                                  fromFormat +
+                                  ')  -  ' +
+                                  (int.parse(widget.To) > 12
+                                          ? int.parse(widget.To) - 12
+                                          : int.parse(widget.To))
+                                      .toString() +
+                                  ' (' +
+                                  fromTo +
+                                  ')',
+                              style: const TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(),
+                            RaisedButton(
+                                child: Text('حجز'),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          Booking(
+                                              widget.HospitalName,
+                                              widget.DoctorName,
+                                              widget.Day,
+                                              widget.From,
+                                              widget.To)));
+                                }),
+                          ],
                         ),
                       ],
                     ),
