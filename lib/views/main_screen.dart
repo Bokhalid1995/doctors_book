@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_const
 
+import 'package:doctors_book/splash/splash_view.dart';
 import 'package:doctors_book/views/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
@@ -204,6 +205,21 @@ class _MainScreenBodyState extends State<MainScreenBody>
                               // Navigator.of(context).push(MaterialPageRoute(
                               //     builder: (BuildContext context) => Register()));
                             },
+                          ),
+                          const Divider(
+                            color: Colors.grey,
+                          ),
+                          ListTile(
+                            title: const Text("الخروج"),
+                            leading: IconButton(
+                              icon: const Icon(Icons.logout),
+                              onPressed: () {},
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const SplashView()));
+                            },
                           )
                         ],
                       ),
@@ -261,14 +277,14 @@ class _MainScreenBodyState extends State<MainScreenBody>
               ),
 
               actions: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              const AdminDashboard()));
-                    },
-                    icon: const Icon(Icons.fullscreen_exit_rounded))
+                // IconButton(
+                //     onPressed: () {
+                //       Navigator.of(context).pop();
+                //       Navigator.of(context).push(MaterialPageRoute(
+                //           builder: (BuildContext context) =>
+                //               const AdminDashboard()));
+                //     },
+                //     icon: const Icon(Icons.fullscreen_exit_rounded))
               ],
             ),
             body: const Padding(

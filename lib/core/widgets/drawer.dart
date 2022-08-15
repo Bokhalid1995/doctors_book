@@ -2,10 +2,12 @@ import 'package:doctors_book/views/admin/Distribution.dart';
 import 'package:doctors_book/views/admin/Hospital_control.dart';
 import 'package:doctors_book/views/admin/Login.dart';
 import 'package:doctors_book/views/admin/Register.dart';
+import 'package:doctors_book/views/admin/admin_dashboard.dart';
 import 'package:doctors_book/views/admin/staff_control.dart';
 import 'package:doctors_book/views/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
+import 'package:get_storage/get_storage.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -15,6 +17,8 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  final box = GetStorage();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -113,6 +117,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
             color: Colors.grey,
           ),
           ListTile(
+            title: const Text("قائمة الحجوزات"),
+            leading: IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {},
+            ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const AdminDashboard()));
+            },
+          ),
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
             title: const Text("الصفحه الرئيسية"),
             leading: IconButton(
               icon: const Icon(Icons.home_filled),
@@ -134,6 +152,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               onPressed: () {},
             ),
             onTap: () {
+              box.remove('UserName');
+              box.remove('HospitalName');
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const Login()));
             },

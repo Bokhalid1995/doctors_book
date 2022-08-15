@@ -38,71 +38,110 @@ class _AdminDashboardState extends State<AdminDashboard> {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: PColor,
-        title: Text("لوحة التحكم"),
+        title: const Text("لوحة التحكم"),
       ),
-      drawer: CustomDrawer(),
-      body: StreamBuilder(
-          stream: _booking.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            return snapshot.connectionState == ConnectionState.waiting
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
-                      if (data['Status'] == "Waiting") {
-                        isConfirmed = false;
-                      } else {
-                        isConfirmed = true;
-                      }
-                      //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
-                      return hospital == data['HospitalName']
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
-                              child: Card(
-                                elevation: 5,
-                                child: ListTile(
-                                  leading: IconButton(
-                                    icon: const Icon(
-                                      Icons.delete_forever,
-                                      color: Colors.redAccent,
+      drawer: const CustomDrawer(),
+      body: ListView(
+        children: [
+          Container(
+            width: SizeConfig.screenWidth! - 20,
+            height: 70,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: PColor.withOpacity(0.20),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "مرحبا $user",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: PColor, fontSize: 15),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "قائمة حجوزات اليوم",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: PColor, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: SizeConfig.screenheight,
+            child: StreamBuilder(
+                stream: _booking.snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot data = snapshot.data!.docs[index];
+                            if (data['Status'] == "Waiting") {
+                              isConfirmed = false;
+                            } else {
+                              isConfirmed = true;
+                            }
+
+                            if (hospital == data['HospitalName']) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
+                                child: Card(
+                                  elevation: 5,
+                                  child: ListTile(
+                                    leading: IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_forever,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onPressed: () {
+                                        DeleteBooking(data.id);
+                                      },
                                     ),
-                                    onPressed: () {
-                                      // Deletehospital(data.id);
-                                    },
-                                  ),
-                                  // ignore: prefer_interpolation_to_compose_strings
-                                  title: Text(
-                                    'اسم المريض : ' + data['PatientName'],
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                  // ignore: prefer_interpolation_to_compose_strings
-                                  subtitle: Text('التاريخ : ' +
-                                      data['BookingDate'] +
-                                      ' | ' +
-                                      data['TimeFrom'] +
-                                      '- ' +
-                                      data['TimeTo']),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      isConfirmed == true
-                                          ? Icons.check
-                                          : Icons.info,
-                                      color: PColor,
+                                    // ignore: prefer_interpolation_to_compose_strings
+                                    title: Text(
+                                      'اسم المريض : ' + data['PatientName'],
+                                      style: const TextStyle(fontSize: 13),
                                     ),
-                                    onPressed: () {
-                                      Update(data);
-                                    },
+                                    // ignore: prefer_interpolation_to_compose_strings
+                                    subtitle: Text('التاريخ : ' +
+                                        data['BookingDate'] +
+                                        ' | ' +
+                                        data['TimeFrom'] +
+                                        '- ' +
+                                        data['TimeTo']),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        isConfirmed == true
+                                            ? Icons.check
+                                            : Icons.info,
+                                        color: PColor,
+                                      ),
+                                      onPressed: () {
+                                        Update(data);
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : Container();
-                    });
-          }),
+                              );
+                            }
+                            return Container();
+                          });
+                }),
+          ),
+        ],
+      ),
     );
   }
 
@@ -127,8 +166,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         width: SizeConfig.screenWidth! / 2,
                         height: 30,
                         decoration: BoxDecoration(
-                          color:
-                              Color.fromARGB(255, 6, 90, 8).withOpacity(0.20),
+                          color: const Color.fromARGB(255, 6, 90, 8)
+                              .withOpacity(0.20),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
@@ -250,5 +289,28 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 )),
           );
         });
+  }
+
+  Future<void> DeleteBooking(String Id) async {
+    _booking.doc(Id).delete();
+
+    scaffoldKey.currentState!.showSnackBar(SnackBar(
+      content: const Padding(
+        padding: EdgeInsets.all(5),
+        child: Text(
+          "تم الغاء الحجز بنجاح ",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Cairo',
+            color: Colors.white,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.redAccent,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+    ));
   }
 }

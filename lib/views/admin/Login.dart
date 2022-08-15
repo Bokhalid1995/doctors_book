@@ -160,6 +160,9 @@ class _LoginState extends State<Login> {
                                                   'UserName', doc["UserName"]);
                                               box.write('HospitalName',
                                                   doc["HospitalName"]);
+
+                                              _UserName.clear();
+                                              _Password.clear();
                                             }
                                           }),
                                           if (Auth == true)

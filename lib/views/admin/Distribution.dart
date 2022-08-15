@@ -325,8 +325,8 @@ class _DistributionControlState extends State<DistributionControl> {
                     });
                   },
                   value: Type != "doctor"
-                      ? _SelectedHos ?? "المتكامل"
-                      : _SelectedDocs ?? "الطيب ابايزيد",
+                      ? _SelectedHos ?? snapshot.data!.docs[0]['Name']
+                      : _SelectedDocs ?? snapshot.data!.docs[0]['DoctorName'],
 
                   // buttonDecoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(14),
@@ -351,7 +351,6 @@ class _DistributionControlState extends State<DistributionControl> {
                 }
               })
             });
-    print("FUUUUUUUCK" + Specialize.toString());
   }
 
   Future<void> UpdateDistribution([DocumentSnapshot? documentSnapshot]) async {
@@ -521,6 +520,7 @@ class _DistributionControlState extends State<DistributionControl> {
   }
 
   Future<void> DeleteDistribution(String Id) async {
+    print("Doc ID : " + Id);
     _dist.doc(Id).delete();
 
     scaffoldKey.currentState!.showSnackBar(SnackBar(
