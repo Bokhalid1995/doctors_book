@@ -319,6 +319,5 @@ class _BookingState extends State<Booking> {
                 }
               })
             });
-    print("Fuuuuuuuuuck" + length.toString());
   }
 }
