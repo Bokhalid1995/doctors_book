@@ -329,14 +329,14 @@ class _RegisterControlState extends State<RegisterControl> {
                     var name = document['Name'];
                     var id = document.id;
                     return DropdownMenuItem<String>(
-                        value: id, child: Text(name));
+                        value: name, child: Text(name));
                   }).toList(),
                   onChanged: (val) {
                     setState(() {
                       _SelectedHos = val!;
                     });
                   },
-                  value: _SelectedHos ?? snapshot.data!.docs[0].id,
+                  value: _SelectedHos ?? snapshot.data!.docs[0]['Name'],
 
                   // buttonDecoration: BoxDecoration(
                   //   borderRadius: BorderRadius.circular(14),
