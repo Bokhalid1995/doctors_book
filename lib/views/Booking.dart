@@ -22,6 +22,14 @@ class Booking extends StatefulWidget {
 }
 
 class _BookingState extends State<Booking> {
+  int length = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getBooking(widget._hosName, widget.DoctorName);
+  }
+
   final CollectionReference _booking =
       FirebaseFirestore.instance.collection('BookingDetails');
   final TextEditingController _PatientName = TextEditingController();
@@ -186,23 +194,54 @@ class _BookingState extends State<Booking> {
                               color: Colors.green,
                               raduis: 30,
                               onTap: () {
-                                if (formKey.currentState!.validate()) {
-                                  _booking.add({
-                                    "PatientName": _PatientName.text,
-                                    "Age": _Age.text,
-                                    "BookingDate": _BookingDate.text,
-                                    "DoctorName": widget.DoctorName,
-                                    "HospitalName": widget._hosName,
-                                    "TimeFrom": widget.From,
-                                    "TimeTo": widget.To,
-                                    "Status": "Waiting",
-                                  });
+                                if (length <= 10) {
+                                  if (formKey.currentState!.validate()) {
+                                    _booking.add({
+                                      "PatientName": _PatientName.text,
+                                      "Age": _Age.text,
+                                      "BookingDate": _BookingDate.text,
+                                      "DoctorName": widget.DoctorName,
+                                      "HospitalName": widget._hosName,
+                                      "TimeFrom": widget.From,
+                                      "TimeTo": widget.To,
+                                      "Status": "Waiting",
+                                    });
 
-                                  setState(() {
-                                    _PatientName.clear();
-                                    _Age.clear();
-                                  });
+                                    setState(() {
+                                      _PatientName.clear();
+                                      _Age.clear();
+                                    });
 
+                                    scaffoldKey.currentState!
+                                        .showSnackBar(SnackBar(
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            "تم  تاكيد الحجز بنجاح",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: 'Cairo',
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.check_circle,
+                                            color: Colors.white,
+                                          )
+                                        ],
+                                      ),
+                                      backgroundColor: Colors.green,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                    ));
+                                  }
+                                } else {
                                   scaffoldKey.currentState!
                                       .showSnackBar(SnackBar(
                                     content: Row(
@@ -212,7 +251,7 @@ class _BookingState extends State<Booking> {
                                           CrossAxisAlignment.center,
                                       children: const [
                                         Text(
-                                          "تم  تاكيد الحجز بنجاح",
+                                          " الحجوزات مغلقه لهذا الطبيب الرجاء  المحاوله لاحقا ",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily: 'Cairo',
@@ -220,17 +259,18 @@ class _BookingState extends State<Booking> {
                                           ),
                                         ),
                                         Icon(
-                                          Icons.check_circle,
+                                          Icons.work_off,
                                           color: Colors.white,
                                         )
                                       ],
                                     ),
-                                    backgroundColor: Colors.green,
+                                    backgroundColor: Colors.redAccent,
                                     behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24),
                                     ),
                                   ));
+
                                   // Navigator.of(context).pop();
                                 }
                               },
@@ -265,5 +305,20 @@ class _BookingState extends State<Booking> {
             text: formatter.format(
                 picked)); //Use formatter to format selected date and assign to text field
       });
+  }
+
+  Future<void> _getBooking(hospital, DoctorName) async {
+    await FirebaseFirestore.instance
+        .collection('Distriputions')
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                if (hospital == doc["HospitalName"] &&
+                    DoctorName == doc["DoctorName"]) {
+                  ++length;
+                }
+              })
+            });
+    print("Fuuuuuuuuuck" + length.toString());
   }
 }

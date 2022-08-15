@@ -1,5 +1,6 @@
 import 'package:doctors_book/views/admin/Distribution.dart';
 import 'package:doctors_book/views/admin/Hospital_control.dart';
+import 'package:doctors_book/views/admin/Login.dart';
 import 'package:doctors_book/views/admin/Register.dart';
 import 'package:doctors_book/views/admin/staff_control.dart';
 import 'package:doctors_book/views/main_screen.dart';
@@ -121,6 +122,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const MainScreen()));
+            },
+          ),
+          const Divider(
+            color: Colors.grey,
+          ),
+          ListTile(
+            title: const Text("تسجيل الخروج"),
+            leading: IconButton(
+              icon: const Icon(Icons.home_filled),
+              onPressed: () {},
+            ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const Login()));
             },
           )
         ],

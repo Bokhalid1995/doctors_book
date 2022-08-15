@@ -56,19 +56,19 @@ class _StaffState extends State<Staff> {
                         : ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              var x = "";
-                              DocumentSnapshot data =
-                                  snapshot.data!.docs[index];
-                              _getDoctors(data['DoctorName']).then((value) =>
-                                  {x = value, print("Fuck" + value)});
-                              Timer(
-                                  const Duration(milliseconds: 1000), () => {});
+                              // var x = "";
+
+                              // _getDoctors(data['DoctorName']).then((value) =>
+                              //     {x = value, print("Fuck" + value)});
+                              // Timer(
+                              //     const Duration(milliseconds: 1000), () => {});
 
                               // print("DoctorName" + data['DoctorName']);
                               // print("Fuuuuuuuuuuuck" +
                               //     data['HospitalName'] +
                               //     widget._hosName);
-
+                              DocumentSnapshot data =
+                                  snapshot.data!.docs[index];
                               if (data['HospitalName']
                                   .toString()
                                   .contains(widget._hosName)) {
@@ -76,7 +76,8 @@ class _StaffState extends State<Staff> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: StaffDetailsBody(
                                       widget._hosName,
-                                      x,
+                                      data['DoctorName'],
+                                      data['Specialize'],
                                       data['Day'],
                                       data['TimeFrom'],
                                       data['TimeTo']),

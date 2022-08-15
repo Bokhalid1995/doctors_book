@@ -1,3 +1,4 @@
+import 'package:doctors_book/views/admin/Login.dart';
 import 'package:doctors_book/views/admin/admin_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -73,7 +74,6 @@ class _SplashBodyState extends State<SplashBody>
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => const MainScreen()));
                 },
@@ -105,10 +105,8 @@ class _SplashBodyState extends State<SplashBody>
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const AdminDashboard()));
+                      builder: (BuildContext context) => const Login()));
                 },
                 child: Container(
                   width: SizeConfig.screenWidth! / 1.2,

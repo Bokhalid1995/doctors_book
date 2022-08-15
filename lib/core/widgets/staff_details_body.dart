@@ -6,12 +6,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class StaffDetailsBody extends StatefulWidget {
-  const StaffDetailsBody(
-      this.HospitalName, this.DoctorName, this.Day, this.From, this.To,
+  const StaffDetailsBody(this.HospitalName, this.DoctorName, this.Specialize,
+      this.Day, this.From, this.To,
       {Key? key});
 
   final String HospitalName;
   final String DoctorName;
+  final String Specialize;
   final String Day;
   final String From;
   final String To;
@@ -109,25 +110,36 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.DoctorName,
-                          style: const TextStyle(
-                            color: PColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              widget.DoctorName,
+                              style: const TextStyle(
+                                color: PColor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Spacer(),
+                            Icon(Icons.supervised_user_circle),
+                            Text(
+                              ' أخصائي : ${widget.Specialize}',
+                              style: TextStyle(
+                                color: PColor.withOpacity(0.60),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 10,
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Text(
-                            widget.Day,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        Text(
+                          'الحضور : ' + widget.Day,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(

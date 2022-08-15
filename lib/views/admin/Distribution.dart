@@ -40,6 +40,7 @@ class _DistributionControlState extends State<DistributionControl> {
   String? _DayAttend;
   String? _SelectedHos;
   String? _SelectedDocs;
+  String? Specialize = "";
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +176,8 @@ class _DistributionControlState extends State<DistributionControl> {
                                                         "DoctorName":
                                                             _SelectedDocs,
                                                         "Status": "Active",
+                                                        "Specialize":
+                                                            Specialize,
                                                       });
 
                                                       setState(() {
@@ -314,6 +317,7 @@ class _DistributionControlState extends State<DistributionControl> {
                   onChanged: (val) {
                     setState(() {
                       if (Type == "doctor") {
+                        _getDoctors(val);
                         _SelectedDocs = val!;
                       } else {
                         _SelectedHos = val!;
@@ -334,6 +338,20 @@ class _DistributionControlState extends State<DistributionControl> {
                 ),
               ));
         });
+  }
+
+  Future<void> _getDoctors(doctorId) async {
+    await FirebaseFirestore.instance
+        .collection('doctors')
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                if (doctorId == doc["DoctorName"]) {
+                  Specialize = doc["Specialize"];
+                }
+              })
+            });
+    print("FUUUUUUUCK" + Specialize.toString());
   }
 
   Future<void> UpdateDistribution([DocumentSnapshot? documentSnapshot]) async {
@@ -456,6 +474,7 @@ class _DistributionControlState extends State<DistributionControl> {
                                             "Day": _DayAttend,
                                             "HospitalName": _SelectedHos,
                                             "DoctorName": _SelectedDocs,
+                                            "Specialize": Specialize,
                                           });
 
                                           setState(() {

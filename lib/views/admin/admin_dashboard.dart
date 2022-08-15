@@ -5,6 +5,7 @@ import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -14,6 +15,18 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  final box = GetStorage();
+  String user = "";
+  String hospital = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = box.read('UserName');
+    hospital = box.read('HospitalName');
+  }
+
   bool isConfirmed = false;
   final CollectionReference _booking =
       FirebaseFirestore.instance.collection('BookingDetails');
@@ -45,45 +58,49 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         isConfirmed = true;
                       }
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
-                        child: Card(
-                          elevation: 5,
-                          child: ListTile(
-                            leading: IconButton(
-                              icon: const Icon(
-                                Icons.delete_forever,
-                                color: Colors.redAccent,
+                      return hospital == data['HospitalName']
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
+                              child: Card(
+                                elevation: 5,
+                                child: ListTile(
+                                  leading: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.redAccent,
+                                    ),
+                                    onPressed: () {
+                                      // Deletehospital(data.id);
+                                    },
+                                  ),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  title: Text(
+                                    'اسم المريض : ' + data['PatientName'],
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  subtitle: Text('التاريخ : ' +
+                                      data['BookingDate'] +
+                                      ' | ' +
+                                      data['TimeFrom'] +
+                                      '- ' +
+                                      data['TimeTo']),
+                                  trailing: IconButton(
+                                    icon: Icon(
+                                      isConfirmed == true
+                                          ? Icons.check
+                                          : Icons.info,
+                                      color: PColor,
+                                    ),
+                                    onPressed: () {
+                                      Update(data);
+                                    },
+                                  ),
+                                ),
                               ),
-                              onPressed: () {
-                                // Deletehospital(data.id);
-                              },
-                            ),
-                            // ignore: prefer_interpolation_to_compose_strings
-                            title: Text(
-                              'اسم المريض : ' + data['PatientName'],
-                              style: TextStyle(fontSize: 13),
-                            ),
-                            // ignore: prefer_interpolation_to_compose_strings
-                            subtitle: Text('التاريخ : ' +
-                                data['BookingDate'] +
-                                ' | ' +
-                                data['TimeFrom'] +
-                                '- ' +
-                                data['TimeTo']),
-                            trailing: IconButton(
-                              icon: Icon(
-                                isConfirmed == true ? Icons.check : Icons.info,
-                                color: PColor,
-                              ),
-                              onPressed: () {
-                                Update(data);
-                              },
-                            ),
-                          ),
-                        ),
-                      );
+                            )
+                          : Container();
                     });
           }),
     );
