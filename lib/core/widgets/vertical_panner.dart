@@ -27,8 +27,8 @@ class GroceryFeaturedCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Container(
-          width: SizeConfig.screenWidth! / 1.8,
-          height: 120,
+          width: SizeConfig.screenWidth! / 3.5,
+          height: 150,
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 17),
           decoration: BoxDecoration(
               color: color!.withOpacity(0.15),
@@ -44,52 +44,42 @@ class GroceryFeaturedCard extends StatelessWidget {
               //   )
               // ],
               borderRadius: BorderRadius.circular(18)),
-          child: Row(
+          child: Column(
+            textDirection: TextDirection.rtl,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: color!.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(10),
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     offset: Offset(0,0),
-                      //     blurRadius: 30,
-                      //     color: Color(0xFF0377AD).withOpacity(0.5),
-                      //   )
-                      // ]
-                    ),
-                    child: Text(
-                      groceryFeaturedItem.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                width: SizeConfig.screenWidth! / 5,
+                decoration: BoxDecoration(
+                  color: color!.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(10),
+                  // boxShadow: [s
+                  //   BoxShadow(
+                  //     offset: Offset(0,0),
+                  //     blurRadius: 30,
+                  //     color: Color(0xFF0377AD).withOpacity(0.5),
+                  //   )
+                  // ]
+                ),
+                child: Text(
+                  groceryFeaturedItem.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
+                ),
               ),
-              const Spacer(),
-              Column(
-                textDirection: TextDirection.rtl,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    groceryFeaturedItem.statcs.toString(),
-                    style: TextStyle(
-                      color: color,
-                      fontSize: 50,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+              Text(
+                groceryFeaturedItem.statcs.toString(),
+                style: TextStyle(
+                  color: color,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),

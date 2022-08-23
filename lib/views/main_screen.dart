@@ -39,7 +39,7 @@ class _MainScreenBodyState extends State<MainScreenBody>
   // ignore: unused_field
   static const List<Tab> _tabs = [
     const Tab(icon: Icon(Icons.home), child: const Text('الرئيسية')),
-    const Tab(icon: Icon(Icons.people_outlined), text: 'التعاقدات'),
+    const Tab(icon: Icon(Icons.people_outlined), text: 'المستشفيات'),
   ];
 
   static const List<Widget> _views = [
@@ -121,61 +121,6 @@ class _MainScreenBodyState extends State<MainScreenBody>
                       ),
                       child: Column(
                         children: [
-                          // ListTile(
-                          //   title: const Text("الفروع"),
-                          //   leading: IconButton(
-                          //     color: PColor,
-                          //     icon: const Icon(Icons.home_work_outlined),
-                          //     onPressed: () {
-                          //       Navigator.of(context).pop();
-                          //     },
-                          //   ),
-                          //   onTap: ()
-                          //   {
-                          //     Navigator.of(context).pop();
-                          //     //   Navigator.of(context).push(MaterialPageRoute(
-                          //     //       builder: (BuildContext context) => ServicesControl()));
-                          //   },
-                          // ),
-                          // const Divider(
-                          //   color: Colors.grey,
-                          // ),
-                          // ListTile(
-                          //   title: const Text("التأمينات الاخري"),
-                          //   leading: IconButton(
-                          //     color: PColor,
-                          //     icon: const Icon(Icons.devices_other),
-                          //     onPressed: () {
-                          //     },
-                          //   ),
-                          //   onTap: ()
-                          //   {
-                          //     Navigator.of(context).pop();
-                          //     // Navigator.of(context).push(MaterialPageRoute(
-                          //     //     builder: (BuildContext context) => StaffControl()));
-                          //   },
-                          // ),
-                          // const Divider(
-                          //   color: Colors.grey,
-                          // ),
-                          // ListTile(
-                          //   title: const Text("عن الشركة"),
-                          //   leading: IconButton(
-                          //     color: PColor,
-                          //     icon: const Icon(Icons.info),
-                          //     onPressed: () {
-                          //     },
-                          //   ),
-                          //   onTap: ()
-                          //   {
-                          //     Navigator.of(context).pop();
-                          //     // Navigator.of(context).push(MaterialPageRoute(
-                          //     //     builder: (BuildContext context) => DepartmentControl()));
-                          //   },
-                          // ),
-                          // const Divider(
-                          //   color: Colors.grey,
-                          // ),
                           ListTile(
                             title: const Text("عن التطبيق"),
                             leading: IconButton(
@@ -230,62 +175,51 @@ class _MainScreenBodyState extends State<MainScreenBody>
             ),
             appBar: AppBar(
               backgroundColor: PColor,
-
               elevation: 0,
+              bottom: TabBar(
+                padding: EdgeInsets.all(15),
+                // labelColor: Colors.white,
+                unselectedLabelColor: Colors.grey,
+                labelStyle: const TextStyle(
+                    fontFamily: 'cairo', fontWeight: FontWeight.bold),
+                unselectedLabelStyle: const TextStyle(
+                    fontFamily: 'cairo', fontWeight: FontWeight.bold),
+                overlayColor:
+                    MaterialStateColor.resolveWith((Set<MaterialState> states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return PColor;
+                  }
+                  if (states.contains(MaterialState.focused)) {
+                    return Colors.white;
+                  } else if (states.contains(MaterialState.hovered)) {
+                    return Colors.grey;
+                  }
 
-              // bottom: TabBar(
-              //    padding: EdgeInsets.all(15),
-              //   // labelColor: Colors.white,
-              //   unselectedLabelColor: PColor,
-              //   labelStyle: const TextStyle(fontFamily: 'cairo',fontWeight: FontWeight.bold),
-              //  // unselectedLabelStyle: const TextStyle(fontStyle: FontStyle.italic),
-              //  //  overlayColor: MaterialStateColor.resolveWith((Set<MaterialState> states) {
-              //  //    // if (states.contains(MaterialState.pressed)) {
-              //  //    //   return Colors.white;
-              //  //    // } if (states.contains(MaterialState.focused)) {
-              //  //    //   return PColor;
-              //  //    // } else if (states.contains(MaterialState.hovered)) {
-              //  //    //   return Colors.grey;
-              //  //    // }
-              //  //
-              //  //    return Colors.transparent;
-              //  //  }),
-              //   indicatorWeight: 10,
-              //   // indicatorColor: Colors.black45,
-              //   indicatorSize: TabBarIndicatorSize.tab,
-              //   indicatorPadding: const EdgeInsets.all(2),
-              //   indicator: BoxDecoration(
-              //
-              //     border: Border.all(color: PColor),
-              //     borderRadius: BorderRadius.circular(100),
-              //     color: PColor,
-              //   ),
-              //   isScrollable: true,
-              //   physics: BouncingScrollPhysics(),
-              //   onTap: (int index) {
-              //     print('Tab $index is tapped');
-              //   },
-              //   enableFeedback: true,
-              //   // Uncomment the line below and remove DefaultTabController if you want to use a custom TabController
-              //   // controller: _tabController,
-              //   tabs: _tabs,
-              // ),
-
+                  return PColor.withOpacity(0.20);
+                }),
+                indicatorWeight: 10,
+                indicatorColor: Colors.black45,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorPadding: const EdgeInsets.all(2),
+                indicator: BoxDecoration(
+                  border: Border.all(color: PColor),
+                  borderRadius: BorderRadius.circular(100),
+                  color: PColor,
+                ),
+                isScrollable: true,
+                physics: BouncingScrollPhysics(),
+                onTap: (int index) {
+                  print('Tab $index is tapped');
+                },
+                enableFeedback: true,
+                // Uncomment the line below and remove DefaultTabController if you want to use a custom TabController
+                // controller: _tabController,
+                tabs: _tabs,
+              ),
               title: const Text(
                 'تطبيق حجز الطبيب',
                 style: TextStyle(fontSize: 17, color: Colors.white),
               ),
-
-              actions: [
-                // IconButton(
-                //     onPressed: () {
-                //       Navigator.of(context).pop();
-                //       Navigator.of(context).push(MaterialPageRoute(
-                //           builder: (BuildContext context) =>
-                //               const AdminDashboard()));
-                //     },
-                //     icon: const Icon(Icons.fullscreen_exit_rounded))
-              ],
             ),
             body: const Padding(
               padding: EdgeInsets.only(top: 18.0),

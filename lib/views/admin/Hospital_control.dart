@@ -1,4 +1,7 @@
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/models/hospitals.dart';
+import 'package:doctors_book/shared/services_hospital.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +23,8 @@ class _HospitalControlState extends State<HospitalControl> {
   final TextEditingController _Location = TextEditingController();
   final TextEditingController _Description = TextEditingController();
   final TextEditingController _PhoneNumber = TextEditingController();
+
+  var hospitalApi = new ServicesHospital();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formUpdateKey = GlobalKey<FormState>();
@@ -189,42 +194,55 @@ class _HospitalControlState extends State<HospitalControl> {
                                               onTap: () {
                                                 if (formKey.currentState!
                                                     .validate()) {
-                                                  _hospital.add({
-                                                    "Name": _Name.text,
-                                                    "Location": _Location.text,
-                                                    "PhoneNumber": int.parse(
-                                                        _PhoneNumber.text),
-                                                    "Description":
-                                                        _Description.text,
-                                                  });
-                                                  _Name.clear();
-                                                  _Location.clear();
-                                                  _PhoneNumber.clear();
-                                                  _Description.clear();
+                                                  hospitalApi.Create(
+                                                          HospitalsModel(
+                                                              id: 0,
+                                                              name: _Name.text,
+                                                              location:
+                                                                  _Location
+                                                                      .text,
+                                                              description:
+                                                                  _Description
+                                                                      .text,
+                                                              phone:
+                                                                  _PhoneNumber
+                                                                      .text))
+                                                      .then((value) {
+                                                    if (value == true) {
+                                                      _Name.clear();
+                                                      _Location.clear();
+                                                      _PhoneNumber.clear();
+                                                      _Description.clear();
 
-                                                  scaffoldKey.currentState!
-                                                      .showSnackBar(SnackBar(
-                                                    content: const Text(
-                                                      "تم الحفظ بنجاح",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Cairo',
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                    behavior: SnackBarBehavior
-                                                        .floating,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              24),
-                                                    ),
-                                                  ));
-                                                  Navigator.of(context).pop();
+                                                      scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        content: const Text(
+                                                          "تم الحفظ بنجاح",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Cairo',
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        behavior:
+                                                            SnackBarBehavior
+                                                                .floating,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(24),
+                                                        ),
+                                                      ));
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      setState(() {});
+                                                    }
+                                                  });
                                                 }
                                               },
                                             );
@@ -245,17 +263,17 @@ class _HospitalControlState extends State<HospitalControl> {
         ],
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder(
-          stream: _hospital.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+          future: hospitalApi.GetAll(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      //DocumentSnapshot data = snapshot.data![index].name;
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -269,18 +287,18 @@ class _HospitalControlState extends State<HospitalControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                Deletehospital(data.id);
+                                Deletehospital(snapshot.data![index].id);
                               },
                             ),
-                            title: Text(data['Name']),
-                            subtitle: Text(data['Location']),
+                            title: Text(snapshot.data![index].name),
+                            subtitle: Text(snapshot.data![index].location),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
                                 color: PColor,
                               ),
                               onPressed: () {
-                                Updatehospital(data);
+                                Updatehospital(snapshot.data![index]);
                               },
                             ),
                           ),
@@ -291,12 +309,12 @@ class _HospitalControlState extends State<HospitalControl> {
     );
   }
 
-  Future<void> Updatehospital([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> Updatehospital(HospitalsModel? documentSnapshot) async {
     if (documentSnapshot != null) {
-      _Name.text = documentSnapshot['Name'];
-      _Location.text = documentSnapshot['Location'];
-      _Description.text = documentSnapshot['Description'];
-      _PhoneNumber.text = documentSnapshot['PhoneNumber'].toString();
+      _Name.text = documentSnapshot.name!;
+      _Location.text = documentSnapshot.location!;
+      _Description.text = documentSnapshot.description!;
+      _PhoneNumber.text = documentSnapshot.phone!;
     }
     await showDialog(
         context: context,
@@ -444,39 +462,40 @@ class _HospitalControlState extends State<HospitalControl> {
                                   onTap: () {
                                     if (formUpdateKey.currentState!
                                         .validate()) {
-                                      _hospital
-                                          .doc(documentSnapshot!.id)
-                                          .update({
-                                        "Name": _Name.text,
-                                        "Location": _Location.text,
-                                        "Description": _Description.text,
-                                        "PhoneNumber":
-                                            int.parse(_PhoneNumber.text),
+                                      hospitalApi.Update(HospitalsModel(
+                                              id: documentSnapshot!.id,
+                                              name: _Name.text,
+                                              location: _Location.text,
+                                              description: _Description.text,
+                                              phone: _PhoneNumber.text))
+                                          .then((value) {
+                                        if (value == true) {
+                                          _Name.clear();
+                                          _Location.clear();
+                                          _Description.clear();
+                                          _PhoneNumber.clear();
+
+                                          scaffoldKey.currentState!
+                                              .showSnackBar(SnackBar(
+                                            content: const Text(
+                                              "تم التعديل بنجاح",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            backgroundColor: PColor,
+                                            behavior: SnackBarBehavior.floating,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                          ));
+                                          Navigator.of(context).pop();
+                                          setState(() {});
+                                        }
                                       });
-
-                                      _Name.clear();
-                                      _Location.clear();
-                                      _Description.clear();
-                                      _PhoneNumber.clear();
-
-                                      scaffoldKey.currentState!
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                          "تم التعديل بنجاح",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Cairo',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        backgroundColor: PColor,
-                                        behavior: SnackBarBehavior.floating,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                      ));
-                                      Navigator.of(context).pop();
                                     }
                                   },
                                 );

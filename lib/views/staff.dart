@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class Staff extends StatefulWidget {
@@ -16,6 +17,8 @@ class Staff extends StatefulWidget {
 }
 
 class _StaffState extends State<Staff> {
+  String? _Specialize = "الكل";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,6 +32,14 @@ class _StaffState extends State<Staff> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> menuItems = [
+      'الكل',
+      'باطنية',
+      'جراحة عامه',
+      'جراحة عظام',
+      'طب الاسنان',
+      'اطفال'
+    ];
     // print(widget._hosName);
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -44,6 +55,36 @@ class _StaffState extends State<Staff> {
         ),
         body: Column(
           children: [
+            const SizedBox(
+              height: 15,
+            ),
+            const Text(
+              'ابحث بالتخصص',
+              style: TextStyle(color: Colors.grey),
+            ),
+            Container(
+                padding: const EdgeInsets.all(5),
+                height: 40,
+                width: SizeConfig.screenWidth! - 20,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<String>(
+                    items: menuItems.map((String item) {
+                      return DropdownMenuItem<String>(
+                          value: item, child: Text(item));
+                    }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _Specialize = val!;
+                      });
+                    },
+                    value: _Specialize == null || _Specialize == ""
+                        ? "باطنية"
+                        : _Specialize,
+                  ),
+                )),
             SizedBox(
               height: SizeConfig.screenheight! / 1.14,
               child: StreamBuilder(
@@ -72,16 +113,30 @@ class _StaffState extends State<Staff> {
                               if (data['HospitalName']
                                   .toString()
                                   .contains(widget._hosName)) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: StaffDetailsBody(
-                                      widget._hosName,
-                                      data['DoctorName'],
-                                      data['Specialize'],
-                                      data['Day'],
-                                      data['TimeFrom'],
-                                      data['TimeTo']),
-                                );
+                                if (data['Specialize'].toString() ==
+                                    _Specialize) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StaffDetailsBody(
+                                        widget._hosName,
+                                        data['DoctorName'],
+                                        data['Specialize'],
+                                        data['Day'],
+                                        data['TimeFrom'],
+                                        data['TimeTo']),
+                                  );
+                                } else if (_Specialize == "الكل") {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: StaffDetailsBody(
+                                        widget._hosName,
+                                        data['DoctorName'],
+                                        data['Specialize'],
+                                        data['Day'],
+                                        data['TimeFrom'],
+                                        data['TimeTo']),
+                                  );
+                                }
                               }
 
                               return Container();

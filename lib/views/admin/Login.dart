@@ -10,6 +10,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../shared/services_connection.dart';
+
 class Login extends StatefulWidget {
   const Login();
 
@@ -18,8 +20,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final CollectionReference _Login =
-      FirebaseFirestore.instance.collection('LoginDetails');
   final TextEditingController _UserName = TextEditingController();
   final TextEditingController _LoginDate = TextEditingController();
   final TextEditingController _Password = TextEditingController();
@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(5),
                             height: 40,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey),
@@ -124,6 +124,7 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(10)),
                             child: TextFormField(
                               controller: _Password,
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
@@ -145,72 +146,51 @@ class _LoginState extends State<Login> {
                               color: Colors.green,
                               raduis: 30,
                               onTap: () {
-                                FirebaseFirestore.instance
-                                    .collection('Users')
-                                    .get()
-                                    .then((QuerySnapshot querySnapshot) => {
-                                          querySnapshot.docs.forEach((doc) {
-                                            if (_UserName.text ==
-                                                    doc["UserName"] &&
-                                                _Password.text ==
-                                                    doc["Password"]) {
-                                              Auth = true;
-
-                                              box.write(
-                                                  'UserName', doc["UserName"]);
-                                              box.write('HospitalName',
-                                                  doc["HospitalName"]);
-
-                                              _UserName.clear();
-                                              _Password.clear();
-                                            }
-                                          }),
-                                          if (Auth == true)
-                                            {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          const AdminDashboard()))
-                                            }
-                                          else
-                                            {
-                                              scaffoldKey.currentState!
-                                                  .showSnackBar(SnackBar(
-                                                content: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: const [
-                                                    Text(
-                                                      "تأكد من بيانات الدخول ",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Cairo',
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.dangerous,
-                                                      color: Colors.white,
-                                                    )
-                                                  ],
-                                                ),
-                                                backgroundColor:
-                                                    Colors.redAccent,
-                                                behavior:
-                                                    SnackBarBehavior.floating,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(24),
-                                                ),
-                                              ))
-
-                                              // Navigator.of(context).pop();
-                                            }
-                                        });
+                                if (formKey.currentState!.validate()) {
+                                  ServicesConnection.Login(
+                                    _UserName.text,
+                                    _Password.text,
+                                  ).then((value) {
+                                    if (value == true) {
+                                      _UserName.clear();
+                                      _Password.clear();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  const AdminDashboard()));
+                                    } else {
+                                      scaffoldKey.currentState!
+                                          .showSnackBar(SnackBar(
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: const [
+                                            Text(
+                                              "تأكد من بيانات الدخول ",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.dangerous,
+                                              color: Colors.white,
+                                            )
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                        ),
+                                      ));
+                                    }
+                                  });
+                                }
                               },
                             );
                           }),

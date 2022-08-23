@@ -1,46 +1,40 @@
-// ignore_for_file: deprecated_member_use, non_constant_identifier_DoctorNames
+import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/models/specialize.dart';
+import 'package:doctors_book/shared/services_specialize.dart';
+import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
-import 'package:doctors_book/core/utils/size_config.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
-import 'package:doctors_book/core/widgets/drawer.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
 
-class StaffControl extends StatefulWidget {
-  const StaffControl({Key? key}) : super(key: key);
+class SpecializeControl extends StatefulWidget {
+  const SpecializeControl({Key? key}) : super(key: key);
 
   @override
-  State<StaffControl> createState() => _StaffControlState();
+  State<SpecializeControl> createState() => _SpecializeControlState();
 }
 
-class _StaffControlState extends State<StaffControl> {
-  final List<String> menuItems = [
-    'الكل',
-    'باطنية',
-    'جراحة عامه',
-    'جراحة عظام',
-    'طب الاسنان',
-    'اطفال'
-  ];
-  final CollectionReference _staff =
-      FirebaseFirestore.instance.collection('doctors');
-  final TextEditingController _DoctorName = TextEditingController();
-  String _Specialize = "الكل";
-  final TextEditingController _QualifiedCert = TextEditingController();
+class _SpecializeControlState extends State<SpecializeControl> {
+  final CollectionReference _Specialize =
+      FirebaseFirestore.instance.collection('Specialize');
+  final TextEditingController _Name = TextEditingController();
+  final TextEditingController _Location = TextEditingController();
+  final TextEditingController _Description = TextEditingController();
+  final TextEditingController _PhoneNumber = TextEditingController();
+
+  var SpecializeApi = new ServicesSpecializes();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formUpdateKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: PColor,
+        title: Text("إدارة المستشفيات"),
         actions: [
           IconButton(
               onPressed: () {
@@ -52,7 +46,7 @@ class _StaffControlState extends State<StaffControl> {
                             borderRadius: BorderRadius.circular(20)),
                         child: Container(
                           padding: const EdgeInsets.all(8),
-                          height: 350,
+                          height: 420,
                           child: Form(
                             key: formKey,
                             child: ListView(
@@ -65,11 +59,11 @@ class _StaffControlState extends State<StaffControl> {
                                 ),
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  height: 350,
+                                  height: 420,
                                   child: ListView(
                                     children: [
                                       const Text(
-                                        'الإسم',
+                                        'اسم المستشفي',
                                         style: TextStyle(color: Colors.grey),
                                       ),
                                       Container(
@@ -81,7 +75,7 @@ class _StaffControlState extends State<StaffControl> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: TextFormField(
-                                          controller: _DoctorName,
+                                          controller: _Name,
                                           validator: (value) {
                                             if (value!.isEmpty) {
                                               return "هذا الحقل ضروري";
@@ -95,39 +89,7 @@ class _StaffControlState extends State<StaffControl> {
                                         ),
                                       ),
                                       const Text(
-                                        'التخصص',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 40,
-                                          width: SizeConfig.screenWidth! - 20,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              items:
-                                                  menuItems.map((String item) {
-                                                return DropdownMenuItem<String>(
-                                                    value: item,
-                                                    child: Text(item));
-                                              }).toList(),
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  _Specialize = val!;
-                                                });
-                                              },
-                                              value: _Specialize == null ||
-                                                      _Specialize == ""
-                                                  ? "باطنية"
-                                                  : _Specialize,
-                                            ),
-                                          )),
-                                      const Text(
-                                        'المؤهل العلمي',
+                                        'الموقع',
                                         style: TextStyle(color: Colors.grey),
                                       ),
                                       Container(
@@ -139,7 +101,59 @@ class _StaffControlState extends State<StaffControl> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: TextFormField(
-                                          controller: _QualifiedCert,
+                                          controller: _Location,
+                                          decoration: const InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return "هذا الحقل ضروري";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                      const Text(
+                                        'رقم الهاتف',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: TextFormField(
+                                          controller: _PhoneNumber,
+                                          decoration: const InputDecoration(
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return "هذا الحقل ضروري";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                      const Text(
+                                        'تفاصيل اضافية',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: TextFormField(
+                                          controller: _Description,
                                           decoration: const InputDecoration(
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none,
@@ -162,9 +176,10 @@ class _StaffControlState extends State<StaffControl> {
                                             color: Colors.redAccent,
                                             raduis: 30,
                                             onTap: () {
-                                              _DoctorName.clear();
-                                              _Specialize == "الكل";
-                                              _QualifiedCert.clear();
+                                              _Name.clear();
+                                              _Location.clear();
+                                              _PhoneNumber.clear();
+                                              _Location.clear();
 
                                               Navigator.of(context).pop();
                                             },
@@ -178,40 +193,48 @@ class _StaffControlState extends State<StaffControl> {
                                               onTap: () {
                                                 if (formKey.currentState!
                                                     .validate()) {
-                                                  _staff.add({
-                                                    "DoctorName":
-                                                        _DoctorName.text,
-                                                    "Specialize": _Specialize,
-                                                    "QualifiedCert":
-                                                        _QualifiedCert.text,
-                                                  });
-                                                  _DoctorName.clear();
-                                                  _Specialize = menuItems[0];
-                                                  _QualifiedCert.clear();
+                                                  SpecializeApi.Create(
+                                                      SpecializesModel(
+                                                    id: 0,
+                                                    name: _Name.text,
+                                                    description:
+                                                        _Description.text,
+                                                  )).then((value) {
+                                                    if (value == true) {
+                                                      _Name.clear();
+                                                      _Location.clear();
+                                                      _PhoneNumber.clear();
+                                                      _Description.clear();
 
-                                                  scaffoldKey.currentState!
-                                                      .showSnackBar(SnackBar(
-                                                    content: const Text(
-                                                      "تم الحفظ بنجاح",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Cairo',
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                    behavior: SnackBarBehavior
-                                                        .floating,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              24),
-                                                    ),
-                                                  ));
-                                                  Navigator.of(context).pop();
+                                                      scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        content: const Text(
+                                                          "تم الحفظ بنجاح",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Cairo',
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        behavior:
+                                                            SnackBarBehavior
+                                                                .floating,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(24),
+                                                        ),
+                                                      ));
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      setState(() {});
+                                                    }
+                                                  });
                                                 }
                                               },
                                             );
@@ -230,29 +253,23 @@ class _StaffControlState extends State<StaffControl> {
               },
               icon: const Icon(Icons.add_circle_outline_outlined))
         ],
-        title: const Text(
-          "إدارة الأطباء",
-          style: TextStyle(
-            fontSize: 15,
-          ),
-        ),
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder(
-          stream: _staff.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+          future: SpecializeApi.GetAll(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      //DocumentSnapshot data = snapshot.data![index].name;
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        // child: StaffDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
+                        // child: SpecializeDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
                         child: Card(
                           elevation: 5,
                           child: ListTile(
@@ -262,18 +279,18 @@ class _StaffControlState extends State<StaffControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteStaff(data.id);
+                                DeleteSpecialize(snapshot.data![index].id);
                               },
                             ),
-                            title: Text(data['DoctorName']),
-                            subtitle: Text(data['Specialize']),
+                            title: Text(snapshot.data![index].name),
+                            subtitle: Text(snapshot.data![index].location),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
                                 color: PColor,
                               ),
                               onPressed: () {
-                                UpdateStaff(data);
+                                UpdateSpecialize(snapshot.data![index]);
                               },
                             ),
                           ),
@@ -284,11 +301,11 @@ class _StaffControlState extends State<StaffControl> {
     );
   }
 
-  Future<void> UpdateStaff([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> UpdateSpecialize(SpecializesModel? documentSnapshot) async {
     if (documentSnapshot != null) {
-      _DoctorName.text = documentSnapshot['DoctorName'];
-      _Specialize = documentSnapshot['Specialize'];
-      _QualifiedCert.text = documentSnapshot['QualifiedCert'];
+      _Name.text = documentSnapshot.name!;
+
+      _Description.text = documentSnapshot.description!;
     }
     await showDialog(
         context: context,
@@ -298,7 +315,7 @@ class _StaffControlState extends State<StaffControl> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Container(
               padding: const EdgeInsets.all(8),
-              height: 350,
+              height: 420,
               child: Form(
                 key: formUpdateKey,
                 child: ListView(
@@ -311,7 +328,7 @@ class _StaffControlState extends State<StaffControl> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(10),
-                      height: 350,
+                      height: 420,
                       child: ListView(
                         children: [
                           const Text(
@@ -325,7 +342,7 @@ class _StaffControlState extends State<StaffControl> {
                                 border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(10)),
                             child: TextFormField(
-                              controller: _DoctorName,
+                              controller: _Name,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "هذا الحقل ضروري";
@@ -339,35 +356,7 @@ class _StaffControlState extends State<StaffControl> {
                             ),
                           ),
                           const Text(
-                            'التخصص',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Container(
-                              padding: const EdgeInsets.all(5),
-                              height: 40,
-                              width: SizeConfig.screenWidth! - 20,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2<String>(
-                                  items: menuItems.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                        value: item, child: Text(item));
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _Specialize = val!;
-                                    });
-                                  },
-                                  value:
-                                      _Specialize == null || _Specialize == ""
-                                          ? "باطنية"
-                                          : _Specialize,
-                                ),
-                              )),
-                          const Text(
-                            'المؤهل العلمي',
+                            'الموقع',
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
@@ -377,7 +366,55 @@ class _StaffControlState extends State<StaffControl> {
                                 border: Border.all(color: Colors.grey),
                                 borderRadius: BorderRadius.circular(10)),
                             child: TextFormField(
-                              controller: _QualifiedCert,
+                              controller: _Location,
+                              decoration: const InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "هذا الحقل ضروري";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Text(
+                            'رقم الهاتف',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            height: 40,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextFormField(
+                              controller: _PhoneNumber,
+                              decoration: const InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "هذا الحقل ضروري";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Text(
+                            'تفاصيل اضافية',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            height: 40,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextFormField(
+                              controller: _Description,
                               decoration: const InputDecoration(
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
@@ -400,9 +437,9 @@ class _StaffControlState extends State<StaffControl> {
                                 color: Colors.redAccent,
                                 raduis: 30,
                                 onTap: () {
-                                  _DoctorName.clear();
-                                  _Specialize = menuItems[0];
-                                  _QualifiedCert.clear();
+                                  _Name.clear();
+                                  _Location.clear();
+                                  _Description.clear();
 
                                   Navigator.of(context).pop();
                                 },
@@ -416,34 +453,38 @@ class _StaffControlState extends State<StaffControl> {
                                   onTap: () {
                                     if (formUpdateKey.currentState!
                                         .validate()) {
-                                      _staff.doc(documentSnapshot!.id).update({
-                                        "DoctorName": _DoctorName.text,
-                                        "Specialize": _Specialize,
-                                        "QualifiedCert": _QualifiedCert.text,
+                                      SpecializeApi.Update(SpecializesModel(
+                                        id: documentSnapshot!.id,
+                                        name: _Name.text,
+                                        description: _Description.text,
+                                      )).then((value) {
+                                        if (value == true) {
+                                          _Name.clear();
+                                          _Location.clear();
+                                          _Description.clear();
+                                          _PhoneNumber.clear();
+
+                                          scaffoldKey.currentState!
+                                              .showSnackBar(SnackBar(
+                                            content: const Text(
+                                              "تم التعديل بنجاح",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'Cairo',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            backgroundColor: PColor,
+                                            behavior: SnackBarBehavior.floating,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                          ));
+                                          Navigator.of(context).pop();
+                                          setState(() {});
+                                        }
                                       });
-
-                                      _DoctorName.clear();
-                                      _Specialize = menuItems[0];
-                                      _QualifiedCert.clear();
-
-                                      scaffoldKey.currentState!
-                                          .showSnackBar(SnackBar(
-                                        content: const Text(
-                                          "تم التعديل بنجاح",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Cairo',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        backgroundColor: PColor,
-                                        behavior: SnackBarBehavior.floating,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(24),
-                                        ),
-                                      ));
-                                      Navigator.of(context).pop();
                                     }
                                   },
                                 );
@@ -461,8 +502,8 @@ class _StaffControlState extends State<StaffControl> {
         });
   }
 
-  Future<void> DeleteStaff(String Id) async {
-    _staff.doc(Id).delete();
+  Future<void> DeleteSpecialize(String Id) async {
+    _Specialize.doc(Id).delete();
 
     scaffoldKey.currentState!.showSnackBar(SnackBar(
       content: const Padding(
