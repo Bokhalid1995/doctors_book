@@ -17,14 +17,12 @@ class HospitalControl extends StatefulWidget {
 }
 
 class _HospitalControlState extends State<HospitalControl> {
-  final CollectionReference _hospital =
-      FirebaseFirestore.instance.collection('Hospital');
   final TextEditingController _Name = TextEditingController();
   final TextEditingController _Location = TextEditingController();
   final TextEditingController _Description = TextEditingController();
   final TextEditingController _PhoneNumber = TextEditingController();
 
-  var hospitalApi = new ServicesHospital();
+  var hospitalApi = ServicesHospital();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formUpdateKey = GlobalKey<FormState>();
@@ -494,6 +492,36 @@ class _HospitalControlState extends State<HospitalControl> {
                                           ));
                                           Navigator.of(context).pop();
                                           setState(() {});
+                                        } else {
+                                          scaffoldKey.currentState!
+                                              .showSnackBar(SnackBar(
+                                            content: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: const [
+                                                Text(
+                                                  "تأكد من بيانات المدخله ",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Cairo',
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.dangerous,
+                                                  color: Colors.white,
+                                                )
+                                              ],
+                                            ),
+                                            backgroundColor: Colors.redAccent,
+                                            behavior: SnackBarBehavior.floating,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                            ),
+                                          ));
                                         }
                                       });
                                     }
@@ -513,26 +541,47 @@ class _HospitalControlState extends State<HospitalControl> {
         });
   }
 
-  Future<void> Deletehospital(String Id) async {
-    _hospital.doc(Id).delete();
-
-    scaffoldKey.currentState!.showSnackBar(SnackBar(
-      content: const Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "تم حذف العنصر",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            color: Colors.white,
+  Future<void> Deletehospital(int Id) async {
+    hospitalApi.Delete(Id).then((value) {
+      if (value == true) {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "تم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ));
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      } else {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "لم يتم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.amber.shade300,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      }
+    });
   }
 }

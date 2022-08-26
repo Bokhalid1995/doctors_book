@@ -13,9 +13,9 @@ class ServicesSpecializes {
   static const base_url = "http://shihab123test-001-site1.etempurl.com/api/";
 
   Future<bool> Create(SpecializesModel SpecializesModel) async {
-    print("${base_url}Specializes/CreateHospital");
+    print("${base_url}Specializes/CreateSpecializes");
     final http.Response response =
-        await http.post(Uri.parse('${base_url}Specializes/CreateHospital'),
+        await http.post(Uri.parse('${base_url}Specializes/CreateSpecialize'),
             headers: <String, String>{
               'Content-type': 'application/json',
               'Accept': 'application/json',
@@ -32,7 +32,7 @@ class ServicesSpecializes {
   Future<bool> Update(SpecializesModel SpecializesModel) async {
     final http.Response response = await http.put(
         Uri.parse(
-            '${base_url}Specializes/UpdateHospital?id=${SpecializesModel.id}'),
+            '${base_url}Specializes/UpdateSpecialize?id=${SpecializesModel.id}'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -49,7 +49,7 @@ class ServicesSpecializes {
   Future<List<SpecializesModel>> GetAll() async {
     final http.Response response = await http.get(
         // ignore: prefer_interpolation_to_compose_strings
-        Uri.parse('${base_url}Specializes/GetHospitalDetails'),
+        Uri.parse('${base_url}Specializes/GetSpecializeDetails'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',

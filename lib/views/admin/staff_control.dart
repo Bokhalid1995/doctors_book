@@ -6,6 +6,10 @@ import 'package:doctors_book/core/utils/size_config.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/models/doctors.dart';
+import 'package:doctors_book/shared/models/specialize.dart';
+import 'package:doctors_book/shared/services_doctor.dart';
+import 'package:doctors_book/shared/services_specialize.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
@@ -17,18 +21,20 @@ class StaffControl extends StatefulWidget {
 }
 
 class _StaffControlState extends State<StaffControl> {
-  final List<String> menuItems = [
-    'الكل',
-    'باطنية',
-    'جراحة عامه',
-    'جراحة عظام',
-    'طب الاسنان',
-    'اطفال'
-  ];
+  List<SpecializesModel> menuItems = [];
+  var speclizerApi = ServicesSpecializes();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    speclizerApi.GetAll().then((value) => menuItems = value);
+  }
+
   final CollectionReference _staff =
       FirebaseFirestore.instance.collection('doctors');
+  var doctorApi = ServicesDoctor();
   final TextEditingController _DoctorName = TextEditingController();
-  String _Specialize = "الكل";
+  int? _Specialize;
   final TextEditingController _QualifiedCert = TextEditingController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -108,21 +114,20 @@ class _StaffControlState extends State<StaffControl> {
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              items:
-                                                  menuItems.map((String item) {
-                                                return DropdownMenuItem<String>(
-                                                    value: item,
-                                                    child: Text(item));
+                                            child: DropdownButton2<int>(
+                                              items: menuItems
+                                                  .map((SpecializesModel item) {
+                                                return DropdownMenuItem<int>(
+                                                    value: item.id,
+                                                    child: Text(item.name!));
                                               }).toList(),
                                               onChanged: (val) {
                                                 setState(() {
                                                   _Specialize = val!;
                                                 });
                                               },
-                                              value: _Specialize == null ||
-                                                      _Specialize == ""
-                                                  ? "باطنية"
+                                              value: _Specialize == null
+                                                  ? menuItems[0].id
                                                   : _Specialize,
                                             ),
                                           )),
@@ -163,7 +168,7 @@ class _StaffControlState extends State<StaffControl> {
                                             raduis: 30,
                                             onTap: () {
                                               _DoctorName.clear();
-                                              _Specialize == "الكل";
+                                              _Specialize = menuItems[0].id;
                                               _QualifiedCert.clear();
 
                                               Navigator.of(context).pop();
@@ -178,15 +183,15 @@ class _StaffControlState extends State<StaffControl> {
                                               onTap: () {
                                                 if (formKey.currentState!
                                                     .validate()) {
-                                                  _staff.add({
-                                                    "DoctorName":
+                                                  doctorApi.Create(DoctorsModel(
+                                                    doctorName:
                                                         _DoctorName.text,
-                                                    "Specialize": _Specialize,
-                                                    "QualifiedCert":
+                                                    specializeId: 1,
+                                                    qualifiedCert:
                                                         _QualifiedCert.text,
-                                                  });
+                                                  ));
                                                   _DoctorName.clear();
-                                                  _Specialize = menuItems[0];
+                                                  _Specialize = menuItems[0].id;
                                                   _QualifiedCert.clear();
 
                                                   scaffoldKey.currentState!
@@ -238,17 +243,17 @@ class _StaffControlState extends State<StaffControl> {
         ),
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder(
-          stream: _staff.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+          future: doctorApi.GetAll(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      //  DocumentSnapshot data = snapshot.data![index];
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -262,18 +267,19 @@ class _StaffControlState extends State<StaffControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteStaff(data.id);
+                                DeleteStaff(snapshot.data![index].id);
                               },
                             ),
-                            title: Text(data['DoctorName']),
-                            subtitle: Text(data['Specialize']),
+                            title: Text(snapshot.data![index].doctorName),
+                            subtitle: Text(
+                                snapshot.data![index].specializeId.toString()),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
                                 color: PColor,
                               ),
                               onPressed: () {
-                                UpdateStaff(data);
+                                UpdateStaff(snapshot.data![index]);
                               },
                             ),
                           ),
@@ -284,11 +290,11 @@ class _StaffControlState extends State<StaffControl> {
     );
   }
 
-  Future<void> UpdateStaff([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> UpdateStaff(DoctorsModel? documentSnapshot) async {
     if (documentSnapshot != null) {
-      _DoctorName.text = documentSnapshot['DoctorName'];
-      _Specialize = documentSnapshot['Specialize'];
-      _QualifiedCert.text = documentSnapshot['QualifiedCert'];
+      _DoctorName.text = documentSnapshot.doctorName!;
+      _Specialize = documentSnapshot.specializeId!;
+      _QualifiedCert.text = documentSnapshot.qualifiedCert!;
     }
     await showDialog(
         context: context,
@@ -350,20 +356,20 @@ class _StaffControlState extends State<StaffControl> {
                                   border: Border.all(color: Colors.grey),
                                   borderRadius: BorderRadius.circular(10)),
                               child: DropdownButtonHideUnderline(
-                                child: DropdownButton2<String>(
-                                  items: menuItems.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                        value: item, child: Text(item));
+                                child: DropdownButton2<int>(
+                                  items: menuItems.map((SpecializesModel item) {
+                                    return DropdownMenuItem<int>(
+                                        value: item.id,
+                                        child: Text(item.description!));
                                   }).toList(),
                                   onChanged: (val) {
                                     setState(() {
                                       _Specialize = val!;
                                     });
                                   },
-                                  value:
-                                      _Specialize == null || _Specialize == ""
-                                          ? "باطنية"
-                                          : _Specialize,
+                                  value: _Specialize == null
+                                      ? menuItems[0].id
+                                      : _Specialize,
                                 ),
                               )),
                           const Text(
@@ -401,7 +407,7 @@ class _StaffControlState extends State<StaffControl> {
                                 raduis: 30,
                                 onTap: () {
                                   _DoctorName.clear();
-                                  _Specialize = menuItems[0];
+                                  _Specialize = menuItems[0].id;
                                   _QualifiedCert.clear();
 
                                   Navigator.of(context).pop();
@@ -416,14 +422,15 @@ class _StaffControlState extends State<StaffControl> {
                                   onTap: () {
                                     if (formUpdateKey.currentState!
                                         .validate()) {
-                                      _staff.doc(documentSnapshot!.id).update({
-                                        "DoctorName": _DoctorName.text,
-                                        "Specialize": _Specialize,
-                                        "QualifiedCert": _QualifiedCert.text,
-                                      });
+                                      doctorApi.Update(DoctorsModel(
+                                        id: documentSnapshot!.id,
+                                        doctorName: _DoctorName.text,
+                                        specializeId: 1,
+                                        qualifiedCert: _QualifiedCert.text,
+                                      ));
 
                                       _DoctorName.clear();
-                                      _Specialize = menuItems[0];
+                                      _Specialize = menuItems[0].id;
                                       _QualifiedCert.clear();
 
                                       scaffoldKey.currentState!
@@ -461,8 +468,8 @@ class _StaffControlState extends State<StaffControl> {
         });
   }
 
-  Future<void> DeleteStaff(String Id) async {
-    _staff.doc(Id).delete();
+  Future<void> DeleteStaff(int Id) async {
+    // _staff.doc(Id).delete();
 
     scaffoldKey.currentState!.showSnackBar(SnackBar(
       content: const Padding(

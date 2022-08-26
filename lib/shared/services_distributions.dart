@@ -5,38 +5,40 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:doctors_book/shared/models/hospitals.dart';
-// import 'package:doctors_book/views/HospitalsModel_manager/login.dart';
+import 'package:doctors_book/shared/models/distributions.dart';
+// import 'package:doctors_book/views/DistributionsModel_manager/login.dart';
 
-class ServicesHospital {
-  //https://localhost:5001/api/HospitalsModels/GetHospitalsModelDetails
+class ServicesDistributions {
+  //https://localhost:5001/api/DistributionsModels/GetDistributionsModelDetails
   static const base_url = "http://shihab123test-001-site1.etempurl.com/api/";
 
-  Future<bool> Create(HospitalsModel HospitalModel) async {
-    print("${base_url}Hospitals/CreateHospital");
-    final http.Response response =
-        await http.post(Uri.parse('${base_url}Hospitals/CreateHospital'),
-            headers: <String, String>{
-              'Content-type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: jsonEncode(HospitalModel.toJson()));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  Future<bool> Create(DistributionsModel DistributionModel) async {
+    print("${base_url}Distributions/CreateDistribution");
 
-  Future<bool> Update(HospitalsModel HospitalModel) async {
-    final http.Response response = await http.put(
-        Uri.parse('${base_url}Hospitals/UpdateHospital?id=${HospitalModel.id}'),
+    final http.Response response = await http.post(
+        Uri.parse('${base_url}Distributions/CreateDistribution'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode(HospitalModel.toJson()));
+        body: jsonEncode(DistributionModel.toJson()));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception((e) => e.toString());
+    }
+  }
+
+  Future<bool> Update(DistributionsModel DistributionModel) async {
+    final http.Response response = await http.put(
+        Uri.parse(
+            '${base_url}Distributions/UpdateDistribution?id=${DistributionModel.id}'),
+        headers: <String, String>{
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(DistributionModel.toJson()));
     print(response.statusCode);
     if (response.statusCode == 200) {
       return true;
@@ -47,7 +49,7 @@ class ServicesHospital {
 
   Future<bool> Delete(int id) async {
     final http.Response response = await http.delete(
-      Uri.parse('${base_url}Hospitals/DeleteHospital?id=${id}'),
+      Uri.parse('${base_url}Distributions/DeleteDistribution?id=$id'),
       headers: <String, String>{
         'Content-type': 'application/json',
         'Accept': 'application/json',
@@ -61,10 +63,10 @@ class ServicesHospital {
     }
   }
 
-  Future<List<HospitalsModel>> GetAll() async {
+  Future<List<DistributionsModel>> GetAll() async {
     final http.Response response = await http.get(
         // ignore: prefer_interpolation_to_compose_strings
-        Uri.parse('${base_url}Hospitals/GetHospitalDetails'),
+        Uri.parse('${base_url}Distributions/GetDistributionDetails'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -73,9 +75,9 @@ class ServicesHospital {
     if (response.statusCode == 200) {
       List<dynamic> result = jsonDecode(response.body);
 
-      return result.map((e) => HospitalsModel.fromJson(e)).toList();
+      return result.map((e) => DistributionsModel.fromJson(e)).toList();
     } else {
-      throw Exception("");
+      throw Exception((e) => e.toString());
     }
   }
 }

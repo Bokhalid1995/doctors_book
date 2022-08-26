@@ -3,9 +3,11 @@ import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/services_bookingDetails.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -18,6 +20,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   final box = GetStorage();
   String user = "";
   String hospital = "";
+
+  var BookingDetailsApi = ServicesBookingDetails();
 
   @override
   void initState() {
@@ -74,26 +78,26 @@ class _AdminDashboardState extends State<AdminDashboard> {
           const SizedBox(
             height: 15,
           ),
-          Container(
+          SizedBox(
             height: SizeConfig.screenheight,
-            child: StreamBuilder(
-                stream: _booking.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            child: FutureBuilder(
+                future: BookingDetailsApi.GetAll(),
+                builder: (context, AsyncSnapshot<List> snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
+                          itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot data = snapshot.data!.docs[index];
-                            if (data['Status'] == "Waiting") {
-                              isConfirmed = false;
-                            } else {
-                              isConfirmed = true;
-                            }
+                            // DocumentSnapshot data = snapshot.data!.docs[index];
+                            // if (snapshot.data![index].status == "Waiting") {
+                            //   isConfirmed = false;
+                            // } else {
+                            //   isConfirmed = true;
+                            // }
 
-                            if (hospital == data['HospitalName']) {
+                            if (hospital != snapshot.data![index].hospitalsId) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
@@ -106,21 +110,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         color: Colors.redAccent,
                                       ),
                                       onPressed: () {
-                                        DeleteBooking(data.id);
+                                        DeleteBooking(snapshot.data![index].id);
                                       },
                                     ),
                                     // ignore: prefer_interpolation_to_compose_strings
                                     title: Text(
-                                      'اسم المريض : ' + data['PatientName'],
+                                      // ignore: prefer_interpolation_to_compose_strings
+                                      'اسم المريض : ' +
+                                          snapshot.data![index].patientName
+                                              .toString(),
                                       style: const TextStyle(fontSize: 13),
                                     ),
                                     // ignore: prefer_interpolation_to_compose_strings
-                                    subtitle: Text('التاريخ : ' +
-                                        data['BookingDate'] +
-                                        ' | ' +
-                                        data['TimeFrom'] +
-                                        '- ' +
-                                        data['TimeTo']),
+                                    subtitle: Text(
+                                        'التاريخ : ${snapshot.data![index].bookingDate.toString().substring(0, 10)}'),
                                     trailing: IconButton(
                                       icon: Icon(
                                         isConfirmed == true
@@ -129,7 +132,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                         color: PColor,
                                       ),
                                       onPressed: () {
-                                        Update(data);
+                                        Update(snapshot.data![index]);
                                       },
                                     ),
                                   ),

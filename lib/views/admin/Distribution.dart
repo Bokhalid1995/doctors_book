@@ -2,9 +2,16 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
+import 'package:doctors_book/core/utils/size_config.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/models/distributions.dart';
+import 'package:doctors_book/shared/models/doctors.dart';
+import 'package:doctors_book/shared/models/hospitals.dart';
+import 'package:doctors_book/shared/services_distributions.dart';
+import 'package:doctors_book/shared/services_doctor.dart';
+import 'package:doctors_book/shared/services_hospital.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +26,20 @@ class DistributionControl extends StatefulWidget {
 class _DistributionControlState extends State<DistributionControl> {
   final CollectionReference _dist =
       FirebaseFirestore.instance.collection('Distriputions');
-  final CollectionReference _hospital =
-      FirebaseFirestore.instance.collection('Hospital');
-  final CollectionReference _doctor =
-      FirebaseFirestore.instance.collection('doctors');
+  List<HospitalsModel> hospitalList = [];
+  List<DoctorsModel> doctorList = [];
+  var hospitalApi = ServicesHospital();
+  var doctorApi = ServicesDoctor();
+  var distributionApi = ServicesDistributions();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    hospitalApi.GetAll().then((value) => hospitalList = value);
+    doctorApi.GetAll().then((value) => doctorList = value);
+  }
+
   final TextEditingController _TimeFrom = TextEditingController();
   final TextEditingController _TimeTo = TextEditingController();
 
@@ -38,8 +55,8 @@ class _DistributionControlState extends State<DistributionControl> {
   final formUpdateKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   String? _DayAttend;
-  String? _SelectedHos;
-  String? _SelectedDocs;
+  int? _SelectedHos;
+  int? _SelectedDocs;
   String? Specialize = "";
 
   @override
@@ -82,17 +99,77 @@ class _DistributionControlState extends State<DistributionControl> {
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          BuildDropDown(
-                                              setState,
-                                              _hospital.snapshots(),
-                                              "hospital"),
+                                          Container(
+                                              padding: const EdgeInsets.all(5),
+                                              height: 40,
+                                              width:
+                                                  SizeConfig.screenWidth! - 20,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton2<int>(
+                                                  items: hospitalList.map(
+                                                      (HospitalsModel item) {
+                                                    return DropdownMenuItem<
+                                                            int>(
+                                                        value: item.id,
+                                                        child:
+                                                            Text(item.name!));
+                                                  }).toList(),
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      _SelectedHos = val!;
+                                                    });
+                                                  },
+                                                  // ignore: prefer_if_null_operators
+                                                  value: _SelectedHos == null
+                                                      ? hospitalList[0].id
+                                                      : _SelectedHos,
+                                                ),
+                                              )),
                                           const Text(
                                             'الطبيب',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          BuildDropDown(setState,
-                                              _doctor.snapshots(), "doctor"),
+                                          Container(
+                                              padding: const EdgeInsets.all(5),
+                                              height: 40,
+                                              width:
+                                                  SizeConfig.screenWidth! - 20,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton2<int>(
+                                                  items: doctorList
+                                                      .map((DoctorsModel item) {
+                                                    return DropdownMenuItem<
+                                                            int>(
+                                                        value: item.id,
+                                                        child: Text(
+                                                            item.doctorName!));
+                                                  }).toList(),
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      _SelectedDocs = val!;
+                                                    });
+                                                  },
+                                                  // ignore: prefer_if_null_operators
+                                                  value: _SelectedDocs == null
+                                                      ? doctorList[0].id
+                                                      : _SelectedDocs,
+                                                ),
+                                              )),
                                           const Text(
                                             'يوم الحضور',
                                             style:
@@ -166,52 +243,92 @@ class _DistributionControlState extends State<DistributionControl> {
                                                   onTap: () {
                                                     if (formKey.currentState!
                                                         .validate()) {
-                                                      _dist.add({
-                                                        "TimeFrom":
-                                                            _TimeFrom.text,
-                                                        "TimeTo": _TimeTo.text,
-                                                        "Day": _DayAttend,
-                                                        "HospitalName":
+                                                      distributionApi.Create(
+                                                          DistributionsModel(
+                                                        id: null,
+                                                        userId: 1,
+                                                        timeFrom: int.parse(
+                                                            _TimeFrom.text),
+                                                        timeTo: int.parse(
+                                                            _TimeTo.text),
+                                                        day: _DayAttend,
+                                                        hospitalsId:
                                                             _SelectedHos,
-                                                        "DoctorName":
+                                                        doctorsId:
                                                             _SelectedDocs,
-                                                        "Status": "Active",
-                                                        "Specialize":
-                                                            Specialize,
+                                                      )).then((value) {
+                                                        if (value == true) {
+                                                          setState(() {
+                                                            _TimeFrom.clear();
+                                                            _TimeTo.clear();
+                                                            _DayAttend =
+                                                                "الأحد";
+                                                          });
+                                                          print(_DayAttend);
+                                                          scaffoldKey
+                                                              .currentState!
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            content: const Text(
+                                                              "تم الحفظ بنجاح",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Cairo',
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            backgroundColor:
+                                                                Colors.green,
+                                                            behavior:
+                                                                SnackBarBehavior
+                                                                    .floating,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          24),
+                                                            ),
+                                                          ));
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        } else {
+                                                          scaffoldKey
+                                                              .currentState!
+                                                              .showSnackBar(
+                                                                  SnackBar(
+                                                            content: const Text(
+                                                              "خطأ في ادخال البيانات ",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Cairo',
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .redAccent,
+                                                            behavior:
+                                                                SnackBarBehavior
+                                                                    .floating,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          24),
+                                                            ),
+                                                          ));
+                                                        }
                                                       });
-
-                                                      setState(() {
-                                                        _TimeFrom.clear();
-                                                        _TimeTo.clear();
-                                                        _DayAttend = "الأحد";
-                                                      });
-                                                      print(_DayAttend);
-                                                      scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        content: const Text(
-                                                          "تم الحفظ بنجاح",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontFamily: 'Cairo',
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                        backgroundColor:
-                                                            Colors.green,
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(24),
-                                                        ),
-                                                      ));
-                                                      Navigator.of(context)
-                                                          .pop();
                                                     }
                                                   },
                                                 );
@@ -240,17 +357,17 @@ class _DistributionControlState extends State<DistributionControl> {
         ),
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder(
-          stream: _dist.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+          future: distributionApi.GetAll(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      DistributionsModel data = snapshot.data![index];
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -264,11 +381,11 @@ class _DistributionControlState extends State<DistributionControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteDistribution(data.id);
+                                DeleteDistribution(data.id.toString());
                               },
                             ),
-                            title: Text(data['DoctorName']),
-                            subtitle: Text(data['HospitalName']),
+                            title: Text(data.doctorsId.toString()),
+                            subtitle: Text(data.hospitalsId.toString()),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
@@ -286,59 +403,59 @@ class _DistributionControlState extends State<DistributionControl> {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> BuildDropDown(
-      StateSetter setState, Stream<QuerySnapshot<Object?>> _ref, String Type) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: _ref,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
-          var length = snapshot.data!.docs.length;
-          //DocumentSnapshot ds = snapshot.data!.docs[length - 1];
-          var hospitalname = snapshot.data!.docs;
-          return Container(
-              padding: const EdgeInsets.all(5),
-              height: 40,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10)),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<String>(
-                  items: hospitalname.map((DocumentSnapshot document) {
-                    var name = Type == "doctor"
-                        ? document['DoctorName']
-                        : document['Name'];
-                    return DropdownMenuItem<String>(
-                        value: name, child: Text(name));
-                  }).toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      if (Type == "doctor") {
-                        _getDoctors(val);
-                        _SelectedDocs = val!;
-                      } else {
-                        _SelectedHos = val!;
-                      }
-                    });
-                  },
-                  value: Type != "doctor"
-                      ? _SelectedHos ?? snapshot.data!.docs[0]['Name']
-                      : _SelectedDocs ?? snapshot.data!.docs[0]['DoctorName'],
+  // StreamBuilder<QuerySnapshot<Object?>> BuildDropDown(
+  //     StateSetter setState, Future<QuerySnapshot<Object?>> _ref, Sinttring Type) {
+  //   return FutureBuilder<QuerySnapshot>(
+  //       future: _ref,
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return const Center(
+  //             child: CupertinoActivityIndicator(),
+  //           );
+  //         }
+  //         var length = snapshot.data!.docs.length;
+  //         //DocumentSnapshot ds = snapshot.data!.docs[length - 1];
+  //         var hospitalname = snapshot.data!.docs;
+  //         return Container(
+  //             padding: const EdgeInsets.all(5),
+  //             height: 40,
+  //             decoration: BoxDecoration(
+  //                 border: Border.all(color: Colors.grey),
+  //                 borderRadius: BorderRadius.circular(10)),
+  //             child: DropdownButtonHideUnderline(
+  //               child: DropdownButton2<String>(
+  //                 items: hospitalname.map((DocumentSnapshot document) {
+  //                   var name = Type == "doctor"
+  //                       ? document['DoctorName']
+  //                       : document['Name'];
+  //                   return DropdownMenuItem<String>(
+  //                       value: name, child: Text(name));
+  //                 }).toList(),
+  //                 onChanged: (val) {
+  //                   setState(() {
+  //                     if (Type == "doctor") {
+  //                       _getDoctors(val);
+  //                       _SelectedDocs = val!;
+  //                     } else {
+  //                       _SelectedHos = val!;
+  //                     }
+  //                   });
+  //                 },
+  //                 value: Type != "doctor"
+  //                     ? _SelectedHos ?? snapshot.data!.docs[0]['Name']
+  //                     : _SelectedDocs ?? snapshot.data!.docs[0]['DoctorName'],
 
-                  // buttonDecoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(14),
-                  //   border: Border.all(
-                  //     color: Colors.black26,
-                  //   ),
-                  //   color: Colors.redAccent,
-                  // ),
-                ),
-              ));
-        });
-  }
+  //                 // buttonDecoration: BoxDecoration(
+  //                 //   borderRadius: BorderRadius.circular(14),
+  //                 //   border: Border.all(
+  //                 //     color: Colors.black26,
+  //                 //   ),
+  //                 //   color: Colors.redAccent,
+  //                 // ),
+  //               ),
+  //             ));
+  //       });
+  //}
 
   Future<void> _getDoctors(doctorId) async {
     await FirebaseFirestore.instance
@@ -353,13 +470,13 @@ class _DistributionControlState extends State<DistributionControl> {
             });
   }
 
-  Future<void> UpdateDistribution([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> UpdateDistribution(DistributionsModel? documentSnapshot) async {
     if (documentSnapshot != null) {
-      _TimeFrom.text = documentSnapshot['TimeFrom'];
-      _TimeTo.text = documentSnapshot['TimeTo'];
-      _DayAttend = documentSnapshot['Day'];
-      _SelectedDocs = documentSnapshot['DoctorName'];
-      _SelectedHos = documentSnapshot['HospitalName'];
+      _TimeFrom.text = documentSnapshot.timeFrom.toString();
+      _TimeTo.text = documentSnapshot.timeTo.toString();
+      _DayAttend = documentSnapshot.day;
+      _SelectedDocs = documentSnapshot.doctorsId;
+      _SelectedHos = documentSnapshot.hospitalsId;
     }
     await showDialog(
         context: context,
@@ -391,17 +508,62 @@ class _DistributionControlState extends State<DistributionControl> {
                                 'المستشفي',
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              BuildDropDown(
-                                  setState, _hospital.snapshots(), "hospital"),
+                              Container(
+                                  padding: const EdgeInsets.all(5),
+                                  height: 40,
+                                  width: SizeConfig.screenWidth! - 20,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<int>(
+                                      items: hospitalList
+                                          .map((HospitalsModel item) {
+                                        return DropdownMenuItem<int>(
+                                            value: item.id,
+                                            child: Text(item.name!));
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _SelectedHos = val!;
+                                        });
+                                      },
+                                      // ignore: prefer_if_null_operators
+                                      value: _SelectedHos == null
+                                          ? hospitalList[0].id
+                                          : _SelectedHos,
+                                    ),
+                                  )),
                               const Text(
                                 'الطبيب',
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              BuildDropDown(
-                                  setState, _doctor.snapshots(), "doctor"),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              Container(
+                                  padding: const EdgeInsets.all(5),
+                                  height: 40,
+                                  width: SizeConfig.screenWidth! - 20,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<int>(
+                                      items:
+                                          doctorList.map((DoctorsModel item) {
+                                        return DropdownMenuItem<int>(
+                                            value: item.id,
+                                            child: Text(item.doctorName!));
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _SelectedHos = val!;
+                                        });
+                                      },
+                                      // ignore: prefer_if_null_operators
+                                      value: _SelectedHos == null
+                                          ? hospitalList[0].id
+                                          : _SelectedHos,
+                                    ),
+                                  )),
                               const Text(
                                 'يوم الحضور',
                                 style: TextStyle(color: Colors.grey),
@@ -465,16 +627,15 @@ class _DistributionControlState extends State<DistributionControl> {
                                       onTap: () {
                                         if (formUpdateKey.currentState!
                                             .validate()) {
-                                          _dist
-                                              .doc(documentSnapshot!.id)
-                                              .update({
-                                            "TimeFrom": _TimeFrom.text,
-                                            "TimeTo": _TimeTo.text,
-                                            "Day": _DayAttend,
-                                            "HospitalName": _SelectedHos,
-                                            "DoctorName": _SelectedDocs,
-                                            "Specialize": Specialize,
-                                          });
+                                          distributionApi.Update(
+                                              DistributionsModel(
+                                            id: documentSnapshot!.id,
+                                            timeFrom: int.parse(_TimeFrom.text),
+                                            timeTo: int.parse(_TimeTo.text),
+                                            day: _DayAttend,
+                                            hospitalsId: _SelectedHos,
+                                            doctorsId: _SelectedDocs,
+                                          ));
 
                                           setState(() {
                                             _TimeFrom.clear();

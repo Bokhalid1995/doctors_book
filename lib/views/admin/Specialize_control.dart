@@ -19,9 +19,8 @@ class _SpecializeControlState extends State<SpecializeControl> {
   final CollectionReference _Specialize =
       FirebaseFirestore.instance.collection('Specialize');
   final TextEditingController _Name = TextEditingController();
-  final TextEditingController _Location = TextEditingController();
+
   final TextEditingController _Description = TextEditingController();
-  final TextEditingController _PhoneNumber = TextEditingController();
 
   var SpecializeApi = new ServicesSpecializes();
 
@@ -34,7 +33,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: PColor,
-        title: Text("إدارة المستشفيات"),
+        title: Text("إدارة التخصصات"),
         actions: [
           IconButton(
               onPressed: () {
@@ -63,7 +62,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                   child: ListView(
                                     children: [
                                       const Text(
-                                        'اسم المستشفي',
+                                        'اسم التخصص',
                                         style: TextStyle(color: Colors.grey),
                                       ),
                                       Container(
@@ -86,58 +85,6 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                             enabledBorder: InputBorder.none,
                                             focusedBorder: InputBorder.none,
                                           ),
-                                        ),
-                                      ),
-                                      const Text(
-                                        'الموقع',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: TextFormField(
-                                          controller: _Location,
-                                          decoration: const InputDecoration(
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "هذا الحقل ضروري";
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                      const Text(
-                                        'رقم الهاتف',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.grey),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: TextFormField(
-                                          controller: _PhoneNumber,
-                                          decoration: const InputDecoration(
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "هذا الحقل ضروري";
-                                            }
-                                            return null;
-                                          },
                                         ),
                                       ),
                                       const Text(
@@ -177,9 +124,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                             raduis: 30,
                                             onTap: () {
                                               _Name.clear();
-                                              _Location.clear();
-                                              _PhoneNumber.clear();
-                                              _Location.clear();
+                                              _Description.clear();
 
                                               Navigator.of(context).pop();
                                             },
@@ -202,8 +147,6 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                                   )).then((value) {
                                                     if (value == true) {
                                                       _Name.clear();
-                                                      _Location.clear();
-                                                      _PhoneNumber.clear();
                                                       _Description.clear();
 
                                                       scaffoldKey.currentState!
@@ -283,7 +226,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
                               },
                             ),
                             title: Text(snapshot.data![index].name),
-                            subtitle: Text(snapshot.data![index].location),
+                            subtitle: Text(snapshot.data![index].description),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
@@ -356,54 +299,6 @@ class _SpecializeControlState extends State<SpecializeControl> {
                             ),
                           ),
                           const Text(
-                            'الموقع',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextFormField(
-                              controller: _Location,
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "هذا الحقل ضروري";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const Text(
-                            'رقم الهاتف',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextFormField(
-                              controller: _PhoneNumber,
-                              decoration: const InputDecoration(
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "هذا الحقل ضروري";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const Text(
                             'تفاصيل اضافية',
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -438,7 +333,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                 raduis: 30,
                                 onTap: () {
                                   _Name.clear();
-                                  _Location.clear();
+
                                   _Description.clear();
 
                                   Navigator.of(context).pop();
@@ -460,9 +355,7 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                       )).then((value) {
                                         if (value == true) {
                                           _Name.clear();
-                                          _Location.clear();
                                           _Description.clear();
-                                          _PhoneNumber.clear();
 
                                           scaffoldKey.currentState!
                                               .showSnackBar(SnackBar(
