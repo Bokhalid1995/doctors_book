@@ -264,7 +264,8 @@ class _HospitalControlState extends State<HospitalControl> {
       body: FutureBuilder(
           future: hospitalApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {
-            return snapshot.connectionState == ConnectionState.waiting
+            return snapshot.connectionState == ConnectionState.waiting ||
+                    snapshot.connectionState == ConnectionState.none
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )

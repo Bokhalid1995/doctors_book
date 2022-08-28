@@ -14,8 +14,8 @@ class StaffDetailsBody extends StatefulWidget {
   final String DoctorName;
   final String Specialize;
   final String Day;
-  final String From;
-  final String To;
+  final int From;
+  final int To;
 
   final String imagePath = "assets/images/767676.jpg";
 
@@ -28,8 +28,8 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
   double raduis = 17;
   @override
   Widget build(BuildContext context) {
-    var fromFormat = int.parse(widget.From) < 12 ? 'ص' : 'م';
-    var fromTo = int.parse(widget.To) < 12 ? 'ص' : 'م';
+    var fromFormat = widget.From < 12 ? 'ص' : 'م';
+    var fromTo = widget.To < 12 ? 'ص' : 'م';
     return Column(
       children: [
         const SizedBox(
@@ -148,17 +148,16 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                         Row(
                           children: [
                             Text(
+                              // ignore: prefer_interpolation_to_compose_strings
                               ' الزمن : ' +
-                                  (int.parse(widget.From) > 12
-                                          ? int.parse(widget.From) - 12
-                                          : int.parse(widget.From))
+                                  (widget.From > 12
+                                          ? widget.From - 12
+                                          : widget.From)
                                       .toString() +
                                   ' (' +
                                   fromFormat +
                                   ')  -  ' +
-                                  (int.parse(widget.To) > 12
-                                          ? int.parse(widget.To) - 12
-                                          : int.parse(widget.To))
+                                  (widget.To > 12 ? widget.To - 12 : widget.To)
                                       .toString() +
                                   ' (' +
                                   fromTo +

@@ -63,116 +63,119 @@ class _MainScreenBodyState extends State<MainScreenBody>
           child: Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => const SplashView()));
+              },
               backgroundColor: Colors.white,
               elevation: 2,
               hoverColor: Colors.grey.shade700,
               child: const Icon(
-                Icons.call,
+                Icons.logout,
                 color: PColor,
               ),
             ),
             backgroundColor: PColor,
-            drawer: Drawer(
-              backgroundColor: Colors.transparent,
-              child: Container(
-                height: SizeConfig.screenheight!,
-                decoration: const BoxDecoration(
-                  color: PColor,
-                  borderRadius:
-                      BorderRadius.horizontal(left: Radius.circular(30)),
-                ),
-                child: ListView(
-                  children: [
-                    DrawerHeader(
-                      decoration: const BoxDecoration(
-                        color: PColor,
-                      ),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: CircleAvatar(
-                                child: Image.asset(
-                                    "assets/images/insurance/pic (5).png"),
-                              ),
-                            ),
-                            const Expanded(
-                              flex: 6,
-                              child: const Text(
-                                "تطبيق حجز الطبيب",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: SizeConfig.screenheight! / 1.33,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(30)),
-                        color: Colors.green.shade50,
-                      ),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            title: const Text("عن التطبيق"),
-                            leading: IconButton(
-                              color: PColor,
-                              icon:
-                                  const Icon(Icons.add_to_home_screen_outlined),
-                              onPressed: () {},
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (BuildContext context) => DepartmentControl()));
-                            },
-                          ),
-                          const Divider(
-                            color: Colors.grey,
-                          ),
-                          ListTile(
-                            title: const Text("تواصل معنا"),
-                            leading: IconButton(
-                              color: PColor,
-                              icon: const Icon(Icons.login),
-                              onPressed: () {},
-                            ),
-                            onTap: () {
-                              //Navigator.of(context).pop();
-                              // Navigator.of(context).push(MaterialPageRoute(
-                              //     builder: (BuildContext context) => Register()));
-                            },
-                          ),
-                          const Divider(
-                            color: Colors.grey,
-                          ),
-                          ListTile(
-                            title: const Text("الخروج"),
-                            leading: IconButton(
-                              icon: const Icon(Icons.logout),
-                              onPressed: () {},
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const SplashView()));
-                            },
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // drawer: Drawer(
+            //   backgroundColor: Colors.transparent,
+            //   child: Container(
+            //     height: SizeConfig.screenheight!,
+            //     decoration: const BoxDecoration(
+            //       color: PColor,
+            //       borderRadius:
+            //           BorderRadius.horizontal(left: Radius.circular(30)),
+            //     ),
+            //     child: ListView(
+            //       children: [
+            //         DrawerHeader(
+            //           decoration: const BoxDecoration(
+            //             color: PColor,
+            //           ),
+            //           child: Center(
+            //             child: Row(
+            //               children: [
+            //                 Expanded(
+            //                   flex: 2,
+            //                   child: CircleAvatar(
+            //                     child: Image.asset(
+            //                         "assets/images/insurance/pic (5).png"),
+            //                   ),
+            //                 ),
+            //                 const Expanded(
+            //                   flex: 6,
+            //                   child: const Text(
+            //                     "تطبيق حجز الطبيب",
+            //                     style: TextStyle(
+            //                       color: Colors.white,
+            //                       fontSize: 16,
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //         Container(
+            //           height: SizeConfig.screenheight! / 1.33,
+            //           decoration: BoxDecoration(
+            //             borderRadius: const BorderRadius.only(
+            //                 bottomLeft: Radius.circular(30)),
+            //             color: Colors.green.shade50,
+            //           ),
+            //           child: Column(
+            //             children: [
+            //               ListTile(
+            //                 title: const Text("عن التطبيق"),
+            //                 leading: IconButton(
+            //                   color: PColor,
+            //                   icon:
+            //                       const Icon(Icons.add_to_home_screen_outlined),
+            //                   onPressed: () {},
+            //                 ),
+            //                 onTap: () {
+            //                   Navigator.of(context).pop();
+            //                   // Navigator.of(context).push(MaterialPageRoute(
+            //                   //     builder: (BuildContext context) => DepartmentControl()));
+            //                 },
+            //               ),
+            //               const Divider(
+            //                 color: Colors.grey,
+            //               ),
+            //               ListTile(
+            //                 title: const Text("تواصل معنا"),
+            //                 leading: IconButton(
+            //                   color: PColor,
+            //                   icon: const Icon(Icons.login),
+            //                   onPressed: () {},
+            //                 ),
+            //                 onTap: () {
+            //                   //Navigator.of(context).pop();
+            //                   // Navigator.of(context).push(MaterialPageRoute(
+            //                   //     builder: (BuildContext context) => Register()));
+            //                 },
+            //               ),
+            //               const Divider(
+            //                 color: Colors.grey,
+            //               ),
+            //               ListTile(
+            //                 title: const Text("الخروج"),
+            //                 leading: IconButton(
+            //                   icon: const Icon(Icons.logout),
+            //                   onPressed: () {},
+            //                 ),
+            //                 onTap: () {
+            //                   Navigator.of(context).push(MaterialPageRoute(
+            //                       builder: (BuildContext context) =>
+            //                           const SplashView()));
+            //                 },
+            //               )
+            //             ],
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             appBar: AppBar(
               backgroundColor: PColor,
               elevation: 0,
@@ -216,10 +219,10 @@ class _MainScreenBodyState extends State<MainScreenBody>
                 // controller: _tabController,
                 tabs: _tabs,
               ),
-              title: const Text(
-                'تطبيق حجز الطبيب',
-                style: TextStyle(fontSize: 17, color: Colors.white),
-              ),
+              // title: const Text(
+              //   'تطبيق حجز الطبيب',
+              //   style: TextStyle(fontSize: 17, color: Colors.white),
+              // ),
             ),
             body: const Padding(
               padding: EdgeInsets.only(top: 18.0),

@@ -4,12 +4,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
+import 'package:doctors_book/shared/models/distributions.dart';
+import 'package:doctors_book/shared/models/doctors.dart';
+import 'package:doctors_book/shared/services_distributions.dart';
+import 'package:doctors_book/shared/services_doctor.dart';
+import 'package:doctors_book/shared/services_hospital.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/models/hospitals.dart';
+
 class Staff extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
-  const Staff(this._hosName);
+  const Staff(this._hosName, this._hosId);
+  final int _hosId;
   final String _hosName;
 
   @override
@@ -17,11 +25,18 @@ class Staff extends StatefulWidget {
 }
 
 class _StaffState extends State<Staff> {
+  List<HospitalsModel> hospitalList = [];
+  List<DoctorsModel> doctorList = [];
+  var hospitalApi = ServicesHospital();
+  var doctorApi = ServicesDoctor();
+  var distributionApi = ServicesDistributions();
   String? _Specialize = "الكل";
 
   @override
   void initState() {
     // TODO: implement initState
+    hospitalApi.GetAll().then((value) => hospitalList = value);
+    doctorApi.GetAll().then((value) => doctorList = value);
   }
 
   String DoctorName = "";
@@ -87,15 +102,16 @@ class _StaffState extends State<Staff> {
                 )),
             SizedBox(
               height: SizeConfig.screenheight! / 1.14,
-              child: StreamBuilder(
-                  stream: _distribution.snapshots(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              child: FutureBuilder(
+                  future: distributionApi.GetAll(),
+                  builder: (context,
+                      AsyncSnapshot<List<DistributionsModel>> snapshot) {
                     return snapshot.connectionState == ConnectionState.waiting
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
                         : ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
+                            itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               // var x = "";
 
@@ -108,33 +124,31 @@ class _StaffState extends State<Staff> {
                               // print("Fuuuuuuuuuuuck" +
                               //     data['HospitalName'] +
                               //     widget._hosName);
-                              DocumentSnapshot data =
-                                  snapshot.data!.docs[index];
-                              if (data['HospitalName']
+                              DistributionsModel data = snapshot.data![index];
+                              if (data.hospitalsId
                                   .toString()
-                                  .contains(widget._hosName)) {
-                                if (data['Specialize'].toString() ==
-                                    _Specialize) {
+                                  .contains(widget._hosName.toString())) {
+                                if (data.doctorsId.toString() == _Specialize) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: StaffDetailsBody(
-                                        widget._hosName,
-                                        data['DoctorName'],
-                                        data['Specialize'],
-                                        data['Day'],
-                                        data['TimeFrom'],
-                                        data['TimeTo']),
+                                        widget._hosName.toString(),
+                                        data.doctorsName!,
+                                        data.userId.toString(),
+                                        data.day!,
+                                        data.timeFrom!,
+                                        data.timeTo!),
                                   );
                                 } else if (_Specialize == "الكل") {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: StaffDetailsBody(
-                                        widget._hosName,
-                                        data['DoctorName'],
-                                        data['Specialize'],
-                                        data['Day'],
-                                        data['TimeFrom'],
-                                        data['TimeTo']),
+                                        widget._hosName.toString(),
+                                        data.doctorsName!,
+                                        data.userId.toString(),
+                                        data.day!,
+                                        data.timeFrom!,
+                                        data.timeTo!),
                                   );
                                 }
                               }

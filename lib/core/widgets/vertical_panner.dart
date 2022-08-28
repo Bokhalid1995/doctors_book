@@ -68,7 +68,7 @@ class GroceryFeaturedCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 15,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -77,7 +77,7 @@ class GroceryFeaturedCard extends StatelessWidget {
                 groceryFeaturedItem.statcs.toString(),
                 style: TextStyle(
                   color: color,
-                  fontSize: 40,
+                  fontSize: 35,
                   fontWeight: FontWeight.w600,
                 ),
               ),

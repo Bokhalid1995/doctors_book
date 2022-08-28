@@ -186,7 +186,7 @@ class _StaffControlState extends State<StaffControl> {
                                                   doctorApi.Create(DoctorsModel(
                                                     doctorName:
                                                         _DoctorName.text,
-                                                    specializeId: 1,
+                                                    specializeId: _Specialize,
                                                     qualifiedCert:
                                                         _QualifiedCert.text,
                                                   ));
@@ -271,8 +271,8 @@ class _StaffControlState extends State<StaffControl> {
                               },
                             ),
                             title: Text(snapshot.data![index].doctorName),
-                            subtitle: Text(
-                                snapshot.data![index].specializeId.toString()),
+                            subtitle:
+                                Text(snapshot.data![index].specializeName),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
@@ -425,7 +425,7 @@ class _StaffControlState extends State<StaffControl> {
                                       doctorApi.Update(DoctorsModel(
                                         id: documentSnapshot!.id,
                                         doctorName: _DoctorName.text,
-                                        specializeId: 1,
+                                        specializeId: _Specialize,
                                         qualifiedCert: _QualifiedCert.text,
                                       ));
 

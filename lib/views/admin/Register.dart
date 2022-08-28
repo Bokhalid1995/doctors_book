@@ -2,12 +2,19 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
+import 'package:doctors_book/core/utils/size_config.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/drawer.dart';
+import 'package:doctors_book/shared/models/user.dart';
+import 'package:doctors_book/shared/services_connection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../shared/models/doctors.dart';
+import '../../shared/models/hospitals.dart';
+import '../../shared/services_hospital.dart';
 
 class RegisterControl extends StatefulWidget {
   const RegisterControl({Key? key}) : super(key: key);
@@ -17,19 +24,29 @@ class RegisterControl extends StatefulWidget {
 }
 
 class _RegisterControlState extends State<RegisterControl> {
-  final CollectionReference _register =
-      FirebaseFirestore.instance.collection('Users');
-  final CollectionReference _hospital =
-      FirebaseFirestore.instance.collection('Hospital');
+  List<HospitalsModel> hospitalList = [];
+  var hospitalApi = ServicesHospital();
+  var userApi = ServicesConnection();
+  // final CollectionReference _register =
+  //     FirebaseFirestore.instance.collection('Users');
+  // final CollectionReference _hospital =
+  //     FirebaseFirestore.instance.collection('Hospital');
   final TextEditingController _UserName = TextEditingController();
   final TextEditingController _Password = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    hospitalApi.GetAll().then((value) => hospitalList = value);
+  }
 
   final List<String> menuItems = ['Supervisor', 'Admin', 'Recieption'];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formUpdateKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   String? _UserType;
-  String? _SelectedHos;
+  int? _SelectedHos;
 
   @override
   Widget build(BuildContext context) {
@@ -160,11 +177,39 @@ class _RegisterControlState extends State<RegisterControl> {
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          BuildDropDown(
-                                              setState, _hospital.snapshots()),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
+                                          Container(
+                                              padding: const EdgeInsets.all(5),
+                                              height: 40,
+                                              width:
+                                                  SizeConfig.screenWidth! - 20,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child:
+                                                  DropdownButtonHideUnderline(
+                                                child: DropdownButton2<int>(
+                                                  items: hospitalList.map(
+                                                      (HospitalsModel item) {
+                                                    return DropdownMenuItem<
+                                                            int>(
+                                                        value: item.id,
+                                                        child:
+                                                            Text(item.name!));
+                                                  }).toList(),
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      _SelectedHos = val!;
+                                                    });
+                                                  },
+                                                  // ignore: prefer_if_null_operators
+                                                  value: _SelectedHos == null
+                                                      ? hospitalList[0].id
+                                                      : _SelectedHos,
+                                                ),
+                                              )),
                                           Row(
                                             children: [
                                               GeneralButton(
@@ -188,15 +233,15 @@ class _RegisterControlState extends State<RegisterControl> {
                                                   onTap: () {
                                                     if (formKey.currentState!
                                                         .validate()) {
-                                                      _register.add({
-                                                        "UserName":
+                                                      userApi.register(User(
+                                                        userName:
                                                             _UserName.text,
-                                                        "Password":
+                                                        password:
                                                             _Password.text,
-                                                        "UserType": _UserType,
-                                                        "HospitalName":
+                                                        userType: _UserType,
+                                                        hospitalsId:
                                                             _SelectedHos,
-                                                      });
+                                                      ));
 
                                                       setState(() {
                                                         _UserName.clear();
@@ -258,17 +303,17 @@ class _RegisterControlState extends State<RegisterControl> {
         ),
       ),
       drawer: const CustomDrawer(),
-      body: StreamBuilder(
-          stream: _register.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      body: FutureBuilder(
+          future: userApi.GetAll(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
             return snapshot.connectionState == ConnectionState.waiting
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot data = snapshot.data!.docs[index];
+                      User data = snapshot.data![index];
                       //  print("Fuuuuuuuuuuuck" + dataDocument['imagepath'].toString());
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -282,11 +327,11 @@ class _RegisterControlState extends State<RegisterControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteRegister(data.id);
+                                DeleteRegister(data.id.toString());
                               },
                             ),
-                            title: Text(data['UserName']),
-                            subtitle: Text(data['Password']),
+                            title: Text(data.userName!),
+                            subtitle: Text(data.userType!),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
@@ -304,57 +349,11 @@ class _RegisterControlState extends State<RegisterControl> {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> BuildDropDown(
-      StateSetter setState, Stream<QuerySnapshot<Object?>> _ref) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: _ref,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
-          var length = snapshot.data!.docs.length;
-          DocumentSnapshot ds = snapshot.data!.docs[length - 1];
-          var hospitalname = snapshot.data!.docs;
-          return Container(
-              padding: const EdgeInsets.all(5),
-              height: 40,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10)),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<String>(
-                  items: hospitalname.map((DocumentSnapshot document) {
-                    var name = document['Name'];
-                    var id = document.id;
-                    return DropdownMenuItem<String>(
-                        value: name, child: Text(name));
-                  }).toList(),
-                  onChanged: (val) {
-                    setState(() {
-                      _SelectedHos = val!;
-                    });
-                  },
-                  value: _SelectedHos ?? snapshot.data!.docs[0]['Name'],
-
-                  // buttonDecoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(14),
-                  //   border: Border.all(
-                  //     color: Colors.black26,
-                  //   ),
-                  //   color: Colors.redAccent,
-                  // ),
-                ),
-              ));
-        });
-  }
-
-  Future<void> UpdateRegister([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> UpdateRegister(User? documentSnapshot) async {
     if (documentSnapshot != null) {
-      _UserName.text = documentSnapshot['UserName'];
-      _Password.text = documentSnapshot['Password'];
-      _UserType = documentSnapshot['UserType'];
+      _UserName.text = documentSnapshot.userName!;
+      _Password.text = documentSnapshot.password!;
+      _UserType = documentSnapshot.userType;
     }
     await showDialog(
         context: context,
@@ -461,7 +460,32 @@ class _RegisterControlState extends State<RegisterControl> {
                                 'المستشفي',
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              BuildDropDown(setState, _hospital.snapshots()),
+                              Container(
+                                  padding: const EdgeInsets.all(5),
+                                  height: 40,
+                                  width: SizeConfig.screenWidth! - 20,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2<int>(
+                                      items: hospitalList
+                                          .map((HospitalsModel item) {
+                                        return DropdownMenuItem<int>(
+                                            value: item.id,
+                                            child: Text(item.name!));
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _SelectedHos = val!;
+                                        });
+                                      },
+                                      // ignore: prefer_if_null_operators
+                                      value: _SelectedHos == null
+                                          ? hospitalList[0].id
+                                          : _SelectedHos,
+                                    ),
+                                  )),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -488,14 +512,13 @@ class _RegisterControlState extends State<RegisterControl> {
                                       onTap: () {
                                         if (formUpdateKey.currentState!
                                             .validate()) {
-                                          _register
-                                              .doc(documentSnapshot!.id)
-                                              .update({
-                                            "UserName": _UserName.text,
-                                            "Password": _Password.text,
-                                            "UserType": _UserType,
-                                            "HospitalName": _SelectedHos,
-                                          });
+                                          userApi.Update(User(
+                                            id: documentSnapshot!.id,
+                                            userName: _UserName.text,
+                                            password: _Password.text,
+                                            userType: _UserType,
+                                            hospitalsId: _SelectedHos,
+                                          ));
 
                                           setState(() {
                                             _UserName.clear();
@@ -541,7 +564,7 @@ class _RegisterControlState extends State<RegisterControl> {
   }
 
   Future<void> DeleteRegister(String Id) async {
-    _register.doc(Id).delete();
+    // _register.doc(Id).delete();
 
     scaffoldKey.currentState!.showSnackBar(SnackBar(
       content: const Padding(

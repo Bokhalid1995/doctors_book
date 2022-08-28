@@ -24,8 +24,6 @@ class DistributionControl extends StatefulWidget {
 }
 
 class _DistributionControlState extends State<DistributionControl> {
-  final CollectionReference _dist =
-      FirebaseFirestore.instance.collection('Distriputions');
   List<HospitalsModel> hospitalList = [];
   List<DoctorsModel> doctorList = [];
   var hospitalApi = ServicesHospital();
@@ -245,7 +243,6 @@ class _DistributionControlState extends State<DistributionControl> {
                                                         .validate()) {
                                                       distributionApi.Create(
                                                           DistributionsModel(
-                                                        id: null,
                                                         userId: 1,
                                                         timeFrom: int.parse(
                                                             _TimeFrom.text),
@@ -384,8 +381,8 @@ class _DistributionControlState extends State<DistributionControl> {
                                 DeleteDistribution(data.id.toString());
                               },
                             ),
-                            title: Text(data.doctorsId.toString()),
-                            subtitle: Text(data.hospitalsId.toString()),
+                            title: Text(data.doctorsName!),
+                            subtitle: Text(data.hospitalsName!),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.edit_outlined,
@@ -402,60 +399,6 @@ class _DistributionControlState extends State<DistributionControl> {
           }),
     );
   }
-
-  // StreamBuilder<QuerySnapshot<Object?>> BuildDropDown(
-  //     StateSetter setState, Future<QuerySnapshot<Object?>> _ref, Sinttring Type) {
-  //   return FutureBuilder<QuerySnapshot>(
-  //       future: _ref,
-  //       builder: (context, snapshot) {
-  //         if (!snapshot.hasData) {
-  //           return const Center(
-  //             child: CupertinoActivityIndicator(),
-  //           );
-  //         }
-  //         var length = snapshot.data!.docs.length;
-  //         //DocumentSnapshot ds = snapshot.data!.docs[length - 1];
-  //         var hospitalname = snapshot.data!.docs;
-  //         return Container(
-  //             padding: const EdgeInsets.all(5),
-  //             height: 40,
-  //             decoration: BoxDecoration(
-  //                 border: Border.all(color: Colors.grey),
-  //                 borderRadius: BorderRadius.circular(10)),
-  //             child: DropdownButtonHideUnderline(
-  //               child: DropdownButton2<String>(
-  //                 items: hospitalname.map((DocumentSnapshot document) {
-  //                   var name = Type == "doctor"
-  //                       ? document['DoctorName']
-  //                       : document['Name'];
-  //                   return DropdownMenuItem<String>(
-  //                       value: name, child: Text(name));
-  //                 }).toList(),
-  //                 onChanged: (val) {
-  //                   setState(() {
-  //                     if (Type == "doctor") {
-  //                       _getDoctors(val);
-  //                       _SelectedDocs = val!;
-  //                     } else {
-  //                       _SelectedHos = val!;
-  //                     }
-  //                   });
-  //                 },
-  //                 value: Type != "doctor"
-  //                     ? _SelectedHos ?? snapshot.data!.docs[0]['Name']
-  //                     : _SelectedDocs ?? snapshot.data!.docs[0]['DoctorName'],
-
-  //                 // buttonDecoration: BoxDecoration(
-  //                 //   borderRadius: BorderRadius.circular(14),
-  //                 //   border: Border.all(
-  //                 //     color: Colors.black26,
-  //                 //   ),
-  //                 //   color: Colors.redAccent,
-  //                 // ),
-  //               ),
-  //             ));
-  //       });
-  //}
 
   Future<void> _getDoctors(doctorId) async {
     await FirebaseFirestore.instance
@@ -555,13 +498,13 @@ class _DistributionControlState extends State<DistributionControl> {
                                       }).toList(),
                                       onChanged: (val) {
                                         setState(() {
-                                          _SelectedHos = val!;
+                                          _SelectedDocs = val!;
                                         });
                                       },
                                       // ignore: prefer_if_null_operators
-                                      value: _SelectedHos == null
-                                          ? hospitalList[0].id
-                                          : _SelectedHos,
+                                      value: _SelectedDocs == null
+                                          ? doctorList[0].id
+                                          : _SelectedDocs,
                                     ),
                                   )),
                               const Text(
@@ -633,34 +576,37 @@ class _DistributionControlState extends State<DistributionControl> {
                                             timeFrom: int.parse(_TimeFrom.text),
                                             timeTo: int.parse(_TimeTo.text),
                                             day: _DayAttend,
+                                            userId: 1,
                                             hospitalsId: _SelectedHos,
                                             doctorsId: _SelectedDocs,
-                                          ));
-
-                                          setState(() {
-                                            _TimeFrom.clear();
-                                            _TimeTo.clear();
-                                            _DayAttend = "الأحد";
+                                          )).then((value) {
+                                            if (value == true) {
+                                              scaffoldKey.currentState!
+                                                  .showSnackBar(SnackBar(
+                                                content: const Text(
+                                                  "تم التعديل بنجاح",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Cairo',
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                backgroundColor: PColor,
+                                                behavior:
+                                                    SnackBarBehavior.floating,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(24),
+                                                ),
+                                              ));
+                                              Navigator.of(context).pop();
+                                              setState(() {
+                                                _TimeFrom.clear();
+                                                _TimeTo.clear();
+                                                _DayAttend = "الأحد";
+                                              });
+                                            } else {}
                                           });
-
-                                          scaffoldKey.currentState!
-                                              .showSnackBar(SnackBar(
-                                            content: const Text(
-                                              "تم التعديل بنجاح",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: 'Cairo',
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            backgroundColor: PColor,
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                            ),
-                                          ));
-                                          Navigator.of(context).pop();
                                         }
                                       },
                                     );
@@ -682,7 +628,7 @@ class _DistributionControlState extends State<DistributionControl> {
 
   Future<void> DeleteDistribution(String Id) async {
     print("Doc ID : " + Id);
-    _dist.doc(Id).delete();
+    // _dist.doc(Id).delete();
 
     scaffoldKey.currentState!.showSnackBar(SnackBar(
       content: const Padding(

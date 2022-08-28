@@ -215,7 +215,7 @@ class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        Staff(hospName)));
+                                        Staff(hospName, int.parse(hospName))));
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(10),

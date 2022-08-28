@@ -4,6 +4,9 @@ class BookingDetailsModel {
   int? id;
   int? hospitalsId;
   int? doctorsId;
+  int? userId;
+  String? hospitalsName;
+  String? doctorsName;
   int? patientName;
   String? phone;
   int? age;
@@ -13,6 +16,9 @@ class BookingDetailsModel {
       {this.id,
       this.hospitalsId,
       this.doctorsId,
+      this.userId,
+      this.hospitalsName,
+      this.doctorsName,
       this.patientName,
       this.phone,
       this.age,
@@ -23,6 +29,9 @@ class BookingDetailsModel {
           id: json['id'],
           hospitalsId: json['hospitalsId'],
           doctorsId: json['doctorsId'],
+          userId: json['userId'],
+          hospitalsName: json['hospitalsName'],
+          doctorsName: json['doctorsName'],
           patientName: json['patientName'],
           age: json['age'],
           bookingDate:
@@ -33,6 +42,9 @@ class BookingDetailsModel {
         "id": id,
         "hospitalsId": hospitalsId,
         "doctorsId": doctorsId,
+        "userId": userId,
+        "hospitalName": hospitalsName,
+        "doctorsName": doctorsName,
         "patientName": patientName,
         "phone": phone,
         "bookingDate": bookingDate,

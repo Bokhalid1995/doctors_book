@@ -14,8 +14,8 @@ class Booking extends StatefulWidget {
 
   final String DoctorName;
   final String Day;
-  final String From;
-  final String To;
+  final int From;
+  final int To;
 
   @override
   State<Booking> createState() => _BookingState();

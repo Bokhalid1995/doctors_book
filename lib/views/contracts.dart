@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doctors_book/shared/models/hospitals.dart';
+import 'package:doctors_book/shared/services_distributions.dart';
+import 'package:doctors_book/shared/services_hospital.dart';
 import 'package:doctors_book/views/staff.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
@@ -42,6 +45,8 @@ class _PublicServicesState extends State<PublicServices> {
   List<MoreServicesDetails> listToFill = moreServicesDetailsItems;
   final CollectionReference _hospital =
       FirebaseFirestore.instance.collection('Hospital');
+
+  var hospitalApi = ServicesHospital();
   String? hospName = "";
   @override
   Widget build(BuildContext context) {
@@ -131,9 +136,10 @@ class _PublicServicesState extends State<PublicServices> {
             const SizedBox(
               height: 10,
             ),
-            StreamBuilder(
-                stream: _hospital.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            FutureBuilder(
+                future: hospitalApi.GetAll(),
+                builder:
+                    (context, AsyncSnapshot<List<HospitalsModel>> snapshot) {
                   return snapshot.connectionState == ConnectionState.waiting
                       ? const Center(
                           child: CircularProgressIndicator(),
@@ -143,17 +149,17 @@ class _PublicServicesState extends State<PublicServices> {
                           child: Container(
                             height: SizeConfig.screenheight! / 1.6,
                             padding: const EdgeInsets.all(10),
-                            child: snapshot.data!.docs.isEmpty
+                            child: snapshot.data!.isEmpty
                                 ? (const Text(
                                     'لايوجد نتائج للبحث',
                                     style: (TextStyle(color: Colors.red)),
                                     textAlign: TextAlign.center,
                                   ))
                                 : ListView.builder(
-                                    itemCount: snapshot.data!.docs.length,
+                                    itemCount: snapshot.data!.length,
                                     itemBuilder: (context, index) {
-                                      DocumentSnapshot data =
-                                          snapshot.data!.docs[index];
+                                      HospitalsModel data =
+                                          snapshot.data![index];
                                       return Container(
                                         height: 70,
                                         margin: const EdgeInsets.only(top: 10),
@@ -169,7 +175,7 @@ class _PublicServicesState extends State<PublicServices> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Staff(data['Name']),
+                                                    Staff(data.name!, data.id!),
                                               ),
                                             );
                                           },
@@ -178,8 +184,8 @@ class _PublicServicesState extends State<PublicServices> {
                                             Icons.home_work_outlined,
                                             color: PColor,
                                           ),
-                                          title: Text(data['Name']),
-                                          subtitle: Text(data['Location']),
+                                          title: Text(data.name!),
+                                          subtitle: Text(data.location!),
                                         ),
                                       );
                                     },
