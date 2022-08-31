@@ -12,7 +12,7 @@ class GroceryFeaturedItem {
 var groceryFeaturedItems = [
   GroceryFeaturedItem("الحجوزات", "assets/images/136934.jpg", 45),
   GroceryFeaturedItem("الاطباء", "assets/images/136949.jpg", 17),
-  GroceryFeaturedItem("المستشفيات", "assets/images/136934.jpg", 34),
+  GroceryFeaturedItem("مستشفي", "assets/images/136934.jpg", 34),
 ];
 
 class GroceryFeaturedCard extends StatelessWidget {

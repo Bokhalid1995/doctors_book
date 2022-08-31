@@ -4,6 +4,8 @@ class DistributionsModel {
   int? doctorsId;
   int? userId;
   String? hospitalsName;
+  String? specializeName;
+  int? specializeId;
   String? doctorsName;
   int? timeFrom;
   int? timeTo;
@@ -18,6 +20,8 @@ class DistributionsModel {
       this.timeTo,
       this.hospitalsName,
       this.doctorsName,
+      this.specializeId,
+      this.specializeName,
       this.day});
 
   factory DistributionsModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +34,8 @@ class DistributionsModel {
           userId: json['userId'],
           day: json['day'],
           timeTo: json['timeTo'],
+          specializeName: json['specializeName'],
+          specializeId: json['specializeId'],
           timeFrom: json['timeFrom']);
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +47,8 @@ class DistributionsModel {
         "userId": userId,
         "timeFrom": timeFrom,
         "timeTo": timeTo,
+        "specializeName": specializeName,
+        "specializeId": specializeId,
         "day": day
       };
 }

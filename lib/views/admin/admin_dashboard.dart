@@ -27,8 +27,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    user = box.read('UserName');
-    hospital = box.read('HospitalName');
+    // user = box.read('UserId');
+    // hospital = box.read('HospitalName');
   }
 
   bool isConfirmed = false;
@@ -97,49 +97,46 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             //   isConfirmed = true;
                             // }
 
-                            if (hospital != snapshot.data![index].hospitalsId) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
-                                child: Card(
-                                  elevation: 5,
-                                  child: ListTile(
-                                    leading: IconButton(
-                                      icon: const Icon(
-                                        Icons.delete_forever,
-                                        color: Colors.redAccent,
-                                      ),
-                                      onPressed: () {
-                                        DeleteBooking(snapshot.data![index].id);
-                                      },
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              // child: hospitalDetailsBody(data['name'],data['category'],data['details'],data['phone'],data['imagepath']),
+                              child: Card(
+                                elevation: 5,
+                                child: ListTile(
+                                  leading: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.redAccent,
                                     ),
+                                    onPressed: () {
+                                      DeleteBooking(snapshot.data![index].id);
+                                    },
+                                  ),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  title: Text(
                                     // ignore: prefer_interpolation_to_compose_strings
-                                    title: Text(
-                                      // ignore: prefer_interpolation_to_compose_strings
-                                      'اسم المريض : ' +
-                                          snapshot.data![index].patientName
-                                              .toString(),
-                                      style: const TextStyle(fontSize: 13),
+                                    'اسم المريض : ' +
+                                        snapshot.data![index].patientName
+                                            .toString(),
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                  // ignore: prefer_interpolation_to_compose_strings
+                                  subtitle: Text(
+                                      'التاريخ : ${snapshot.data![index].bookingDate.toString().substring(0, 10)}'),
+                                  trailing: IconButton(
+                                    icon: Icon(
+                                      isConfirmed == true
+                                          ? Icons.check
+                                          : Icons.info,
+                                      color: PColor,
                                     ),
-                                    // ignore: prefer_interpolation_to_compose_strings
-                                    subtitle: Text(
-                                        'التاريخ : ${snapshot.data![index].bookingDate.toString().substring(0, 10)}'),
-                                    trailing: IconButton(
-                                      icon: Icon(
-                                        isConfirmed == true
-                                            ? Icons.check
-                                            : Icons.info,
-                                        color: PColor,
-                                      ),
-                                      onPressed: () {
-                                        Update(snapshot.data![index]);
-                                      },
-                                    ),
+                                    onPressed: () {
+                                      Update(snapshot.data![index]);
+                                    },
                                   ),
                                 ),
-                              );
-                            }
-                            return Container();
+                              ),
+                            );
                           });
                 }),
           ),

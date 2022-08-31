@@ -18,38 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
       FirebaseFirestore.instance.collection('doctors');
   @override
   Widget build(BuildContext context) {
-    var moreServicesDetailsItems = [
-      MoreServicesDetails(
-          "ابراهيم مالك",
-          "مستشفي",
-          "الخرطوم - بري - شارع بري بالنص",
-          "assets/images/insurance/ibrahim.jpg"),
-      MoreServicesDetails(
-          "رويال كير",
-          "مستشفي",
-          "الخرطوم 2 - جوار مطاعم برشلونة",
-          "assets/images/insurance/royal.jpg"),
-      MoreServicesDetails(
-          "الترا لاب",
-          "معمل",
-          "الخرطوم - العربي - قرب شارع الحوادث",
-          "assets/images/insurance/altra.jpg"),
-      MoreServicesDetails(
-          "مستشفي الأطباء",
-          "مستشفي",
-          "الخرطوم - العمارات - قرب لفه الجريف - شارع المطار",
-          "assets/images/insurance/zaytona.jpg"),
-      MoreServicesDetails(
-          "الزيتونة",
-          "مستشفي",
-          "الخرطوم - العربي - قرب شارع الحوادث",
-          "assets/images/insurance/zaytona.jpg"),
-      MoreServicesDetails(
-          "فضيل",
-          "مستشفي",
-          "الخرطوم - العربي - قرب شارع الحوادث",
-          "assets/images/insurance/fodil.jpg"),
-    ];
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(

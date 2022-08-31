@@ -378,7 +378,7 @@ class _DistributionControlState extends State<DistributionControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteDistribution(data.id.toString());
+                                DeleteDistribution(data.id!);
                               },
                             ),
                             title: Text(data.doctorsName!),
@@ -626,28 +626,50 @@ class _DistributionControlState extends State<DistributionControl> {
         });
   }
 
-  Future<void> DeleteDistribution(String Id) async {
-    print("Doc ID : " + Id);
+  Future<void> DeleteDistribution(int Id) async {
+    // print("Doc ID : " + Id);
     // _dist.doc(Id).delete();
-
-    scaffoldKey.currentState!.showSnackBar(SnackBar(
-      content: const Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "تم حذف العنصر",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            color: Colors.white,
+    distributionApi.Delete(Id).then((value) {
+      if (value == true) {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "تم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ));
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      } else {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "لم يتم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.amber.shade300,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      }
+    });
   }
 }
 

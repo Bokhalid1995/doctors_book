@@ -10,7 +10,7 @@ class BookingDetailsModel {
   int? patientName;
   String? phone;
   int? age;
-  DateTime? bookingDate;
+  String? bookingDate;
 
   BookingDetailsModel(
       {this.id,
@@ -34,8 +34,7 @@ class BookingDetailsModel {
           doctorsName: json['doctorsName'],
           patientName: json['patientName'],
           age: json['age'],
-          bookingDate:
-              DateTime.parse(json['bookingDate'].toString().substring(0, 10)),
+          bookingDate: json['bookingDate'].toString().substring(0, 10),
           phone: json['phone']);
 
   Map<String, dynamic> toJson() => {

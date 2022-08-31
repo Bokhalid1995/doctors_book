@@ -217,6 +217,7 @@ class _StaffControlState extends State<StaffControl> {
                                                     ),
                                                   ));
                                                   Navigator.of(context).pop();
+                                                  setState(() {});
                                                 }
                                               },
                                             );
@@ -360,7 +361,7 @@ class _StaffControlState extends State<StaffControl> {
                                   items: menuItems.map((SpecializesModel item) {
                                     return DropdownMenuItem<int>(
                                         value: item.id,
-                                        child: Text(item.description!));
+                                        child: Text(item.name!));
                                   }).toList(),
                                   onChanged: (val) {
                                     setState(() {

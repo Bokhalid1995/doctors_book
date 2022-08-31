@@ -8,32 +8,6 @@ import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/more_details.dart';
 
-var moreServicesDetailsItems = [
-  MoreServicesDetails("ابراهيم مالك", "مستشفي",
-      "الخرطوم - بري - شارع بري بالنص", "assets/images/136934.jpg"),
-  MoreServicesDetails("رويال كير", "مستشفي", "الخرطوم 2 - جوار مطاعم برشلونة",
-      "assets/images/136949.jpg"),
-  MoreServicesDetails("الترا لاب", "معمل",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-  MoreServicesDetails(
-      "مستشفي الأطباء",
-      "مستشفي",
-      "الخرطوم - العمارات - قرب لفه الجريف - شارع المطار",
-      "assets/images/136949.jpg"),
-  MoreServicesDetails("الوسيلة", "صيدلية",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-  MoreServicesDetails("الزيتونة", "مستشفي",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-  MoreServicesDetails("فضيل", "مستشفي", "الخرطوم - العربي - قرب شارع الحوادث",
-      "assets/images/136949.jpg"),
-  MoreServicesDetails("ابن سينا", "مستشفي",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-  MoreServicesDetails("المتكامل", "مركز صحي",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-  MoreServicesDetails("الرعاية الخاصة", "معمل",
-      "الخرطوم - العربي - قرب شارع الحوادث", "assets/images/136949.jpg"),
-];
-
 class PublicServices extends StatefulWidget {
   const PublicServices({Key? key}) : super(key: key);
 
@@ -48,6 +22,7 @@ class _PublicServicesState extends State<PublicServices> {
 
   var hospitalApi = ServicesHospital();
   String? hospName = "";
+  int? hospId;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

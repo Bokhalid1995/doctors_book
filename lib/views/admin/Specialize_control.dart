@@ -395,26 +395,47 @@ class _SpecializeControlState extends State<SpecializeControl> {
         });
   }
 
-  Future<void> DeleteSpecialize(String Id) async {
-    _Specialize.doc(Id).delete();
-
-    scaffoldKey.currentState!.showSnackBar(SnackBar(
-      content: const Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "تم حذف العنصر",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            color: Colors.white,
+  Future<void> DeleteSpecialize(int Id) async {
+    SpecializeApi.Delete(Id).then((value) {
+      if (value == true) {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "تم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ));
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      } else {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "لم يتم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.amber.shade300,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ));
+      }
+    });
   }
 }

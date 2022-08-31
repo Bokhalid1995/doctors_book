@@ -1,18 +1,22 @@
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/custom_button.dart';
+import 'package:doctors_book/shared/models/specialize.dart';
+import 'package:doctors_book/shared/services_specialize.dart';
 import 'package:doctors_book/views/Booking.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 class StaffDetailsBody extends StatefulWidget {
-  const StaffDetailsBody(this.HospitalName, this.DoctorName, this.Specialize,
-      this.Day, this.From, this.To,
+  StaffDetailsBody(this.HospitalName, this.HospitalId, this.DoctorName,
+      this.DoctorId, this.Specialize, this.Day, this.From, this.To,
       {Key? key});
 
   final String HospitalName;
+  final int HospitalId;
   final String DoctorName;
-  final String Specialize;
+  final int DoctorId;
+  final String? Specialize;
   final String Day;
   final int From;
   final int To;
@@ -175,7 +179,9 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                                       builder: (BuildContext context) =>
                                           Booking(
                                               widget.HospitalName,
+                                              widget.HospitalId,
                                               widget.DoctorName,
+                                              widget.DoctorId,
                                               widget.Day,
                                               widget.From,
                                               widget.To)));

@@ -152,6 +152,7 @@ class _LoginState extends State<Login> {
                                     _Password.text,
                                   ).then((value) {
                                     if (value == true) {
+                                      // box.write('UserId', _UserName.text);
                                       _UserName.clear();
                                       _Password.clear();
                                       Navigator.of(context).push(

@@ -3,16 +3,21 @@ import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
+import 'package:doctors_book/shared/models/bookingDetails.dart';
+import 'package:doctors_book/shared/services_bookingDetails.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart' as intl;
 
 class Booking extends StatefulWidget {
-  const Booking(this._hosName, this.DoctorName, this.Day, this.From, this.To);
+  Booking(this._hosName, this.HosId, this.DoctorName, this.DoctorId, this.Day,
+      this.From, this.To);
   final String _hosName;
+  final int? HosId;
 
   final String DoctorName;
+  final int? DoctorId;
   final String Day;
   final int From;
   final int To;
@@ -22,6 +27,7 @@ class Booking extends StatefulWidget {
 }
 
 class _BookingState extends State<Booking> {
+  var bookingApi = ServicesBookingDetails();
   int length = 0;
   @override
   void initState() {
@@ -35,6 +41,7 @@ class _BookingState extends State<Booking> {
   final TextEditingController _PatientName = TextEditingController();
   final TextEditingController _BookingDate = TextEditingController();
   final TextEditingController _Age = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
@@ -161,6 +168,30 @@ class _BookingState extends State<Booking> {
                             ),
                           ),
                           const Text(
+                            'رقم الهاتف',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            height: 40,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextFormField(
+                              controller: _phone,
+                              decoration: const InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "هذا الحقل ضروري";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const Text(
                             'تاريخ الحجز',
                             style: TextStyle(color: Colors.grey),
                           ),
@@ -194,52 +225,60 @@ class _BookingState extends State<Booking> {
                               color: Colors.green,
                               raduis: 30,
                               onTap: () {
-                                if (length <= 10) {
+                                if (length <= 5) {
                                   if (formKey.currentState!.validate()) {
-                                    _booking.add({
-                                      "PatientName": _PatientName.text,
-                                      "Age": _Age.text,
-                                      "BookingDate": _BookingDate.text,
-                                      "DoctorName": widget.DoctorName,
-                                      "HospitalName": widget._hosName,
-                                      "TimeFrom": widget.From,
-                                      "TimeTo": widget.To,
-                                      "Status": "Waiting",
-                                    });
+                                    bookingApi.Create(BookingDetailsModel(
+                                            patientName:
+                                                int.parse(_PatientName.text),
+                                            age: int.parse(_Age.text),
+                                            bookingDate: intl.DateFormat(
+                                                    "yyyy-MM-ddThh:mm:ss")
+                                                .format(DateTime.parse(
+                                                    _BookingDate.text))
+                                                .toString(),
+                                            doctorsId: widget.DoctorId,
+                                            hospitalsId: widget.HosId,
+                                            phone: _phone.text))
+                                        .then((value) {
+                                      if (value == true) {
+                                        setState(() {
+                                          _PatientName.clear();
+                                          _Age.clear();
+                                          _BookingDate.clear();
+                                          _phone.clear();
+                                        });
 
-                                    setState(() {
-                                      _PatientName.clear();
-                                      _Age.clear();
-                                    });
-
-                                    scaffoldKey.currentState!
-                                        .showSnackBar(SnackBar(
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: const [
-                                          Text(
-                                            "تم  تاكيد الحجز بنجاح",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily: 'Cairo',
-                                              color: Colors.white,
-                                            ),
+                                        scaffoldKey.currentState!
+                                            .showSnackBar(SnackBar(
+                                          content: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: const [
+                                              Text(
+                                                "تم  تاكيد الحجز بنجاح",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: 'Cairo',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.check_circle,
+                                                color: Colors.white,
+                                              )
+                                            ],
                                           ),
-                                          Icon(
-                                            Icons.check_circle,
-                                            color: Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                      backgroundColor: Colors.green,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                      ),
-                                    ));
+                                          backgroundColor: Colors.green,
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                        ));
+                                      }
+                                    });
                                   }
                                 } else {
                                   scaffoldKey.currentState!
@@ -291,7 +330,7 @@ class _BookingState extends State<Booking> {
 
   Future<Null> _selectDate(BuildContext context) async {
     intl.DateFormat formatter =
-        intl.DateFormat('dd/MM/yyyy'); //specifies day/month/year format
+        intl.DateFormat('yyyy-MM-dd'); //specifies day/month/year format
 
     final DateTime? picked = await showDatePicker(
         context: context,

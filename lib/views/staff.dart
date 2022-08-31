@@ -6,9 +6,11 @@ import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
 import 'package:doctors_book/shared/models/distributions.dart';
 import 'package:doctors_book/shared/models/doctors.dart';
+import 'package:doctors_book/shared/models/specialize.dart';
 import 'package:doctors_book/shared/services_distributions.dart';
 import 'package:doctors_book/shared/services_doctor.dart';
 import 'package:doctors_book/shared/services_hospital.dart';
+import 'package:doctors_book/shared/services_specialize.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
@@ -25,36 +27,28 @@ class Staff extends StatefulWidget {
 }
 
 class _StaffState extends State<Staff> {
+  List<SpecializesModel> menuItems = [];
+  var speclizerApi = ServicesSpecializes();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    speclizerApi.GetAll().then((value) => menuItems = value);
+  }
+
   List<HospitalsModel> hospitalList = [];
   List<DoctorsModel> doctorList = [];
   var hospitalApi = ServicesHospital();
   var doctorApi = ServicesDoctor();
   var distributionApi = ServicesDistributions();
-  String? _Specialize = "الكل";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    hospitalApi.GetAll().then((value) => hospitalList = value);
-    doctorApi.GetAll().then((value) => doctorList = value);
-  }
+  int? _Specialize = 1;
 
   String DoctorName = "";
   String Specialist = "";
   bool isLoaded = false;
-  final CollectionReference _distribution =
-      FirebaseFirestore.instance.collection('Distriputions');
 
   @override
   Widget build(BuildContext context) {
-    final List<String> menuItems = [
-      'الكل',
-      'باطنية',
-      'جراحة عامه',
-      'جراحة عظام',
-      'طب الاسنان',
-      'اطفال'
-    ];
     // print(widget._hosName);
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -77,29 +71,39 @@ class _StaffState extends State<Staff> {
               'ابحث بالتخصص',
               style: TextStyle(color: Colors.grey),
             ),
-            Container(
-                padding: const EdgeInsets.all(5),
-                height: 40,
-                width: SizeConfig.screenWidth! - 20,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10)),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
-                    items: menuItems.map((String item) {
-                      return DropdownMenuItem<String>(
-                          value: item, child: Text(item));
-                    }).toList(),
-                    onChanged: (val) {
-                      setState(() {
-                        _Specialize = val!;
-                      });
-                    },
-                    value: _Specialize == null || _Specialize == ""
-                        ? "باطنية"
-                        : _Specialize,
-                  ),
-                )),
+            FutureBuilder(
+              future: speclizerApi.GetAll(),
+              builder:
+                  (context, AsyncSnapshot<List<SpecializesModel>> snapshot) {
+                return snapshot.connectionState == ConnectionState.waiting
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        padding: const EdgeInsets.all(5),
+                        height: 40,
+                        width: SizeConfig.screenWidth! - 20,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2<int>(
+                            items: menuItems.map((SpecializesModel item) {
+                              return DropdownMenuItem<int>(
+                                  value: item.id, child: Text(item.name!));
+                            }).toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                _Specialize = val!;
+                              });
+                            },
+                            value: _Specialize == null
+                                ? menuItems[0].id
+                                : _Specialize,
+                          ),
+                        ));
+              },
+            ),
             SizedBox(
               height: SizeConfig.screenheight! / 1.14,
               child: FutureBuilder(
@@ -125,26 +129,28 @@ class _StaffState extends State<Staff> {
                               //     data['HospitalName'] +
                               //     widget._hosName);
                               DistributionsModel data = snapshot.data![index];
-                              if (data.hospitalsId
-                                  .toString()
-                                  .contains(widget._hosName.toString())) {
-                                if (data.doctorsId.toString() == _Specialize) {
+                              if (data.hospitalsId == widget._hosId) {
+                                if (data.specializeId == _Specialize) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: StaffDetailsBody(
                                         widget._hosName.toString(),
+                                        widget._hosId,
                                         data.doctorsName!,
-                                        data.userId.toString(),
+                                        data.doctorsId!,
+                                        data.specializeName,
                                         data.day!,
                                         data.timeFrom!,
                                         data.timeTo!),
                                   );
-                                } else if (_Specialize == "الكل") {
+                                } else if (_Specialize == null) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: StaffDetailsBody(
                                         widget._hosName.toString(),
+                                        widget._hosId,
                                         data.doctorsName!,
+                                        data.doctorsId!,
                                         data.userId.toString(),
                                         data.day!,
                                         data.timeFrom!,
