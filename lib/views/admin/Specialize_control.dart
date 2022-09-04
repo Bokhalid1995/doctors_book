@@ -165,12 +165,12 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                                             Colors.green,
                                                         behavior:
                                                             SnackBarBehavior
-                                                                .floating,
+                                                                .fixed,
                                                         shape:
                                                             RoundedRectangleBorder(
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(24),
+                                                                  .circular(0),
                                                         ),
                                                       ));
                                                       Navigator.of(context)
@@ -368,10 +368,10 @@ class _SpecializeControlState extends State<SpecializeControl> {
                                               ),
                                             ),
                                             backgroundColor: PColor,
-                                            behavior: SnackBarBehavior.floating,
+                                            behavior: SnackBarBehavior.fixed,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(24),
+                                                  BorderRadius.circular(0),
                                             ),
                                           ));
                                           Navigator.of(context).pop();
@@ -411,11 +411,12 @@ class _SpecializeControlState extends State<SpecializeControl> {
             ),
           ),
           backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
+        setState(() {});
       } else {
         scaffoldKey.currentState!.showSnackBar(SnackBar(
           content: const Padding(
@@ -430,9 +431,9 @@ class _SpecializeControlState extends State<SpecializeControl> {
             ),
           ),
           backgroundColor: Colors.amber.shade300,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
       }

@@ -152,7 +152,7 @@ class _LoginState extends State<Login> {
                                     _Password.text,
                                   ).then((value) {
                                     if (value == true) {
-                                      // box.write('UserId', _UserName.text);
+                                      box.write('UserName', _UserName.text);
                                       _UserName.clear();
                                       _Password.clear();
                                       Navigator.of(context).push(
@@ -183,10 +183,10 @@ class _LoginState extends State<Login> {
                                           ],
                                         ),
                                         backgroundColor: Colors.redAccent,
-                                        behavior: SnackBarBehavior.floating,
+                                        behavior: SnackBarBehavior.fixed,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(24),
+                                              BorderRadius.circular(0),
                                         ),
                                       ));
                                     }

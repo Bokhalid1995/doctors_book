@@ -29,12 +29,6 @@ class Staff extends StatefulWidget {
 class _StaffState extends State<Staff> {
   List<SpecializesModel> menuItems = [];
   var speclizerApi = ServicesSpecializes();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    speclizerApi.GetAll().then((value) => menuItems = value);
-  }
 
   List<HospitalsModel> hospitalList = [];
   List<DoctorsModel> doctorList = [];
@@ -46,6 +40,15 @@ class _StaffState extends State<Staff> {
   String DoctorName = "";
   String Specialist = "";
   bool isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    speclizerApi.GetAll().then((value) => menuItems = value);
+    Future.delayed(Duration(seconds: 1)).then((value) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,39 +74,29 @@ class _StaffState extends State<Staff> {
               'ابحث بالتخصص',
               style: TextStyle(color: Colors.grey),
             ),
-            FutureBuilder(
-              future: speclizerApi.GetAll(),
-              builder:
-                  (context, AsyncSnapshot<List<SpecializesModel>> snapshot) {
-                return snapshot.connectionState == ConnectionState.waiting
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(
-                        padding: const EdgeInsets.all(5),
-                        height: 40,
-                        width: SizeConfig.screenWidth! - 20,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton2<int>(
-                            items: menuItems.map((SpecializesModel item) {
-                              return DropdownMenuItem<int>(
-                                  value: item.id, child: Text(item.name!));
-                            }).toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                _Specialize = val!;
-                              });
-                            },
-                            value: _Specialize == null
-                                ? menuItems[0].id
-                                : _Specialize,
-                          ),
-                        ));
-              },
-            ),
+            Container(
+                padding: const EdgeInsets.all(5),
+                height: 40,
+                width: SizeConfig.screenWidth! - 20,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10)),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton2<int>(
+                    items: menuItems.length == 0
+                        ? []
+                        : menuItems.map((SpecializesModel item) {
+                            return DropdownMenuItem<int>(
+                                value: item.id, child: Text(item.name!));
+                          }).toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _Specialize = val!;
+                      });
+                    },
+                    value: _Specialize == null ? menuItems[0].id : _Specialize,
+                  ),
+                )),
             SizedBox(
               height: SizeConfig.screenheight! / 1.14,
               child: FutureBuilder(

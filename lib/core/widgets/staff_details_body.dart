@@ -120,12 +120,11 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                               widget.DoctorName,
                               style: const TextStyle(
                                 color: PColor,
-                                fontSize: 13,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Spacer(),
-                            Icon(Icons.supervised_user_circle),
                             Text(
                               ' أخصائي : ${widget.Specialize}',
                               style: TextStyle(
@@ -140,7 +139,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                           height: 10,
                         ),
                         Text(
-                          'الحضور : ' + widget.Day,
+                          'متواجد  : ' + widget.Day,
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -172,9 +171,11 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                               ),
                             ),
                             const Spacer(),
-                            RaisedButton(
-                                child: Text('حجز'),
-                                onPressed: () {
+                            GeneralButton(
+                                customText: 'حجز',
+                                raduis: 8,
+                                color: Colors.green.shade300,
+                                onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           Booking(

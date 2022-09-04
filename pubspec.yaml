@@ -49,6 +49,7 @@ dependencies:
   http:
   intl: ^0.17.0
   dropdown_button2: ^1.7.0
+  pdf: ^3.8.3
 
   
 

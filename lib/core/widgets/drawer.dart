@@ -140,6 +140,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               onPressed: () {},
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const AdminDashboard()));
             },
@@ -171,6 +172,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             onTap: () {
               box.remove('UserName');
               box.remove('HospitalName');
+              Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => const Login()));
             },

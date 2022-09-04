@@ -62,6 +62,22 @@ class ServicesConnection {
     }
   }
 
+  Future<bool> Delete(int id) async {
+    final http.Response response = await http.delete(
+      Uri.parse('${base_url}Users/DeleteUser?id=${id}'),
+      headers: <String, String>{
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<List<User>> GetAll() async {
     final http.Response response = await http.get(
         // ignore: prefer_interpolation_to_compose_strings

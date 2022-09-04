@@ -233,7 +233,8 @@ class _RegisterControlState extends State<RegisterControl> {
                                                   onTap: () {
                                                     if (formKey.currentState!
                                                         .validate()) {
-                                                      userApi.register(User(
+                                                      userApi
+                                                          .register(User(
                                                         userName:
                                                             _UserName.text,
                                                         password:
@@ -241,40 +242,45 @@ class _RegisterControlState extends State<RegisterControl> {
                                                         userType: _UserType,
                                                         hospitalsId:
                                                             _SelectedHos,
-                                                      ));
-
-                                                      setState(() {
-                                                        _UserName.clear();
-                                                        _Password.clear();
-                                                        _UserType = "Admin";
-                                                      });
-                                                      print(_UserType);
-                                                      scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        content: const Text(
-                                                          "تم الحفظ بنجاح",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontFamily: 'Cairo',
-                                                            color: Colors.white,
+                                                      ))
+                                                          .then((value) {
+                                                        setState(() {
+                                                          _UserName.clear();
+                                                          _Password.clear();
+                                                          _UserType = "Admin";
+                                                        });
+                                                        print(_UserType);
+                                                        scaffoldKey
+                                                            .currentState!
+                                                            .showSnackBar(
+                                                                SnackBar(
+                                                          content: const Text(
+                                                            "تم الحفظ بنجاح",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Cairo',
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        backgroundColor:
-                                                            Colors.green,
-                                                        behavior:
-                                                            SnackBarBehavior
-                                                                .floating,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(24),
-                                                        ),
-                                                      ));
-                                                      Navigator.of(context)
-                                                          .pop();
+                                                          backgroundColor:
+                                                              Colors.green,
+                                                          behavior:
+                                                              SnackBarBehavior
+                                                                  .fixed,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        0),
+                                                          ),
+                                                        ));
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      });
                                                     }
                                                   },
                                                 );
@@ -327,7 +333,7 @@ class _RegisterControlState extends State<RegisterControl> {
                                 color: Colors.redAccent,
                               ),
                               onPressed: () {
-                                DeleteRegister(data.id.toString());
+                                DeleteRegister(data.id!);
                               },
                             ),
                             title: Text(data.userName!),
@@ -518,32 +524,31 @@ class _RegisterControlState extends State<RegisterControl> {
                                             password: _Password.text,
                                             userType: _UserType,
                                             hospitalsId: _SelectedHos,
-                                          ));
-
-                                          setState(() {
-                                            _UserName.clear();
-                                            _Password.clear();
-                                            _UserType = "Admin";
-                                          });
-
-                                          scaffoldKey.currentState!
-                                              .showSnackBar(SnackBar(
-                                            content: const Text(
-                                              "تم التعديل بنجاح",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontFamily: 'Cairo',
-                                                color: Colors.white,
+                                          )).then((value) {
+                                            scaffoldKey.currentState!
+                                                .showSnackBar(SnackBar(
+                                              content: const Text(
+                                                "تم التعديل بنجاح",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: 'Cairo',
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                            ),
-                                            backgroundColor: PColor,
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(24),
-                                            ),
-                                          ));
-                                          Navigator.of(context).pop();
+                                              backgroundColor: PColor,
+                                              behavior: SnackBarBehavior.fixed,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(0),
+                                              ),
+                                            ));
+                                            setState(() {
+                                              _UserName.clear();
+                                              _Password.clear();
+                                              _UserType = "Admin";
+                                            });
+                                            Navigator.of(context).pop();
+                                          });
                                         }
                                       },
                                     );
@@ -563,26 +568,50 @@ class _RegisterControlState extends State<RegisterControl> {
         });
   }
 
-  Future<void> DeleteRegister(String Id) async {
+  Future<void> DeleteRegister(int Id) async {
     // _register.doc(Id).delete();
 
-    scaffoldKey.currentState!.showSnackBar(SnackBar(
-      content: const Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "تم حذف العنصر",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            color: Colors.white,
+    userApi.Delete(Id).then((value) {
+      if (value == true) {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "تم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ));
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.fixed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ));
+        setState(() {});
+      } else {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "لم يتم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.amber.shade300,
+          behavior: SnackBarBehavior.fixed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ));
+      }
+    });
   }
 }

@@ -228,12 +228,12 @@ class _HospitalControlState extends State<HospitalControl> {
                                                             Colors.green,
                                                         behavior:
                                                             SnackBarBehavior
-                                                                .floating,
+                                                                .fixed,
                                                         shape:
                                                             RoundedRectangleBorder(
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(24),
+                                                                  .circular(0),
                                                         ),
                                                       ));
                                                       Navigator.of(context)
@@ -485,10 +485,10 @@ class _HospitalControlState extends State<HospitalControl> {
                                               ),
                                             ),
                                             backgroundColor: PColor,
-                                            behavior: SnackBarBehavior.floating,
+                                            behavior: SnackBarBehavior.fixed,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(24),
+                                                  BorderRadius.circular(0),
                                             ),
                                           ));
                                           Navigator.of(context).pop();
@@ -517,10 +517,10 @@ class _HospitalControlState extends State<HospitalControl> {
                                               ],
                                             ),
                                             backgroundColor: Colors.redAccent,
-                                            behavior: SnackBarBehavior.floating,
+                                            behavior: SnackBarBehavior.fixed,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(24),
+                                                  BorderRadius.circular(0),
                                             ),
                                           ));
                                         }
@@ -558,11 +558,12 @@ class _HospitalControlState extends State<HospitalControl> {
             ),
           ),
           backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
+        setState(() {});
       } else {
         scaffoldKey.currentState!.showSnackBar(SnackBar(
           content: const Padding(
@@ -577,9 +578,9 @@ class _HospitalControlState extends State<HospitalControl> {
             ),
           ),
           backgroundColor: Colors.amber.shade300,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
       }

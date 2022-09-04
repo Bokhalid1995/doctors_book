@@ -207,13 +207,13 @@ class _StaffControlState extends State<StaffControl> {
                                                     ),
                                                     backgroundColor:
                                                         Colors.green,
-                                                    behavior: SnackBarBehavior
-                                                        .floating,
+                                                    behavior:
+                                                        SnackBarBehavior.fixed,
                                                     shape:
                                                         RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              24),
+                                                              0),
                                                     ),
                                                   ));
                                                   Navigator.of(context).pop();
@@ -445,13 +445,14 @@ class _StaffControlState extends State<StaffControl> {
                                           ),
                                         ),
                                         backgroundColor: PColor,
-                                        behavior: SnackBarBehavior.floating,
+                                        behavior: SnackBarBehavior.fixed,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(24),
+                                              BorderRadius.circular(0),
                                         ),
                                       ));
                                       Navigator.of(context).pop();
+                                      setState(() {});
                                     }
                                   },
                                 );
@@ -471,24 +472,47 @@ class _StaffControlState extends State<StaffControl> {
 
   Future<void> DeleteStaff(int Id) async {
     // _staff.doc(Id).delete();
-
-    scaffoldKey.currentState!.showSnackBar(SnackBar(
-      content: const Padding(
-        padding: EdgeInsets.all(5),
-        child: Text(
-          "تم حذف العنصر",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Cairo',
-            color: Colors.white,
+    doctorApi.Delete(Id).then((value) {
+      if (value == true) {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "تم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.redAccent,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-      ),
-    ));
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.fixed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ));
+        setState(() {});
+      } else {
+        scaffoldKey.currentState!.showSnackBar(SnackBar(
+          content: const Padding(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "لم يتم حذف العنصر",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.amber.shade300,
+          behavior: SnackBarBehavior.fixed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ));
+      }
+    });
   }
 }

@@ -282,13 +282,13 @@ class _DistributionControlState extends State<DistributionControl> {
                                                                 Colors.green,
                                                             behavior:
                                                                 SnackBarBehavior
-                                                                    .floating,
+                                                                    .fixed,
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          24),
+                                                                          0),
                                                             ),
                                                           ));
                                                           Navigator.of(context)
@@ -315,13 +315,13 @@ class _DistributionControlState extends State<DistributionControl> {
                                                                     .redAccent,
                                                             behavior:
                                                                 SnackBarBehavior
-                                                                    .floating,
+                                                                    .fixed,
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          24),
+                                                                          0),
                                                             ),
                                                           ));
                                                         }
@@ -593,10 +593,10 @@ class _DistributionControlState extends State<DistributionControl> {
                                                 ),
                                                 backgroundColor: PColor,
                                                 behavior:
-                                                    SnackBarBehavior.floating,
+                                                    SnackBarBehavior.fixed,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(24),
+                                                      BorderRadius.circular(0),
                                                 ),
                                               ));
                                               Navigator.of(context).pop();
@@ -644,11 +644,12 @@ class _DistributionControlState extends State<DistributionControl> {
             ),
           ),
           backgroundColor: Colors.redAccent,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
+        setState(() {});
       } else {
         scaffoldKey.currentState!.showSnackBar(SnackBar(
           content: const Padding(
@@ -663,9 +664,9 @@ class _DistributionControlState extends State<DistributionControl> {
             ),
           ),
           backgroundColor: Colors.amber.shade300,
-          behavior: SnackBarBehavior.floating,
+          behavior: SnackBarBehavior.fixed,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(0),
           ),
         ));
       }
