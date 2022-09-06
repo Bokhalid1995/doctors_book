@@ -109,7 +109,7 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     width: SizeConfig.screenWidth! / 1.35,
-                    height: SizeConfig.screenheight! / 6.3,
+                    height: SizeConfig.screenheight! / 6,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -128,26 +128,39 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Icon(
+                              Icons.live_help,
+                              color: Colors.amber,
+                            ),
                             Text(
-                              ' أخصائي : ${widget.Specialize}',
+                              widget.Specialize.toString(),
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            Icon(
+                              Icons.calendar_today,
+                              color: Colors.amber,
+                            ),
                             Text(
-                              'متواجد  : ' + widget.Day,
+                              widget.Day,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),
+                            ),
+                            Icon(
+                              Icons.watch_later,
+                              color: Colors.amber,
                             ),
                             Text(
                               // ignore: prefer_interpolation_to_compose_strings
-                              ' الزمن : ' +
-                                  (widget.From > 12
+                              (widget.From > 12
                                           ? widget.From - 12
                                           : widget.From)
                                       .toString() +
@@ -159,9 +172,11 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                                   ' (' +
                                   fromTo +
                                   ')',
+
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

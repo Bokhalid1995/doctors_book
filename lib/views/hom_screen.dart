@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     hospitalApi.GetAll().then((value) => hospitalList = value);
     doctorApi.GetAll().then((value) => doctorList = value);
     bookingApi.GetAll().then((value) => bookingList = value);
-    Future.delayed(Duration(seconds: 1)).then((value) {
+    Future.delayed(Duration(seconds: 2)).then((value) {
       setState(() {});
     });
   }
