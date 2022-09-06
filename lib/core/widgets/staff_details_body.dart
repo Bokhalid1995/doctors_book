@@ -111,20 +111,23 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                     width: SizeConfig.screenWidth! / 1.35,
                     height: SizeConfig.screenheight! / 6.3,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Text(
+                          'د. ' + widget.DoctorName,
+                          style: const TextStyle(
+                            color: PColor,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(
-                              widget.DoctorName,
-                              style: const TextStyle(
-                                color: PColor,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Spacer(),
                             Text(
                               ' أخصائي : ${widget.Specialize}',
                               style: TextStyle(
@@ -133,23 +136,14 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'متواجد  : ' + widget.Day,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
+                            Text(
+                              'متواجد  : ' + widget.Day,
+                              style: TextStyle(
+                                color: PColor.withOpacity(0.60),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             Text(
                               // ignore: prefer_interpolation_to_compose_strings
                               ' الزمن : ' +
@@ -165,30 +159,32 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                                   ' (' +
                                   fromTo +
                                   ')',
-                              style: const TextStyle(
-                                fontSize: 9,
+                              style: TextStyle(
+                                color: PColor.withOpacity(0.60),
+                                fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const Spacer(),
-                            GeneralButton(
-                                customText: 'حجز',
-                                raduis: 8,
-                                color: Colors.green.shade300,
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          Booking(
-                                              widget.HospitalName,
-                                              widget.HospitalId,
-                                              widget.DoctorName,
-                                              widget.DoctorId,
-                                              widget.Day,
-                                              widget.From,
-                                              widget.To)));
-                                }),
                           ],
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GeneralButton(
+                            customText: 'حجز',
+                            raduis: 8,
+                            color: Colors.green.shade300,
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => Booking(
+                                      widget.HospitalName,
+                                      widget.HospitalId,
+                                      widget.DoctorName,
+                                      widget.DoctorId,
+                                      widget.Day,
+                                      widget.From,
+                                      widget.To)));
+                            }),
                       ],
                     ),
                   ),

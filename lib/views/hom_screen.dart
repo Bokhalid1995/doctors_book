@@ -1,10 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doctors_book/shared/models/bookingDetails.dart';
+import 'package:doctors_book/shared/models/doctors.dart';
+import 'package:doctors_book/shared/services_bookingDetails.dart';
+import 'package:doctors_book/shared/services_doctor.dart';
+import 'package:doctors_book/shared/services_hospital.dart';
 import 'package:flutter/material.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/more_details.dart';
 import 'package:doctors_book/core/widgets/services_details.dart';
 import 'package:doctors_book/core/widgets/vertical_panner.dart';
+
+import '../shared/models/hospitals.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +23,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final CollectionReference _doctors =
       FirebaseFirestore.instance.collection('doctors');
+
+  List<HospitalsModel> hospitalList = [];
+  List<DoctorsModel> doctorList = [];
+  List<BookingDetailsModel> bookingList = [];
+  var hospitalApi = ServicesHospital();
+  var doctorApi = ServicesDoctor();
+  var bookingApi = ServicesBookingDetails();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    hospitalApi.GetAll().then((value) => hospitalList = value);
+    doctorApi.GetAll().then((value) => doctorList = value);
+    bookingApi.GetAll().then((value) => bookingList = value);
+    Future.delayed(Duration(seconds: 1)).then((value) {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -53,26 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25),
-                        child: Text(
-                          'مرحبا بكم في تطبيق احجز طبيبك',
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   SizedBox(
                     height: 150,
                     child: ListView(
@@ -83,16 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 15,
                         ),
                         GroceryFeaturedCard(
-                            groceryFeaturedItems[0], const Color(0xff068e93)),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        GroceryFeaturedCard(groceryFeaturedItems[1], PColor),
+                            GroceryFeaturedItem(
+                                'مستشفي', '', hospitalList.length),
+                            const Color(0xff068e93)),
                         const SizedBox(
                           width: 15,
                         ),
                         GroceryFeaturedCard(
-                            groceryFeaturedItems[2], const Color(0xff7506af)),
+                            GroceryFeaturedItem('حجز', '', bookingList.length),
+                            PColor),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        GroceryFeaturedCard(
+                            GroceryFeaturedItem('طبيب', '', doctorList.length),
+                            const Color(0xff7506af)),
                         const SizedBox(
                           width: 20,
                         ),

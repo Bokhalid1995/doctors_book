@@ -179,10 +179,29 @@ class _MainScreenBodyState extends State<MainScreenBody>
             appBar: AppBar(
               backgroundColor: PColor,
               elevation: 0,
+              centerTitle: true,
+              actions: const [Icon(Icons.info_sharp)],
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/images/pic_1.png',
+                    height: 35,
+                    width: 35,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Text(
+                    'تطبيق حجز الأطباء',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
               bottom: TabBar(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 // labelColor: Colors.white,
-                unselectedLabelColor: Colors.grey,
+                unselectedLabelColor: Colors.blueGrey,
                 labelStyle: const TextStyle(
                     fontFamily: 'cairo', fontWeight: FontWeight.bold),
                 unselectedLabelStyle: const TextStyle(
@@ -210,7 +229,7 @@ class _MainScreenBodyState extends State<MainScreenBody>
                   color: PColor,
                 ),
                 isScrollable: true,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 onTap: (int index) {
                   print('Tab $index is tapped');
                 },

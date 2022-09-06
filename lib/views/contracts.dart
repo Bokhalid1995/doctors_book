@@ -34,7 +34,7 @@ class _PublicServicesState extends State<PublicServices> {
           color: Colors.grey.shade200,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
         ),
-        child: Column(
+        child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -55,7 +55,7 @@ class _PublicServicesState extends State<PublicServices> {
                           Text(
                             'ابحث من هنا ',
                             style: TextStyle(
-                              color: const Color(0xff0a0a0a).withOpacity(0.65),
+                              color: const Color(0xff0a0a0a).withOpacity(0.40),
                               fontSize: 17,
                             ),
                           ),
@@ -140,10 +140,16 @@ class _PublicServicesState extends State<PublicServices> {
                                         margin: const EdgeInsets.only(top: 10),
                                         padding: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(
-                                          color: PColor.withOpacity(0.10),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color:
+                                                      PColor.withOpacity(0.20),
+                                                  blurRadius: 5,
+                                                  offset: Offset(0, 3))
+                                            ]),
                                         child: ListTile(
                                           onTap: () {
                                             Navigator.push(
