@@ -56,6 +56,7 @@ class _BookingState extends State<Booking> {
         key: scaffoldKey,
         appBar: AppBar(
           backgroundColor: PColor,
+          elevation: 0,
           title: Text(
             'اجراء الحجز  - ' + widget._hosName,
             style: const TextStyle(
@@ -65,20 +66,32 @@ class _BookingState extends State<Booking> {
         ),
         body: Container(
           height: SizeConfig.screenheight,
-          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
+              Container(
+                padding: const EdgeInsets.all(5),
+                height: 10,
+                width: SizeConfig.screenWidth,
+                decoration: const BoxDecoration(
+                    // border: Border.all(color: PColor),
+                    color: PColor,
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(60))),
+              ),
               Form(
                 key: formKey,
                 child: Column(
                   children: [
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Center(
                       child: Container(
-                        width: SizeConfig.screenWidth! - 20,
+                        width: SizeConfig.screenWidth! - 160,
                         height: 30,
                         decoration: BoxDecoration(
                           color: Colors.red.withOpacity(0.20),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Text(
                           "تأكد من البيانات جيدا قبل اجراء الحجز",
@@ -92,31 +105,30 @@ class _BookingState extends State<Booking> {
                     ),
                     Row(
                       children: [
+                        Spacer(),
                         const Icon(
                           Icons.house_siding_sharp,
                           color: Colors.green,
                         ),
                         const SizedBox(width: 5),
-                        const Text('المستشفي: '),
+                        const Text('المستشفي : '),
                         const SizedBox(width: 10),
                         Text(widget._hosName),
-                      ],
-                    ),
-                    Row(
-                      children: [
+                        const SizedBox(width: 50),
                         const Icon(
                           Icons.person,
                           color: Colors.green,
                         ),
                         const SizedBox(width: 5),
-                        const Text('الطبيب: '),
+                        const Text('الطبيب : '),
                         const SizedBox(width: 10),
                         Text(widget.DoctorName),
+                        Spacer()
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.all(10),
-                      height: 390,
+                      padding: const EdgeInsets.all(30),
+                      height: 490,
                       child: ListView(
                         children: [
                           const Text(
@@ -223,7 +235,7 @@ class _BookingState extends State<Booking> {
                             return GeneralButton(
                               customText: 'حجز',
                               color: Colors.green,
-                              raduis: 30,
+                              raduis: 10,
                               onTap: () {
                                 if (length <= 5) {
                                   if (formKey.currentState!.validate()) {

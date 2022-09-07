@@ -128,35 +128,38 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.live_help,
-                              color: Colors.amber,
+                              color: Color.fromARGB(255, 187, 148, 6),
+                              size: 20,
                             ),
                             Text(
                               widget.Specialize.toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 13,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.calendar_today,
-                              color: Colors.amber,
+                              color: Color.fromARGB(255, 187, 148, 6),
+                              size: 20,
                             ),
                             Text(
                               widget.Day,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 13,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.watch_later,
-                              color: Colors.amber,
+                              color: Color.fromARGB(255, 187, 148, 6),
+                              size: 20,
                             ),
                             Text(
                               // ignore: prefer_interpolation_to_compose_strings
@@ -164,19 +167,18 @@ class _StaffDetailsBodyState extends State<StaffDetailsBody> {
                                           ? widget.From - 12
                                           : widget.From)
                                       .toString() +
-                                  ' (' +
+                                  ' ' +
                                   fromFormat +
-                                  ')  -  ' +
+                                  '  -  ' +
                                   (widget.To > 12 ? widget.To - 12 : widget.To)
                                       .toString() +
-                                  ' (' +
-                                  fromTo +
-                                  ')',
+                                  ' ' +
+                                  fromTo,
 
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: PColor.withOpacity(0.60),
-                                fontSize: 13,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

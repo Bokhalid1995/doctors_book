@@ -45,7 +45,7 @@ class _StaffState extends State<Staff> {
   void initState() {
     super.initState();
     speclizerApi.GetAll().then((value) => menuItems = value);
-    Future.delayed(Duration(seconds: 1)).then((value) {
+    Future.delayed(const Duration(seconds: 1)).then((value) {
       setState(() {});
     });
   }
@@ -58,6 +58,7 @@ class _StaffState extends State<Staff> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: PColor,
+          elevation: 0,
           title: Text(
             'الاطباء المتوفرون - ${widget._hosName}',
             style: const TextStyle(
@@ -67,6 +68,16 @@ class _StaffState extends State<Staff> {
         ),
         body: Column(
           children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              height: 10,
+              width: SizeConfig.screenWidth,
+              decoration: const BoxDecoration(
+                  // border: Border.all(color: PColor),
+                  color: PColor,
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(60))),
+            ),
             const SizedBox(
               height: 15,
             ),
