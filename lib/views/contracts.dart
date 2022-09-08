@@ -36,76 +36,50 @@ class _PublicServicesState extends State<PublicServices> {
         ),
         child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: SizeConfig.screenheight! / 5,
-                decoration: BoxDecoration(
-                  color: PColor.withOpacity(0.20),
+            Container(
+              height: SizeConfig.screenheight! / 13,
+              decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(30), bottom: Radius.circular(30)),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      height: size.height * 0.1,
-                      child: Row(
-                        children: [
-                          Text(
-                            'ابحث من هنا ',
-                            style: TextStyle(
-                              color: const Color(0xff0a0a0a).withOpacity(0.40),
-                              fontSize: 17,
-                            ),
-                          ),
-                          const Spacer(),
-                          SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: Icon(
-                              Icons.volunteer_activism,
-                              color: const Color(0xff0a0a0a).withOpacity(0.65),
-                            ),
-                          ),
-                        ],
+                  boxShadow: [
+                    BoxShadow(
+                        color: PColor.withOpacity(0.20),
+                        blurRadius: 5,
+                        offset: Offset(0, 3))
+                  ]),
+              child: ListView(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    height: 55,
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          hospName = value;
+                          //  print("Fuuuk" + moreServicesDetailsItems.toJS().toString() + "  " + value + " === " );
+                        });
+                      },
+                      decoration: InputDecoration(
+                        suffixIconColor: PColor.withOpacity(0.33),
+                        hintText: 'بحث ...',
+                        hintStyle: TextStyle(color: PColor.withOpacity(0.33)),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        suffixIcon: const Icon(Icons.search),
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 55,
-                      margin: const EdgeInsets.symmetric(horizontal: 15),
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextField(
-                        onSubmitted: (value) {
-                          setState(() {
-                            hospName = value;
-                            listToFill = moreServicesDetailsItems
-                                .where(
-                                    (element) => element.title.contains(value))
-                                .toList();
-                            //  print("Fuuuk" + moreServicesDetailsItems.toJS().toString() + "  " + value + " === " );
-                          });
-                        },
-                        decoration: InputDecoration(
-                          suffixIconColor: PColor.withOpacity(0.33),
-                          hintText: 'بحث ...',
-                          hintStyle: TextStyle(color: PColor.withOpacity(0.33)),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          suffixIcon: const Icon(Icons.search),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  )
+                ],
               ),
             ),
             const SizedBox(
@@ -135,40 +109,51 @@ class _PublicServicesState extends State<PublicServices> {
                                     itemBuilder: (context, index) {
                                       HospitalsModel data =
                                           snapshot.data![index];
-                                      return Container(
-                                        height: 70,
-                                        margin: const EdgeInsets.only(top: 10),
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color:
-                                                      PColor.withOpacity(0.20),
-                                                  blurRadius: 5,
-                                                  offset: Offset(0, 3))
-                                            ]),
-                                        child: ListTile(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Staff(data.name!, data.id!),
-                                              ),
-                                            );
-                                          },
-                                          hoverColor: PColor,
-                                          leading: const Icon(
-                                            Icons.home_work_outlined,
-                                            color: PColor,
+                                      print(
+                                          'hospName -> ' + hospName.toString());
+                                      print('data.name -> ' +
+                                          data.name.toString());
+                                      if (data.name!
+                                              .contains(hospName.toString()) ||
+                                          hospName == "") {
+                                        return Container(
+                                          height: 70,
+                                          margin:
+                                              const EdgeInsets.only(top: 10),
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: PColor.withOpacity(
+                                                        0.20),
+                                                    blurRadius: 5,
+                                                    offset: Offset(0, 3))
+                                              ]),
+                                          child: ListTile(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => Staff(
+                                                      data.name!, data.id!),
+                                                ),
+                                              );
+                                            },
+                                            hoverColor: PColor,
+                                            leading: const Icon(
+                                              Icons.home_work_outlined,
+                                              color: PColor,
+                                            ),
+                                            title: Text(data.name!),
+                                            subtitle: Text(data.location!),
                                           ),
-                                          title: Text(data.name!),
-                                          subtitle: Text(data.location!),
-                                        ),
-                                      );
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
                                     },
                                   ),
                           ),

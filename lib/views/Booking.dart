@@ -88,15 +88,16 @@ class _BookingState extends State<Booking> {
                     Center(
                       child: Container(
                         width: SizeConfig.screenWidth! - 160,
-                        height: 30,
+                        height: 50,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: Colors.red.withOpacity(0.20),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: const Text(
                           "تأكد من البيانات جيدا قبل اجراء الحجز",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: PColor),
+                          style: TextStyle(color: Colors.red),
                         ),
                       ),
                     ),
@@ -114,7 +115,7 @@ class _BookingState extends State<Booking> {
                         const Text('المستشفي : '),
                         const SizedBox(width: 10),
                         Text(widget._hosName),
-                        const SizedBox(width: 50),
+                        Spacer(),
                         const Icon(
                           Icons.person,
                           color: Colors.green,
@@ -136,11 +137,19 @@ class _BookingState extends State<Booking> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
+                            padding: const EdgeInsets.all(7),
+                            height: 45,
+                            width: SizeConfig.screenWidth! - 5,
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
+                                // border: Border.all(color: Colors.grey),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3))
+                                ],
+                                borderRadius: BorderRadius.circular(30)),
                             child: TextFormField(
                               controller: _PatientName,
                               validator: (value) {
@@ -160,11 +169,19 @@ class _BookingState extends State<Booking> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
+                            padding: const EdgeInsets.all(7),
+                            height: 45,
+                            width: SizeConfig.screenWidth! - 5,
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
+                                // border: Border.all(color: Colors.grey),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3))
+                                ],
+                                borderRadius: BorderRadius.circular(30)),
                             child: TextFormField(
                               controller: _Age,
                               decoration: const InputDecoration(
@@ -184,11 +201,19 @@ class _BookingState extends State<Booking> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
+                            padding: const EdgeInsets.all(7),
+                            height: 45,
+                            width: SizeConfig.screenWidth! - 5,
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
+                                // border: Border.all(color: Colors.grey),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3))
+                                ],
+                                borderRadius: BorderRadius.circular(30)),
                             child: TextFormField(
                               controller: _phone,
                               decoration: const InputDecoration(
@@ -208,11 +233,19 @@ class _BookingState extends State<Booking> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 40,
+                            padding: const EdgeInsets.all(7),
+                            height: 45,
+                            width: SizeConfig.screenWidth! - 5,
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
+                                // border: Border.all(color: Colors.grey),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3))
+                                ],
+                                borderRadius: BorderRadius.circular(30)),
                             child: TextFormField(
                               onTap: (() => _selectDate(context)),
                               controller: _BookingDate,
@@ -229,13 +262,13 @@ class _BookingState extends State<Booking> {
                             ),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           Builder(builder: (context) {
                             return GeneralButton(
                               customText: 'حجز',
                               color: Colors.green,
-                              raduis: 10,
+                              raduis: 20,
                               onTap: () {
                                 if (length <= 5) {
                                   if (formKey.currentState!.validate()) {

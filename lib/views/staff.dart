@@ -86,12 +86,19 @@ class _StaffState extends State<Staff> {
               style: TextStyle(color: Colors.grey),
             ),
             Container(
-                padding: const EdgeInsets.all(5),
-                height: 40,
+                padding: const EdgeInsets.all(10),
+                height: 50,
                 width: SizeConfig.screenWidth! - 20,
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10)),
+                    // border: Border.all(color: Colors.grey),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade400,
+                          blurRadius: 5,
+                          offset: Offset(0, 3))
+                    ],
+                    borderRadius: BorderRadius.circular(30)),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton2<int>(
                     items: menuItems.length == 0

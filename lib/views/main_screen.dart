@@ -39,7 +39,7 @@ class _MainScreenBodyState extends State<MainScreenBody>
   // ignore: unused_field
   static const List<Tab> _tabs = [
     const Tab(icon: Icon(Icons.home), child: const Text('الرئيسية')),
-    const Tab(icon: Icon(Icons.people_outlined), text: 'المستشفيات'),
+    const Tab(icon: Icon(Icons.home_work_outlined), text: 'المستشفيات'),
   ];
 
   static const List<Widget> _views = [
@@ -180,23 +180,10 @@ class _MainScreenBodyState extends State<MainScreenBody>
               backgroundColor: PColor,
               elevation: 0,
               centerTitle: true,
-              actions: const [Icon(Icons.info_sharp)],
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/images/pic_1.png',
-                    height: 35,
-                    width: 35,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    'تطبيق حجز الأطباء',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ],
+              // actions: const [Icon(Icons.info_sharp)],
+              title: const Text(
+                'حجز الأطباء',
+                style: TextStyle(fontSize: 18),
               ),
               bottom: TabBar(
                 padding: const EdgeInsets.all(15),
