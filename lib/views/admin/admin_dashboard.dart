@@ -130,6 +130,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
               columns: [
                 DataColumn(
                     label: Text(
+                  '#',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.blue.shade300),
+                )),
+                DataColumn(
+                    label: Text(
                   'الاسم',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.blue.shade300),
@@ -160,14 +166,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 )),
               ],
               rows: List.generate(filterData.length, (index) {
+                int i = 0;
                 final y = filterData[index]!.patientName;
                 final x = filterData[index]!.age.toString();
                 final z = filterData[index]!.bookingDate.toString();
                 final w = filterData[index]!.doctorsName.toString();
                 final o = filterData[index]!.hospitalsName.toString();
-
+                i++;
                 return DataRow(cells: [
-                  DataCell(Container(width: 75, child: Text(y))),
+                  DataCell(Container(child: Text(i.toString()))),
+                  DataCell(Container(child: Text(y))),
                   DataCell(Container(child: Text(x))),
                   DataCell(Container(child: Text(w))),
                   DataCell(Container(child: Text(z))),
