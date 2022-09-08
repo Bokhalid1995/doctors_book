@@ -37,11 +37,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
     user = box.read('UserName');
     // hospital = box.read('HospitalName');
     BookingDetailsApi.GetAll().then((value) => bookingList = value);
-    Future.delayed(Duration(seconds: 1)).then((value) {
+    Future.delayed(Duration(seconds: 3)).then((value) {
       setState(() {
         filterData = bookingList;
       });
-      if (user == null || user == "") {}
     });
   }
 
@@ -161,8 +160,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 )),
               ],
               rows: List.generate(filterData.length, (index) {
-                final y = filterData[index]!.patientName.toString();
-
+                final y = filterData[index]!.patientName;
                 final x = filterData[index]!.age.toString();
                 final z = filterData[index]!.bookingDate.toString();
                 final w = filterData[index]!.doctorsName.toString();

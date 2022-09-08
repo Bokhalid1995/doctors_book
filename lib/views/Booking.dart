@@ -273,8 +273,7 @@ class _BookingState extends State<Booking> {
                                 if (length <= 5) {
                                   if (formKey.currentState!.validate()) {
                                     bookingApi.Create(BookingDetailsModel(
-                                            patientName:
-                                                int.parse(_PatientName.text),
+                                            patientName: _PatientName.text,
                                             age: int.parse(_Age.text),
                                             bookingDate: intl.DateFormat(
                                                     "yyyy-MM-ddThh:mm:ss")
