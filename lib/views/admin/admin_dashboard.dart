@@ -166,15 +166,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 )),
               ],
               rows: List.generate(filterData.length, (index) {
-                int i = 0;
                 final y = filterData[index]!.patientName;
                 final x = filterData[index]!.age.toString();
                 final z = filterData[index]!.bookingDate.toString();
                 final w = filterData[index]!.doctorsName.toString();
                 final o = filterData[index]!.hospitalsName.toString();
-                i++;
+
                 return DataRow(cells: [
-                  DataCell(Container(child: Text(i.toString()))),
+                  DataCell(Container(child: Text((index + 1).toString()))),
                   DataCell(Container(child: Text(y))),
                   DataCell(Container(child: Text(x))),
                   DataCell(Container(child: Text(w))),
