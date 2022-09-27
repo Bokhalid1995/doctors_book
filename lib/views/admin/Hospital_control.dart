@@ -260,7 +260,9 @@ class _HospitalControlState extends State<HospitalControl> {
               icon: const Icon(Icons.add_circle_outline_outlined))
         ],
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
       body: FutureBuilder(
           future: hospitalApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {

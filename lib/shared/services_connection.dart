@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,6 @@ class ServicesConnection {
   static const base_url = "http://shihab123test-001-site1.etempurl.com/api/";
 
   Future<User> register(User user) async {
-    print("${base_url}Users/GetUserDetails");
     final http.Response response =
         await http.post(Uri.parse("${base_url}Users/CreateUser"),
             headers: <String, String>{
@@ -27,7 +27,7 @@ class ServicesConnection {
     }
   }
 
-  static Future<bool> Login(String userName, String password) async {
+  static Future<User> Login(String userName, String password) async {
     final http.Response response = await http.post(
         // ignore: prefer_interpolation_to_compose_strings
         Uri.parse('${base_url}Users/Login?UserName=' +
@@ -38,11 +38,15 @@ class ServicesConnection {
           'Content-type': 'application/json',
           'Accept': 'application/json',
         });
-
+    print(response.body);
     if (response.statusCode == 200) {
-      return true;
+      User data = User.fromJson(jsonDecode(response.body));
+
+      return data;
     } else {
-      return false;
+      User notFound = User(userName: "notFound");
+      print(notFound.userName);
+      return notFound;
     }
   }
 

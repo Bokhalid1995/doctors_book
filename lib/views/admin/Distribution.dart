@@ -353,7 +353,9 @@ class _DistributionControlState extends State<DistributionControl> {
           ),
         ),
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
       body: FutureBuilder(
           future: distributionApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {
@@ -398,19 +400,6 @@ class _DistributionControlState extends State<DistributionControl> {
                     });
           }),
     );
-  }
-
-  Future<void> _getDoctors(doctorId) async {
-    await FirebaseFirestore.instance
-        .collection('doctors')
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                if (doctorId == doc["DoctorName"]) {
-                  Specialize = doc["Specialize"];
-                }
-              })
-            });
   }
 
   Future<void> UpdateDistribution(DistributionsModel? documentSnapshot) async {

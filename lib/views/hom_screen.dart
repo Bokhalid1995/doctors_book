@@ -21,14 +21,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final CollectionReference _doctors =
-      FirebaseFirestore.instance.collection('doctors');
+  var doctorApi = ServicesDoctor();
 
   List<HospitalsModel> hospitalList = [];
   List<DoctorsModel> doctorList = [];
   List<BookingDetailsModel> bookingList = [];
   var hospitalApi = ServicesHospital();
-  var doctorApi = ServicesDoctor();
   var bookingApi = ServicesBookingDetails();
 
   @override
@@ -39,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     hospitalApi.GetAll().then((value) => hospitalList = value);
     doctorApi.GetAll().then((value) => doctorList = value);
     bookingApi.GetAll().then((value) => bookingList = value);
-    Future.delayed(Duration(seconds: 2)).then((value) {
+    Future.delayed(Duration(seconds: 3)).then((value) {
       setState(() {});
     });
   }
@@ -132,9 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  StreamBuilder(
-                    stream: _doctors.snapshots(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) =>
+                  FutureBuilder(
+                    future: doctorApi.GetAll(),
+                    builder: (context, AsyncSnapshot<List> snapshot) =>
                         snapshot.connectionState == ConnectionState.waiting
                             ? const Center(
                                 child: CircularProgressIndicator(),
@@ -143,16 +141,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: SizeConfig.screenheight!,
                                 padding: EdgeInsets.all(10),
                                 child: ListView.builder(
-                                  itemCount: snapshot.data!.docs.length,
+                                  itemCount: snapshot.data!.length,
                                   itemBuilder: (context, index) {
-                                    DocumentSnapshot data =
-                                        snapshot.data!.docs[index];
+                                    DoctorsModel data = snapshot.data![index];
                                     return Column(
                                       children: [
                                         MoreDetails(
-                                          name: data['DoctorName'],
-                                          degree: data['QualifiedCert'],
-                                          spec: data['Specialize'],
+                                          name: "د. " + data.doctorName!,
+                                          degree: data.qualifiedCert!,
+                                          spec: data.specializeName!,
                                           press: () {
                                             // Navigator.push(
                                             //   context,

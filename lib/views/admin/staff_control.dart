@@ -30,8 +30,6 @@ class _StaffControlState extends State<StaffControl> {
     speclizerApi.GetAll().then((value) => menuItems = value);
   }
 
-  final CollectionReference _staff =
-      FirebaseFirestore.instance.collection('doctors');
   var doctorApi = ServicesDoctor();
   final TextEditingController _DoctorName = TextEditingController();
   int? _Specialize;
@@ -243,7 +241,9 @@ class _StaffControlState extends State<StaffControl> {
           ),
         ),
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
       body: FutureBuilder(
           future: doctorApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {

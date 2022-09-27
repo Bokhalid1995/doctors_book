@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
 import 'package:doctors_book/core/utils/size_config.dart';
 import 'package:doctors_book/core/widgets/custom_button.dart';
 import 'package:doctors_book/core/widgets/staff_details_body.dart';
+import 'package:doctors_book/views/admin/Distribution.dart';
 import 'package:doctors_book/views/admin/admin_dashboard.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -151,14 +154,17 @@ class _LoginState extends State<Login> {
                                     _UserName.text,
                                     _Password.text,
                                   ).then((value) {
-                                    if (value == true) {
+                                    if (!value.userName!.contains("notFound")) {
                                       box.write('UserName', _UserName.text);
+                                      box.write('UserType', value.userType);
+                                      // print(jsonDecode(value.toString()));
                                       _UserName.clear();
                                       _Password.clear();
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  const AdminDashboard()));
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              value.userType!.contains("Admin")
+                                                  ? const DistributionControl()
+                                                  : const AdminDashboard()));
                                     } else {
                                       scaffoldKey.currentState!
                                           .showSnackBar(SnackBar(
@@ -207,6 +213,7 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+  //"DefaultConnection": "Data Source=SQL8004.site4now.net;Initial Catalog=db_a8bd3e_doctordb;User Id=db_a8bd3e_doctordb_admin;Password=test123456"
 
   Future<Null> _selectDate(BuildContext context) async {
     intl.DateFormat formatter =

@@ -7,7 +7,7 @@ class BookingDetailsModel {
   int? userId;
   String? hospitalsName;
   String? doctorsName;
-  int? patientName;
+  String? patientName;
   String? phone;
   int? age;
   String? bookingDate;

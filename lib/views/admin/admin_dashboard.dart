@@ -46,8 +46,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   bool isConfirmed = false;
-  final CollectionReference _booking =
-      FirebaseFirestore.instance.collection('BookingDetails');
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -56,9 +54,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: PColor,
-        title: const Text("لوحة التحكم"),
+        title: const Text("التقارير"),
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(this.context).pop();
+      }),
       body: ListView(
         children: [
           Container(
@@ -82,7 +82,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   width: 10,
                 ),
                 const Text(
-                  "قائمة حجوزات اليوم",
+                  "تقرير بجميع الحجوزات",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: PColor, fontSize: 13),
                 ),
@@ -112,14 +112,33 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       .where((data) =>
                           data!.patientName.toString().contains(_searchText) ||
                           data.doctorsName.toString().contains(_searchText) ||
-                          data.bookingDate.toString().contains(_searchText))
+                          data.bookingDate.toString().contains(_searchText) ||
+                          data.hospitalsName.toString().contains(_searchText))
                       .toList();
                 });
               },
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 10,
+          ),
+          Container(
+            width: SizeConfig.screenWidth! - 50,
+            height: 50,
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: PColor.withOpacity(0.20),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              "الإجمالي ( ${filterData.length} ) ",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: PColor, fontSize: 13),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
