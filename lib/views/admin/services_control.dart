@@ -10,8 +10,9 @@ class ServicesControl extends StatelessWidget {
       appBar: AppBar(
         title: Text("إدارة الخدمات"),
       ),
-      drawer: CustomDrawer(),
-
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
     );
   }
 }

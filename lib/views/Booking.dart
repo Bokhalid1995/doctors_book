@@ -9,6 +9,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:lottie/lottie.dart';
 
 class Booking extends StatefulWidget {
   Booking(this._hosName, this.HosId, this.DoctorName, this.DoctorId, this.Day,
@@ -33,11 +34,8 @@ class _BookingState extends State<Booking> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getBooking(widget._hosName, widget.DoctorName);
   }
 
-  final CollectionReference _booking =
-      FirebaseFirestore.instance.collection('BookingDetails');
   final TextEditingController _PatientName = TextEditingController();
   final TextEditingController _BookingDate = TextEditingController();
   final TextEditingController _Age = TextEditingController();
@@ -54,29 +52,60 @@ class _BookingState extends State<Booking> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         key: scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: PColor,
-          elevation: 0,
-          title: Text(
-            'اجراء الحجز  - ' + widget._hosName,
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          ),
-        ),
         body: Container(
           height: SizeConfig.screenheight,
           child: Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(5),
-                height: 10,
+                padding: const EdgeInsets.all(15),
+                height: 120,
                 width: SizeConfig.screenWidth,
                 decoration: const BoxDecoration(
                     // border: Border.all(color: PColor),
                     color: PColor,
                     borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(60))),
+                        BorderRadius.vertical(bottom: Radius.circular(30))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 30,
+                          color: Colors.white,
+                        )),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'اجراء الحجز',
+                          style: TextStyle(
+                            // color: PColor,
+                            color: Colors.white,
+
+                            fontSize: 11,
+                          ),
+                        ),
+                        Text(
+                          widget._hosName,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: 70,
+                      height: 70,
+                      child: Lottie.asset('assets/images/img_3.json'),
+                    ),
+                  ],
+                ),
               ),
               Form(
                 key: formKey,
@@ -87,17 +116,17 @@ class _BookingState extends State<Booking> {
                     ),
                     Center(
                       child: Container(
-                        width: SizeConfig.screenWidth! - 160,
+                        width: SizeConfig.screenWidth! - 20,
                         height: 50,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.20),
+                          color: PColor.withOpacity(0.20),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: const Text(
                           "تأكد من البيانات جيدا قبل اجراء الحجز",
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(color: PColor),
                         ),
                       ),
                     ),
@@ -107,28 +136,34 @@ class _BookingState extends State<Booking> {
                     Row(
                       children: [
                         Spacer(),
-                        const Icon(
-                          Icons.house_siding_sharp,
-                          color: Colors.green,
+                        Column(
+                          children: [
+                            const Icon(
+                              Icons.house_siding_sharp,
+                              size: 50,
+                              color: Colors.green,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(widget._hosName),
+                          ],
                         ),
-                        const SizedBox(width: 5),
-                        const Text('المستشفي : '),
-                        const SizedBox(width: 10),
-                        Text(widget._hosName),
                         Spacer(),
-                        const Icon(
-                          Icons.person,
-                          color: Colors.green,
+                        Column(
+                          children: [
+                            const Icon(
+                              Icons.person,
+                              size: 50,
+                              color: Colors.green,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(widget.DoctorName),
+                          ],
                         ),
-                        const SizedBox(width: 5),
-                        const Text('الطبيب : '),
-                        const SizedBox(width: 10),
-                        Text(widget.DoctorName),
                         Spacer()
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.all(30),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       height: 490,
                       child: ListView(
                         children: [
@@ -388,19 +423,5 @@ class _BookingState extends State<Booking> {
             text: formatter.format(
                 picked)); //Use formatter to format selected date and assign to text field
       });
-  }
-
-  Future<void> _getBooking(hospital, DoctorName) async {
-    await FirebaseFirestore.instance
-        .collection('Distriputions')
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                if (hospital == doc["HospitalName"] &&
-                    DoctorName == doc["DoctorName"]) {
-                  ++length;
-                }
-              })
-            });
   }
 }

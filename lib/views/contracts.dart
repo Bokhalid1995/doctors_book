@@ -17,8 +17,6 @@ class PublicServices extends StatefulWidget {
 
 class _PublicServicesState extends State<PublicServices> {
   List<MoreServicesDetails> listToFill = moreServicesDetailsItems;
-  final CollectionReference _hospital =
-      FirebaseFirestore.instance.collection('Hospital');
 
   var hospitalApi = ServicesHospital();
   String? hospName = "";

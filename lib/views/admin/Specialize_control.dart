@@ -3,7 +3,6 @@ import 'package:doctors_book/shared/models/specialize.dart';
 import 'package:doctors_book/shared/services_specialize.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctors_book/core/constants.dart';
 
 import 'package:doctors_book/core/widgets/custom_button.dart';
@@ -16,8 +15,7 @@ class SpecializeControl extends StatefulWidget {
 }
 
 class _SpecializeControlState extends State<SpecializeControl> {
-  final CollectionReference _Specialize =
-      FirebaseFirestore.instance.collection('Specialize');
+  
   final TextEditingController _Name = TextEditingController();
 
   final TextEditingController _Description = TextEditingController();
@@ -197,7 +195,9 @@ class _SpecializeControlState extends State<SpecializeControl> {
               icon: const Icon(Icons.add_circle_outline_outlined))
         ],
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
       body: FutureBuilder(
           future: SpecializeApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {

@@ -13,6 +13,7 @@ import 'package:doctors_book/shared/services_hospital.dart';
 import 'package:doctors_book/shared/services_specialize.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../shared/models/hospitals.dart';
 
@@ -56,27 +57,58 @@ class _StaffState extends State<Staff> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: PColor,
-          elevation: 0,
-          title: Text(
-            'الاطباء المتوفرون - ${widget._hosName}',
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          ),
-        ),
         body: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(5),
-              height: 10,
+              padding: const EdgeInsets.all(15),
+              height: 120,
               width: SizeConfig.screenWidth,
               decoration: const BoxDecoration(
                   // border: Border.all(color: PColor),
                   color: PColor,
                   borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(60))),
+                      BorderRadius.vertical(bottom: Radius.circular(30))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_rounded,
+                        size: 30,
+                        color: Colors.white,
+                      )),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'الاطباء المتوفرون',
+                        style: TextStyle(
+                          // color: PColor,
+                          color: Colors.white,
+
+                          fontSize: 11,
+                        ),
+                      ),
+                      Text(
+                        widget._hosName,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: 70,
+                    height: 70,
+                    child: Lottie.asset('assets/images/img_2.json'),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 15,
@@ -178,21 +210,5 @@ class _StaffState extends State<Staff> {
         ),
       ),
     );
-  }
-
-  Future<String> _getDoctors(doctorId) async {
-    var Doctor = "";
-    await FirebaseFirestore.instance
-        .collection('doctors')
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                if (doctorId == doc.id) {
-                  Doctor = doc["DoctorName"];
-                  print("Doctor" + Doctor);
-                }
-              })
-            });
-    return Doctor;
   }
 }

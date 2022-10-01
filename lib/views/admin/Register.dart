@@ -27,10 +27,7 @@ class _RegisterControlState extends State<RegisterControl> {
   List<HospitalsModel> hospitalList = [];
   var hospitalApi = ServicesHospital();
   var userApi = ServicesConnection();
-  // final CollectionReference _register =
-  //     FirebaseFirestore.instance.collection('Users');
-  // final CollectionReference _hospital =
-  //     FirebaseFirestore.instance.collection('Hospital');
+
   final TextEditingController _UserName = TextEditingController();
   final TextEditingController _Password = TextEditingController();
 
@@ -308,7 +305,9 @@ class _RegisterControlState extends State<RegisterControl> {
           ),
         ),
       ),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(popOut: () {
+        Navigator.of(context).pop();
+      }),
       body: FutureBuilder(
           future: userApi.GetAll(),
           builder: (context, AsyncSnapshot<List> snapshot) {

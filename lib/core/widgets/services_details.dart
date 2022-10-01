@@ -213,6 +213,7 @@ class _ServicesBodyDetailsState extends State<ServicesBodyDetails> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                Navigator.of(context).pop();
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         Staff(hospName, int.parse(hospName))));
